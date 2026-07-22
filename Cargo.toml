@@ -1,0 +1,22 @@
+[package]
+name = "base-gpui"
+version = "0.1.0"
+edition = "2021"
+authors = ["Luke Tandjung"]
+description = "A GPUI-native port of Base UI's rich, headless component APIs"
+license = "MIT"
+repository = "https://github.com/LukeTandjung/base-gpui"
+readme = "README.md"
+keywords = ["gpui", "ui", "components", "desktop", "unstyled"]
+categories = ["gui"]
+publish = false
+
+[dependencies]
+gpui = { version = "0.2.2", git = "https://github.com/zed-industries/zed", rev = "1d029c5ff5654fb1b1e8caf4462993c8ee13a133" }
+unicode-segmentation = "1"
+
+[dev-dependencies]
+gpui = { version = "0.2.2", git = "https://github.com/zed-industries/zed", rev = "1d029c5ff5654fb1b1e8caf4462993c8ee13a133", features = ["test-support"] }
+
+[lints.clippy]
+pub_with_shorthand = "deny"
