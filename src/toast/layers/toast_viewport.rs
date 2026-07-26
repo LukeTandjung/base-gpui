@@ -1,5 +1,5 @@
 use std::rc::Rc;
-use std::time::Instant;
+use web_time::Instant;
 
 use gpui::{
     div, App, Div, ElementId, InteractiveElement as _, IntoElement, ParentElement, RenderOnce,

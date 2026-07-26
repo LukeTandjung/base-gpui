@@ -1,8 +1,6 @@
-use std::{
-    rc::Rc,
-    sync::Arc,
-    time::{Duration, SystemTime, UNIX_EPOCH},
-};
+use std::{rc::Rc, sync::Arc, time::Duration};
+
+use web_time::{SystemTime, UNIX_EPOCH};
 
 use gpui::{
     div, prelude::FluentBuilder as _, AccessibleAction, AnyElement, App, Div, ElementId, Entity,

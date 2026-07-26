@@ -6,7 +6,7 @@
 
 use std::rc::Rc;
 use std::sync::Arc;
-use std::time::Instant;
+use web_time::Instant;
 
 use gpui::{
     div, point, AccessibleAction, App, Div, ElementId, Entity, FocusHandle,

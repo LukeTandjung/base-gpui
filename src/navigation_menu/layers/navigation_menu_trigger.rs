@@ -1,7 +1,6 @@
-use std::{
-    rc::Rc,
-    time::{Duration, SystemTime, UNIX_EPOCH},
-};
+use std::{rc::Rc, time::Duration};
+
+use web_time::{SystemTime, UNIX_EPOCH};
 
 use gpui::{
     div, AccessibleAction, App, Div, FocusHandle, InteractiveElement as _, IntoElement,

@@ -1016,7 +1016,7 @@ impl DrawerRuntime {
 /// gesture timestamps into runtime commands.
 pub fn drawer_now_ms() -> f32 {
     use std::sync::OnceLock;
-    use std::time::Instant;
+    use web_time::Instant;
     static EPOCH: OnceLock<Instant> = OnceLock::new();
     EPOCH.get_or_init(Instant::now).elapsed().as_secs_f64() as f32 * 1000.0
 }

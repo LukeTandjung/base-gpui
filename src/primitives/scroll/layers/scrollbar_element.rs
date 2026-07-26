@@ -10,7 +10,7 @@
 
 use std::panic::Location;
 use std::rc::Rc;
-use std::time::Instant;
+use web_time::Instant;
 
 use gpui::{
     fill, point, px, relative, size, App, Axis, Bounds, ContentMask, Element, ElementId, Entity,

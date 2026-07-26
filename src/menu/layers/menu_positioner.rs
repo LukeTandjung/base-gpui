@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use std::time::Instant;
+use web_time::Instant;
 
 use gpui::{
     anchored, deferred, div, point, prelude::FluentBuilder as _, px, Anchor, App, Bounds, Div,

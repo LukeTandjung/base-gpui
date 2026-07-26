@@ -9,7 +9,8 @@
 //! [`ScrollTarget`](crate::primitives::scroll::ScrollTarget) — the runtime
 //! only remembers the last *observed* offset to detect scroll activity.
 
-use std::time::{Duration, Instant};
+use std::time::Duration;
+use web_time::Instant;
 
 use gpui::{px, size, Axis, Pixels, Point, Size};
 

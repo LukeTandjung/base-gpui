@@ -10,7 +10,8 @@
 //! here is plain `&mut self` / `&self` over injected offsets, sizes, and
 //! times — unit-testable without a window.
 
-use std::time::{Duration, Instant};
+use std::time::Duration;
+use web_time::Instant;
 
 use gpui::{size, Axis, Pixels, Point, ScrollHandle, Size};
 

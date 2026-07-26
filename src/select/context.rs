@@ -1,4 +1,6 @@
-use std::{rc::Rc, time::Instant};
+use std::rc::Rc;
+
+use web_time::Instant;
 
 use gpui::{App, Bounds, ElementId, Entity, Pixels, Size, Window};
 

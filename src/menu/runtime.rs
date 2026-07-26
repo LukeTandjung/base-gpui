@@ -1,8 +1,6 @@
-use std::{
-    collections::HashMap,
-    rc::Rc,
-    time::{Duration, Instant},
-};
+use std::{collections::HashMap, rc::Rc, time::Duration};
+
+use web_time::Instant;
 
 use gpui::{
     px, App, Bounds, ElementId, FocusHandle, Pixels, Point, ScrollHandle, SharedString, Size,

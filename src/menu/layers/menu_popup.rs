@@ -1,7 +1,6 @@
-use std::{
-    rc::Rc,
-    time::{Duration, Instant, SystemTime, UNIX_EPOCH},
-};
+use std::{rc::Rc, time::Duration};
+
+use web_time::{Instant, SystemTime, UNIX_EPOCH};
 
 use gpui::{
     div, App, Div, ElementId, FocusHandle, InteractiveElement as _, IntoElement, KeyDownEvent,

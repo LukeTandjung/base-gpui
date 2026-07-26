@@ -1,6 +1,6 @@
 use std::future::Future;
 use std::rc::Rc;
-use std::time::Instant;
+use web_time::Instant;
 
 use gpui::{App, Entity, FocusHandle, SharedString};
 
