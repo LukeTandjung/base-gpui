@@ -1,6 +1,6 @@
 # Tooltip
 
-Accessibility: the trigger is exposed as `Role::Button` (with an optional `TooltipTrigger::aria_label`) and the open popup as `Role::Tooltip`; all other layers stay out of the accessibility tree, matching Base UI's ARIA-light tooltip. Known gaps in the pinned gpui revision: - `disabled`: no `.aria_disabled(...)` builder exists, so AT cannot see a disabled trigger state. Disabled triggers are removed from tab order and omit the Click a11y action instead; blocked pending an upstream gpui `set_disabled` addition. - `aria-describedby` trigger→popup relationship: no relationship builders exist. Base UI does not emit this for Tooltip either; tooltip content is not an accessible description or name for the trigger. - Live-region announcements of tooltip content on open: no announcement API exists, so tooltips remain sighted-user visual hints.
+A small label shown when hovering or focusing a control.
 
 [Base UI reference](https://base-ui.com/react/components/tooltip) · [Source](../../src/tooltip/mod.rs)
 
@@ -1025,6 +1025,8 @@ TooltipViewport also supports the GPUI traits implemented in its source, such as
 ## Accessibility
 
 Keyboard interaction and accessibility semantics are implemented by the component, independently of visual styling. Known limitations caused by missing GPUI accessibility primitives are documented in the module source and are not silently approximated.
+
+Accessibility: the trigger is exposed as `Role::Button` (with an optional `TooltipTrigger::aria_label`) and the open popup as `Role::Tooltip`; all other layers stay out of the accessibility tree, matching Base UI's ARIA-light tooltip. Known gaps in the pinned gpui revision: - `disabled`: no `.aria_disabled(...)` builder exists, so AT cannot see a disabled trigger state. Disabled triggers are removed from tab order and omit the Click a11y action instead; blocked pending an upstream gpui `set_disabled` addition. - `aria-describedby` trigger→popup relationship: no relationship builders exist. Base UI does not emit this for Tooltip either; tooltip content is not an accessible description or name for the trigger. - Live-region announcements of tooltip content on open: no announcement API exists, so tooltips remain sighted-user visual hints.
 
 ## Stability
 

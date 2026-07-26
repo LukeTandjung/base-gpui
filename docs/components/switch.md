@@ -1,6 +1,6 @@
 # Switch
 
-`SwitchRoot` exposes an AccessKit node with `Role::Switch`, `aria_toggled` derived from the checked style state, and an accessible name via the `.aria_label(...)` builder. `Action::Click` and `Action::Focus` are auto-registered by the existing `.on_click(...)` / `.track_focus(...)` wiring. `SwitchThumb` is decorative and has no role, so it stays out of the accessibility tree.
+A toggle between an on and an off state.
 
 [Base UI reference](https://base-ui.com/react/components/switch) · [Source](../../src/switch/mod.rs)
 
@@ -280,6 +280,8 @@ SwitchThumb also supports the GPUI traits implemented in its source, such as sta
 ## Accessibility
 
 Keyboard interaction and accessibility semantics are implemented by the component, independently of visual styling. Known limitations caused by missing GPUI accessibility primitives are documented in the module source and are not silently approximated.
+
+`SwitchRoot` exposes an AccessKit node with `Role::Switch`, `aria_toggled` derived from the checked style state, and an accessible name via the `.aria_label(...)` builder. `Action::Click` and `Action::Focus` are auto-registered by the existing `.on_click(...)` / `.track_focus(...)` wiring. `SwitchThumb` is decorative and has no role, so it stays out of the accessibility tree.
 
 ## Stability
 

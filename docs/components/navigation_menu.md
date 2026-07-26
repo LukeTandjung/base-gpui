@@ -1,6 +1,6 @@
 # Navigation Menu
 
-Navigation Menu ports Base UI's Navigation Menu component model to GPUI.
+A set of links with expandable panels for site navigation.
 
 [Base UI reference](https://base-ui.com/react/components/navigation-menu) · [Source](../../src/navigation_menu/mod.rs)
 

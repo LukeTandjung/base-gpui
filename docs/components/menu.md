@@ -1,6 +1,6 @@
 # Menu
 
-The menu family sets `Role::Button`/`Role::MenuItem` on triggers, `Role::Menu` on popups, `Role::MenuItem{,CheckBox,Radio}` on items, and `Role::Group` on (radio) groups. Backdrop, arrow, indicators, group label, portal, positioner, and the structural roots carry no role and stay out of the accessibility tree (mirroring Base UI's `role="presentation"` / `aria-hidden`). Gaps in the pinned gpui revision, omitted rather than faked (blocked on upstream builders): - `aria-haspopup="menu"` / `aria-controls` on triggers and submenu triggers: `aria_expanded` plus the popup's `Role::Menu` stand in. - `aria-labelledby`: replaced by literal-string `.aria_label(...)` sourced from the registered group-label metadata. - `disabled`/`aria-disabled`: disabled parts are inert (withheld tab stops, activation no-ops) but the disabled state is not announced.
+A list of actions or options opened from a trigger.
 
 [Base UI reference](https://base-ui.com/react/components/menu) · [Source](../../src/menu/mod.rs)
 
@@ -2205,6 +2205,8 @@ MenuSeparator also supports the GPUI traits implemented in its source, such as s
 ## Accessibility
 
 Keyboard interaction and accessibility semantics are implemented by the component, independently of visual styling. Known limitations caused by missing GPUI accessibility primitives are documented in the module source and are not silently approximated.
+
+The menu family sets `Role::Button`/`Role::MenuItem` on triggers, `Role::Menu` on popups, `Role::MenuItem{,CheckBox,Radio}` on items, and `Role::Group` on (radio) groups. Backdrop, arrow, indicators, group label, portal, positioner, and the structural roots carry no role and stay out of the accessibility tree (mirroring Base UI's `role="presentation"` / `aria-hidden`). Gaps in the pinned gpui revision, omitted rather than faked (blocked on upstream builders): - `aria-haspopup="menu"` / `aria-controls` on triggers and submenu triggers: `aria_expanded` plus the popup's `Role::Menu` stand in. - `aria-labelledby`: replaced by literal-string `.aria_label(...)` sourced from the registered group-label metadata. - `disabled`/`aria-disabled`: disabled parts are inert (withheld tab stops, activation no-ops) but the disabled state is not announced.
 
 ## Stability
 

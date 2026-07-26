@@ -1,6 +1,6 @@
 # Meter
 
-GPUI-native port of Base UI Meter.
+A read-only gauge showing a value within a known range.
 
 [Base UI reference](https://base-ui.com/react/components/meter) · [Source](../../src/meter/mod.rs)
 

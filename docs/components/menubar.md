@@ -1,6 +1,6 @@
 # Menubar
 
-Menubar ports Base UI's Menubar component model to GPUI.
+A horizontal bar of menus sharing one roving focus.
 
 [Base UI reference](https://base-ui.com/react/components/menubar) · [Source](../../src/menubar/mod.rs)
 

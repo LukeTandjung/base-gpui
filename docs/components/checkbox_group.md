@@ -1,6 +1,6 @@
 # Checkbox Group
 
-Checkbox Group.
+Shared state and labeling for a set of related checkboxes.
 
 [Base UI reference](https://base-ui.com/react/components/checkbox-group) · [Source](../../src/checkbox_group/mod.rs)
 

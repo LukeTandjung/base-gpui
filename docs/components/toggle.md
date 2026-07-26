@@ -1,6 +1,6 @@
 # Toggle
 
-The `Toggle` layer enters the AccessKit tree as `Role::Button` with `aria_toggled` reflecting the pressed state (the AccessKit stand-in for `aria-pressed`; screen readers may phrase it as "toggled"/"checked").
+A button that stays pressed until pressed again.
 
 [Base UI reference](https://base-ui.com/react/components/toggle) · [Source](../../src/toggle/mod.rs)
 
@@ -192,6 +192,8 @@ Toggle also supports the GPUI traits implemented in its source, such as standard
 ## Accessibility
 
 Keyboard interaction and accessibility semantics are implemented by the component, independently of visual styling. Known limitations caused by missing GPUI accessibility primitives are documented in the module source and are not silently approximated.
+
+The `Toggle` layer enters the AccessKit tree as `Role::Button` with `aria_toggled` reflecting the pressed state (the AccessKit stand-in for `aria-pressed`; screen readers may phrase it as "toggled"/"checked").
 
 ## Stability
 

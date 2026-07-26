@@ -1,6 +1,6 @@
 # Avatar
 
-Avatar ports Base UI's Avatar component model to GPUI.
+An image that represents a user, with a fallback while it loads or fails.
 
 [Base UI reference](https://base-ui.com/react/components/avatar) · [Source](../../src/avatar/mod.rs)
 

@@ -1,6 +1,6 @@
 # Accordion
 
-Accessible collapsible-panel component ported from Base UI's Accordion.
+A set of collapsible panels opened by their headers.
 
 [Base UI reference](https://base-ui.com/react/components/accordion) · [Source](../../src/accordion/mod.rs)
 

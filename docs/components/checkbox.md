@@ -1,6 +1,6 @@
 # Checkbox
 
-Checkbox ports Base UI's Checkbox component model to GPUI.
+A control that toggles between checked and unchecked.
 
 [Base UI reference](https://base-ui.com/react/components/checkbox) · [Source](../../src/checkbox/mod.rs)
 

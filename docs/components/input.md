@@ -1,6 +1,6 @@
 # Input
 
-Field-aware Base UI `Input` component.
+A single-line text input with caret, selection, and editing.
 
 [Base UI reference](https://base-ui.com/react/components/input) · [Source](../../src/input/mod.rs)
 

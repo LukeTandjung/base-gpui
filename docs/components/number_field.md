@@ -1,6 +1,6 @@
 # Number Field
 
-Number Field component family.
+A numeric input with increment and decrement buttons.
 
 [Base UI reference](https://base-ui.com/react/components/number-field) · [Source](../../src/number_field/mod.rs)
 

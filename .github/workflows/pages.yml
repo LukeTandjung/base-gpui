@@ -1,0 +1,62 @@
+name: Deploy showcase to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          targets: wasm32-unknown-unknown
+          components: rust-src
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: site
+
+      - name: Install trunk
+        uses: jetli/trunk-action@v0.5.0
+        with:
+          version: "latest"
+
+      - name: Build wasm demos
+        working-directory: site
+        env:
+          CARGO_UNSTABLE_BUILD_STD: std,panic_abort
+        run: trunk build --release --public-url /base-gpui/demo/
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Build docs site
+        run: deno run --allow-read --allow-write --allow-env scripts/build-site.mjs --base /base-gpui
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,6 +1,6 @@
 # Toast
 
-Toast: stacked, auto-dismissing notifications.
+Stacked notifications that dismiss on a timer.
 
 [Base UI reference](https://base-ui.com/react/components/toast) · [Source](../../src/toast/mod.rs)
 

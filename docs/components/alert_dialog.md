@@ -1,6 +1,6 @@
 # Alert Dialog
 
-Alert Dialog component ported from Base UI, composing the Dialog module.
+A dialog that interrupts the user and requires a response.
 
 [Base UI reference](https://base-ui.com/react/components/alert-dialog) · [Source](../../src/alert_dialog/mod.rs)
 

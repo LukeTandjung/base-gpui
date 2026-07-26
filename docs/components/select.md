@@ -1,6 +1,6 @@
 # Select
 
-GPUI port of Base UI Select.
+A trigger that opens a list of options and displays the chosen one.
 
 [Base UI reference](https://base-ui.com/react/components/select) · [Source](../../src/select/mod.rs)
 

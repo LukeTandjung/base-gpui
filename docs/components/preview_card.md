@@ -1,6 +1,6 @@
 # Preview Card
 
-Preview Card ports Base UI's Preview Card component model to GPUI.
+A card that previews a link when hovered.
 
 [Base UI reference](https://base-ui.com/react/components/preview-card) · [Source](../../src/preview_card/mod.rs)
 

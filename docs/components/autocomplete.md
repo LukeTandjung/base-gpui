@@ -1,6 +1,6 @@
 # Autocomplete
 
-Autocomplete ports Base UI's Autocomplete component model to GPUI.
+A text input that filters a list of suggestions as you type.
 
 [Base UI reference](https://base-ui.com/react/components/autocomplete) · [Source](../../src/autocomplete/mod.rs)
 

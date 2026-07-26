@@ -1,6 +1,6 @@
 # Fieldset
 
-Fieldset ports Base UI's Fieldset component model to GPUI.
+Groups related fields under a shared legend.
 
 [Base UI reference](https://base-ui.com/react/components/fieldset) · [Source](../../src/fieldset/mod.rs)
 

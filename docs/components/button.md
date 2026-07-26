@@ -1,6 +1,6 @@
 # Button
 
-Button ports Base UI's Button component model to GPUI.
+A pressable control with focus, keyboard, and disabled behavior.
 
 [Base UI reference](https://base-ui.com/react/components/button) · [Source](../../src/button/mod.rs)
 

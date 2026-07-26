@@ -1,6 +1,6 @@
 # Separator
 
-Separator ports Base UI's Separator component model to GPUI.
+A visual divider between sections or groups of controls.
 
 [Base UI reference](https://base-ui.com/react/components/separator) · [Source](../../src/separator/mod.rs)
 

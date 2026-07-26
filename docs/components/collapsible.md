@@ -1,6 +1,6 @@
 # Collapsible
 
-Collapsible ports Base UI's Collapsible component model to GPUI.
+A panel that a trigger expands and collapses.
 
 [Base UI reference](https://base-ui.com/react/components/collapsible) · [Source](../../src/collapsible/mod.rs)
 

@@ -1,6 +1,6 @@
 # Context Menu
 
-Context Menu ports Base UI's Context Menu component model to GPUI.
+A menu opened by right-clicking a target area.
 
 [Base UI reference](https://base-ui.com/react/components/context-menu) · [Source](../../src/context_menu/mod.rs)
 

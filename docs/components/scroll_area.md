@@ -1,6 +1,6 @@
 # Scroll Area
 
-Scroll Area ports Base UI's Scroll Area component model to GPUI.
+A scrollable viewport with custom, styleable scrollbars.
 
 [Base UI reference](https://base-ui.com/react/components/scroll-area) · [Source](../../src/scroll_area/mod.rs)
 

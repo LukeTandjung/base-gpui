@@ -1,6 +1,6 @@
 # Toggle Group
 
-Toggle Group ports Base UI's Toggle Group component model to GPUI.
+A row of toggles where one or several can be pressed.
 
 [Base UI reference](https://base-ui.com/react/components/toggle-group) · [Source](../../src/toggle_group/mod.rs)
 

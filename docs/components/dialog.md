@@ -1,6 +1,6 @@
 # Dialog
 
-Dialog component ported from Base UI.
+A modal panel rendered on top of the page content.
 
 [Base UI reference](https://base-ui.com/react/components/dialog) · [Source](../../src/dialog/mod.rs)
 

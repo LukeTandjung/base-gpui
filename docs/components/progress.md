@@ -1,6 +1,6 @@
 # Progress
 
-GPUI-native port of Base UI Progress.
+Shows how far a task has advanced.
 
 [Base UI reference](https://base-ui.com/react/components/progress) · [Source](../../src/progress/mod.rs)
 

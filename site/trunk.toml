@@ -1,0 +1,16 @@
+# The wasm demo bundle lands in dist/demo/ so the docs generator can write
+# the rest of the deployable site around it in dist/. public_url must match
+# that mount point or the generated index.html requests its assets from the
+# site root and 404s. CI overrides it with --public-url /base-gpui/demo/.
+[build]
+dist = "dist/demo"
+public_url = "/demo/"
+
+[serve]
+addresses = ["127.0.0.1"]
+port = 8080
+open = false
+
+# Headers required for WebGPU / SharedArrayBuffer support. GitHub Pages
+# cannot send these, so deployed pages rely on coi-serviceworker.js instead.
+headers = { "Cross-Origin-Embedder-Policy" = "require-corp", "Cross-Origin-Opener-Policy" = "same-origin" }

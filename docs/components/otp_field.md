@@ -1,6 +1,6 @@
 # OTP Field
 
-OTP Field: a group of one-character slots editing a single OTP string.
+A row of one-character slots that edit a single passcode.
 
 [Base UI reference](https://base-ui.com/react/components/otp-field) · [Source](../../src/otp_field/mod.rs)
 

@@ -1,6 +1,6 @@
 # Toolbar
 
-Toolbar component family ported from Base UI.
+Groups buttons and inputs behind a single tab stop.
 
 [Base UI reference](https://base-ui.com/react/components/toolbar) · [Source](../../src/toolbar/mod.rs)
 

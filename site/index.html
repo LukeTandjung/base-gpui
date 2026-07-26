@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0" />
+        <title>base-gpui showcase</title>
+        <script src="coi-serviceworker.js"></script>
+        <script src="worker-teardown.js"></script>
+        <link rel="stylesheet" href="demo.css" />
+        <link data-trunk rel="copy-file" href="coi-serviceworker.js" />
+        <link data-trunk rel="copy-file" href="worker-teardown.js" />
+        <link data-trunk rel="copy-file" href="demo.css" />
+        <link data-trunk rel="rust" data-bin="showcase" data-bindgen-target="web" data-wasm-opt="0" />
+    </head>
+    <body></body>
+</html>

@@ -1,6 +1,6 @@
 # Field
 
-Base UI Field's ARIA wiring is id-reference based and this gpui revision has no relationship builders, so parts of it are intentionally omitted (see `issues/port-baseui-field.md`, "AccessKit accessibility follow-up"):
+Labeling, description, and validation wiring for a single form control.
 
 [Base UI reference](https://base-ui.com/react/components/field) · [Source](../../src/field/mod.rs)
 
@@ -846,6 +846,8 @@ FieldValidity also supports the GPUI traits implemented in its source, such as s
 ## Accessibility
 
 Keyboard interaction and accessibility semantics are implemented by the component, independently of visual styling. Known limitations caused by missing GPUI accessibility primitives are documented in the module source and are not silently approximated.
+
+Base UI Field's ARIA wiring is id-reference based and this gpui revision has no relationship builders, so parts of it are intentionally omitted (see `issues/port-baseui-field.md`, "AccessKit accessibility follow-up"):
 
 ## Stability
 

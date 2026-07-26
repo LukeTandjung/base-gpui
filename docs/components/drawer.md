@@ -1,6 +1,6 @@
 # Drawer
 
-Drawer ports Base UI's Drawer component model to GPUI.
+A dialog that slides in from the edge of the screen and can be swiped away.
 
 [Base UI reference](https://base-ui.com/react/components/drawer) · [Source](../../src/drawer/mod.rs)
 

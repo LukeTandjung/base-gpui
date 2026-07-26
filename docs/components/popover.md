@@ -1,6 +1,6 @@
 # Popover
 
-Popover ports Base UI's Popover component model to GPUI.
+A floating panel of content anchored to a trigger.
 
 [Base UI reference](https://base-ui.com/react/components/popover) · [Source](../../src/popover/mod.rs)
 

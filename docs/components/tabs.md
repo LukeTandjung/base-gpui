@@ -2,7 +2,7 @@
 
 # Tabs
 
-Tabs organize related content into panels and show one panel at a time. They support mouse and keyboard selection, horizontal or vertical layouts, controlled and uncontrolled state, disabled tabs, and an optional animated indicator.
+Panels of content shown one at a time, selected by tab.
 
 [Base UI reference](https://base-ui.com/react/components/tabs) · [Source](../../src/tabs/mod.rs)
 

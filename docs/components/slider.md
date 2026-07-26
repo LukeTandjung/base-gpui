@@ -1,6 +1,6 @@
 # Slider
 
-GPUI-native port of Base UI Slider.
+A draggable control for picking a value from a range.
 
 [Base UI reference](https://base-ui.com/react/components/slider) · [Source](../../src/slider/mod.rs)
 

@@ -1,6 +1,6 @@
 # Form
 
-GPUI-native port of Base UI `Form`.
+Submission and validation state for a group of fields.
 
 [Base UI reference](https://base-ui.com/react/components/form) · [Source](../../src/form/mod.rs)
 

@@ -1,0 +1,22 @@
+[build]
+target-dir = "../target"
+
+# Threaded wasm needs atomics + shared memory, and a std rebuilt with those
+# features. Mirrors gpui_web's hello_web example; the single-threaded fallback
+# is broken at the pinned gpui rev, so the threaded build is the only one that
+# renders. The matching `build-std` flag lives in the wasm devshell and CI as
+# CARGO_UNSTABLE_BUILD_STD (nightly only) so native stable builds stay usable.
+[target.wasm32-unknown-unknown]
+rustflags = [
+    "-C", "target-feature=+atomics,+bulk-memory,+mutable-globals",
+    "-C", "link-arg=--shared-memory",
+    "-C", "link-arg=--max-memory=1073741824",
+    "-C", "link-arg=--import-memory",
+    "-C", "link-arg=--export=__wasm_init_tls",
+    "-C", "link-arg=--export=__tls_size",
+    "-C", "link-arg=--export=__tls_align",
+    "-C", "link-arg=--export=__tls_base",
+    # wasm-bindgen's threading transform injects a thread id at __heap_base;
+    # newer nightlies stopped exporting it by default.
+    "-C", "link-arg=--export=__heap_base",
+]

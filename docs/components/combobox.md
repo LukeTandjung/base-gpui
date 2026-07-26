@@ -1,6 +1,6 @@
 # Combobox
 
-Roles/aria props and a11y actions are wired per the port issue's follow-up plan. The following Base UI ARIA attributes have **no gpui builder** in the pinned revision and are intentionally omitted:
+A text input that opens a filtered list of options.
 
 [Base UI reference](https://base-ui.com/react/components/combobox) · [Source](../../src/combobox/mod.rs)
 
@@ -2162,6 +2162,8 @@ ComboboxValue also supports the GPUI traits implemented in its source, such as s
 ## Accessibility
 
 Keyboard interaction and accessibility semantics are implemented by the component, independently of visual styling. Known limitations caused by missing GPUI accessibility primitives are documented in the module source and are not silently approximated.
+
+Roles/aria props and a11y actions are wired per the port issue's follow-up plan. The following Base UI ARIA attributes have **no gpui builder** in the pinned revision and are intentionally omitted:
 
 ## Stability
 

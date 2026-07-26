@@ -1,6 +1,6 @@
 # Radio Group
 
-Radio Group ports Base UI's Radio Group component model to GPUI.
+A set of options where exactly one can be selected.
 
 [Base UI reference](https://base-ui.com/react/components/radio-group) · [Source](../../src/radio_group/mod.rs)
 
