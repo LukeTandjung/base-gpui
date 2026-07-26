@@ -1,7 +1,7 @@
 use gpui::{
-    fill, hsla, point, px, rgba, size, App, Bounds, ContentMask, Element, ElementId,
-    ElementInputHandler, Entity, GlobalElementId, InspectorElementId, IntoElement, LayoutId,
-    PaintQuad, Pixels, ShapedLine, SharedString, Style, TextAlign, TextRun, UnderlineStyle, Window,
+    fill, point, px, rgba, size, App, Bounds, ContentMask, Element, ElementId, ElementInputHandler,
+    Entity, GlobalElementId, InspectorElementId, IntoElement, LayoutId, PaintQuad, Pixels,
+    ShapedLine, SharedString, Style, TextAlign, TextRun, UnderlineStyle, Window,
 };
 
 use crate::primitives::input::InputRuntime;
@@ -82,7 +82,9 @@ impl Element for InputTextElement {
         let disabled = input.disabled();
 
         let (display_text, text_color) = if value.is_empty() {
-            (self.placeholder.clone(), hsla(0.0, 0.0, 0.0, 0.35))
+            // Derive the placeholder from the inherited text color rather
+            // than hardcoding black, so it stays visible on dark themes.
+            (self.placeholder.clone(), style.color.opacity(0.35))
         } else {
             (value.clone(), style.color)
         };
