@@ -1,0 +1,17 @@
+id: barrel-only-mod-rs
+language: Rust
+severity: error
+message: mod.rs files are barrel exports only; move logic into a named sibling file and re-export it.
+files:
+  - "src/**/mod.rs"
+rule:
+  any:
+    - kind: function_item
+    - kind: struct_item
+    - kind: enum_item
+    - kind: trait_item
+    - kind: type_item
+    - kind: const_item
+    - kind: static_item
+    - kind: impl_item
+    - kind: macro_definition

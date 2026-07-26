@@ -1,0 +1,7 @@
+id: no-scoped-pub
+language: Rust
+severity: error
+message: Do not use Rust scoped visibility; keep items private or make the API explicitly public.
+rule:
+  kind: visibility_modifier
+  regex: '^pub\('
