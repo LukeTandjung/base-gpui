@@ -5,13 +5,59 @@
   var base = document.documentElement.getAttribute("data-base") || "";
   var index = window.__SEARCH_INDEX__ || [];
 
-  // ── Examples: hide the skeleton once the iframe paints, and swap to the
-  // fallback when the browser has no WebGPU adapter at all.
-  document.querySelectorAll(".demo").forEach(function (demo) {
+  // ── Examples: hide the skeleton once the iframe paints. Swap to the
+  // fallback when WebGPU is missing or yields no adapter (`navigator.gpu`
+  // often exists on mobile while requestAdapter() resolves null), and to the
+  // error state when the demo shell reports a boot failure via postMessage.
+  var demoCards = Array.prototype.slice.call(document.querySelectorAll(".demo"));
+  // Phones can't run the demos (WebGPU adapter and shared-memory limits), so
+  // say so up front and skip the ~18 MB wasm download entirely. Tablets pass
+  // through and get a real attempt — iPads report a desktop UA anyway.
+  var isPhone = navigator.userAgentData
+    ? navigator.userAgentData.mobile
+    : /iPhone|iPod|Android.*Mobile/i.test(navigator.userAgent);
+  if (isPhone) {
+    demoCards.forEach(function (demo) {
+      var frame = demo.querySelector("iframe");
+      if (frame && frame.getAttribute("src")) {
+        frame.dataset.src = frame.src;
+        frame.removeAttribute("src");
+      }
+      demo.dataset.state = "mobile";
+      var tryButton = demo.querySelector("[data-demo-try]");
+      if (tryButton) tryButton.addEventListener("click", function () {
+        demo.dataset.state = "loading";
+        if (frame && frame.dataset.src) frame.src = frame.dataset.src;
+      });
+    });
+  }
+  demoCards.forEach(function (demo) {
     var frame = demo.querySelector("iframe");
-    if (!("gpu" in navigator)) { demo.dataset.state = "unsupported"; return; }
-    if (frame) frame.addEventListener("load", function () { demo.dataset.state = "ready"; });
+    if (frame) frame.addEventListener("load", function () {
+      if (demo.dataset.state === "loading") demo.dataset.state = "ready";
+    });
   });
+  if (demoCards.length) {
+    if (!isPhone && !("gpu" in navigator)) {
+      demoCards.forEach(function (demo) { demo.dataset.state = "unsupported"; });
+    } else if (!isPhone) {
+      navigator.gpu.requestAdapter().then(function (adapter) {
+        if (adapter) return;
+        demoCards.forEach(function (demo) { demo.dataset.state = "unsupported"; });
+      }, function () {});
+    }
+    window.addEventListener("message", function (event) {
+      var data = event.data;
+      if (!data || data.baseGpui !== "demo-error") return;
+      demoCards.forEach(function (demo) {
+        var frame = demo.querySelector("iframe");
+        if (!frame || frame.contentWindow !== event.source) return;
+        demo.dataset.state = "failed";
+        var detail = demo.querySelector("[data-demo-error]");
+        if (detail) detail.textContent = String(data.message || "unknown error");
+      });
+    });
+  }
 
   // ── Each demo iframe holds a compiled wasm module, worker threads, and a
   // WebGPU device. Pages restored later via the back/forward cache would keep
@@ -20,6 +66,7 @@
   // the iframe when the page is hidden and restore it if the page comes back.
   window.addEventListener("pagehide", function () {
     document.querySelectorAll(".demo iframe").forEach(function (frame) {
+      if (!frame.src) return;
       frame.dataset.src = frame.src;
       frame.removeAttribute("src");
       if (frame.contentWindow) frame.contentWindow.location.replace("about:blank");

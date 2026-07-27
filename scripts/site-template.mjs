@@ -424,13 +424,23 @@ export function demoHtml({ base, slug, title }) {
       <div class="demo__bones">
         <div class="demo__bone demo__bone--track"></div>
         <div class="demo__bone demo__bone--label"></div>
-        <div class="demo__note">Compiling ~11 MB of WebAssembly</div>
+        <div class="demo__note">Compiling ~18 MB of WebAssembly</div>
       </div>
     </div>
     <div class="demo__state demo__fallback">
       <p>This demo runs the real GPUI component on WebGPU, which this browser does not expose.</p>
-      <p>Try Chrome or Edge 113+, or Safari 18+. In Firefox, enable <code>dom.webgpu.enabled</code>.</p>
+      <p>Try Chrome or Edge 113+, or Safari 26+. In Firefox, enable <code>dom.webgpu.enabled</code>.</p>
       <p>You can also run it natively: <code>cargo run -p showcase ${escapeHtml(slug)}</code></p>
+    </div>
+    <div class="demo__state demo__failed">
+      <p>The demo failed to start in this browser.</p>
+      <p><code data-demo-error></code></p>
+      <p>You can run it natively instead: <code>cargo run -p showcase ${escapeHtml(slug)}</code></p>
+    </div>
+    <div class="demo__state demo__mobile">
+      <p>Live examples are not supported on most mobile browsers yet — open this page on a desktop or tablet to run the demo.</p>
+      <p>Recent phones with WebGPU may manage it (downloads ~18 MB):</p>
+      <button class="demo__try" type="button" data-demo-try>Try anyway</button>
     </div>
   </div>
 </div>`;

@@ -203,9 +203,23 @@ img.brand__mark { background: none; object-fit: contain; }
 .demo__bone--label { width: 168px; height: 10px; }
 .demo__note { font-size: 11px; color: var(--fg-mute); }
 .demo[data-state="ready"] .demo__skeleton { display: none; }
-.demo[data-state="unsupported"] .demo__frame { display: none; }
-.demo[data-state="unsupported"] .demo__skeleton { display: none; }
+.demo[data-state="unsupported"] .demo__frame,
+.demo[data-state="failed"] .demo__frame,
+.demo[data-state="mobile"] .demo__frame { display: none; }
+.demo[data-state="unsupported"] .demo__skeleton,
+.demo[data-state="failed"] .demo__skeleton,
+.demo[data-state="mobile"] .demo__skeleton { display: none; }
 .demo[data-state="unsupported"] .demo__fallback { display: flex; }
+.demo[data-state="failed"] .demo__failed { display: flex; }
+.demo[data-state="mobile"] .demo__mobile { display: flex; }
+.demo__failed [data-demo-error] { word-break: break-word; color: var(--fg-mute); }
+.demo__try {
+  font: inherit; font-size: 11.5px; height: 28px; padding: 0 14px;
+  border: 1px solid var(--white-10); border-radius: 6px;
+  background: var(--white-05); color: var(--fg-1); cursor: pointer;
+  transition: background var(--dur-1) ease-out, color var(--dur-1) ease-out;
+}
+.demo__try:hover { background: var(--white-096); color: var(--fg-0); }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
 
 /* ── On this page ────────────────────────────────────────────────────────── */
