@@ -13,6 +13,8 @@ use crate::accordion::{
     AccordionToggle, AccordionTriggerStyleState, ACCORDION_TRIGGER_KEY_CONTEXT,
 };
 
+type AccordionTriggerStyle<T> = Rc<dyn Fn(AccordionTriggerStyleState<T>, Div) -> Div + 'static>;
+
 #[derive(derive_setters::Setters, IntoElement)]
 pub struct AccordionTrigger<T: Clone + Eq + 'static> {
     #[setters(into)]
@@ -31,7 +33,7 @@ pub struct AccordionTrigger<T: Clone + Eq + 'static> {
     #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
     #[setters(skip)]
-    style_with_state: Option<Rc<dyn Fn(AccordionTriggerStyleState<T>, Div) -> Div + 'static>>,
+    style_with_state: Option<AccordionTriggerStyle<T>>,
 }
 
 impl<T: Clone + Eq + 'static> Default for AccordionTrigger<T> {

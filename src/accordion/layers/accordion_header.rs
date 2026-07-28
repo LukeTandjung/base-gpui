@@ -11,6 +11,8 @@ use crate::accordion::{
     AccordionOrientation,
 };
 
+type AccordionHeaderStyle<T> = Rc<dyn Fn(AccordionHeaderStyleState<T>, Div) -> Div + 'static>;
+
 #[derive(derive_setters::Setters, IntoElement)]
 pub struct AccordionHeader<T: Clone + Eq + 'static> {
     #[setters(into, strip_option)]
@@ -23,7 +25,7 @@ pub struct AccordionHeader<T: Clone + Eq + 'static> {
     context: Option<AccordionItemContext<T>>,
     heading_level: usize,
     #[setters(skip)]
-    style_with_state: Option<Rc<dyn Fn(AccordionHeaderStyleState<T>, Div) -> Div + 'static>>,
+    style_with_state: Option<AccordionHeaderStyle<T>>,
 }
 
 impl<T: Clone + Eq + 'static> Default for AccordionHeader<T> {

@@ -143,8 +143,10 @@ impl Element for Scrollbar {
         window: &mut Window,
         cx: &mut App,
     ) -> (LayoutId, Self::RequestLayoutState) {
-        let mut style = Style::default();
-        style.position = Position::Absolute;
+        let mut style = Style {
+            position: Position::Absolute,
+            ..Style::default()
+        };
         style.inset.top = px(0.0).into();
         style.inset.left = px(0.0).into();
         style.size.width = relative(1.0).into();
@@ -192,24 +194,23 @@ impl Element for Scrollbar {
         // frames during the fade window, nothing while hidden.
         match runtime.read(cx).fade_phase(visibility, now) {
             ScrollbarFadePhase::Solid { remaining_delay }
-                if remaining_delay < std::time::Duration::MAX =>
+                if remaining_delay < std::time::Duration::MAX
+                    && !runtime.read(cx).idle_timer_scheduled() =>
             {
-                if !runtime.read(cx).idle_timer_scheduled() {
-                    runtime.update(cx, |runtime, _| runtime.set_idle_timer_scheduled(true));
-                    let runtime = runtime.clone();
-                    window
-                        .spawn(cx, async move |cx| {
-                            cx.background_executor().timer(remaining_delay).await;
-                            cx.update(|_, cx| {
-                                runtime.update(cx, |runtime, cx| {
-                                    runtime.set_idle_timer_scheduled(false);
-                                    cx.notify();
-                                });
-                            })
-                            .ok();
+                runtime.update(cx, |runtime, _| runtime.set_idle_timer_scheduled(true));
+                let runtime = runtime.clone();
+                window
+                    .spawn(cx, async move |cx| {
+                        cx.background_executor().timer(remaining_delay).await;
+                        cx.update(|_, cx| {
+                            runtime.update(cx, |runtime, cx| {
+                                runtime.set_idle_timer_scheduled(false);
+                                cx.notify();
+                            });
                         })
-                        .detach();
-                }
+                        .ok();
+                    })
+                    .detach();
             }
             ScrollbarFadePhase::Fading => window.request_animation_frame(),
             _ => {}

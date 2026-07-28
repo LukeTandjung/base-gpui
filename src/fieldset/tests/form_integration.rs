@@ -9,17 +9,9 @@ use crate::{
     input::Input,
 };
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 struct FieldsetFormConfig {
     fieldset_disabled: bool,
-}
-
-impl Default for FieldsetFormConfig {
-    fn default() -> Self {
-        Self {
-            fieldset_disabled: false,
-        }
-    }
 }
 
 struct FieldsetFormView {

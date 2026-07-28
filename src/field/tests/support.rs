@@ -14,17 +14,12 @@ use crate::field::{
     FieldValidityStyleState, FieldValue,
 };
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Default)]
 pub enum FieldTestValidation {
+    #[default]
     None,
     ErrorWhenEmpty,
     MultipleErrors,
-}
-
-impl Default for FieldTestValidation {
-    fn default() -> Self {
-        Self::None
-    }
 }
 
 #[derive(Clone, Debug)]

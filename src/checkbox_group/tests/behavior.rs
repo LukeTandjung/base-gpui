@@ -272,7 +272,7 @@ fn checkbox(
             .push((state_value.clone(), state));
         checkbox.debug_selector({
             let selector = selector.clone();
-            move || selector.clone().into()
+            move || selector.clone()
         })
     })
 }

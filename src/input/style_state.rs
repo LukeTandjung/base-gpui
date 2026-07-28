@@ -26,7 +26,7 @@ impl InputStyleState {
         let filled = field.map_or(primitive.filled, |field| field.filled);
         let dirty = field.map_or(primitive.dirty, |field| field.dirty);
         let focused = field.map_or(primitive.focused, |field| field.focused);
-        let touched = field.map_or(false, |field| field.touched);
+        let touched = field.is_some_and(|field| field.touched);
 
         Self {
             value: primitive.value,

@@ -11,6 +11,8 @@ use crate::accordion::{
     AccordionOrientation, AccordionPanelStyleState,
 };
 
+type AccordionPanelStyle<T> = Rc<dyn Fn(AccordionPanelStyleState<T>, Div) -> Div + 'static>;
+
 #[derive(derive_setters::Setters, IntoElement)]
 pub struct AccordionPanel<T: Clone + Eq + 'static> {
     #[setters(into, strip_option)]
@@ -24,7 +26,7 @@ pub struct AccordionPanel<T: Clone + Eq + 'static> {
     #[setters(strip_option)]
     keep_mounted: Option<bool>,
     #[setters(skip)]
-    style_with_state: Option<Rc<dyn Fn(AccordionPanelStyleState<T>, Div) -> Div + 'static>>,
+    style_with_state: Option<AccordionPanelStyle<T>>,
 }
 
 impl<T: Clone + Eq + 'static> Default for AccordionPanel<T> {

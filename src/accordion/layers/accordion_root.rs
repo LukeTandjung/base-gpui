@@ -11,6 +11,8 @@ use crate::accordion::{
     AccordionValueChangeHandler,
 };
 
+type AccordionRootStyle<T> = Rc<dyn Fn(AccordionRootStyleState<T>, Div) -> Div + 'static>;
+
 #[derive(derive_setters::Setters, IntoElement)]
 pub struct AccordionRoot<T: Clone + Eq + 'static> {
     #[setters(into)]
@@ -29,7 +31,7 @@ pub struct AccordionRoot<T: Clone + Eq + 'static> {
     #[setters(skip)]
     on_value_change: Option<AccordionValueChangeHandler<T>>,
     #[setters(skip)]
-    style_with_state: Option<Rc<dyn Fn(AccordionRootStyleState<T>, Div) -> Div + 'static>>,
+    style_with_state: Option<AccordionRootStyle<T>>,
 }
 
 impl<T: Clone + Eq + 'static> Default for AccordionRoot<T> {

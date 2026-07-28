@@ -14,6 +14,8 @@ use crate::accordion::{
     AccordionItemOpenChangeHandler, AccordionItemStyleState, AccordionOrientation,
 };
 
+type AccordionItemStyle<T> = Rc<dyn Fn(AccordionItemStyleState<T>, Div) -> Div + 'static>;
+
 #[derive(derive_setters::Setters, IntoElement)]
 pub struct AccordionItem<T: Clone + Eq + 'static> {
     #[setters(into, strip_option)]
@@ -32,7 +34,7 @@ pub struct AccordionItem<T: Clone + Eq + 'static> {
     #[setters(skip)]
     on_open_change: Option<AccordionItemOpenChangeHandler>,
     #[setters(skip)]
-    style_with_state: Option<Rc<dyn Fn(AccordionItemStyleState<T>, Div) -> Div + 'static>>,
+    style_with_state: Option<AccordionItemStyle<T>>,
 }
 
 impl<T: Clone + Eq + 'static> Styled for AccordionItem<T> {

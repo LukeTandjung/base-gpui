@@ -185,7 +185,7 @@ impl Render for OTPFieldTestView {
                     .style_with_state(move |state, slot| {
                         let index = state.index;
                         slot_observations.borrow_mut().input_states.push(state);
-                        slot.debug_selector(move || format!("otp-slot-{index}").into())
+                        slot.debug_selector(move || format!("otp-slot-{index}"))
                     }),
             );
         }

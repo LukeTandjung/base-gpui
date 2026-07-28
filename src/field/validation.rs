@@ -1,7 +1,8 @@
 use gpui::SharedString;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Default)]
 pub enum FieldValue {
+    #[default]
     Empty,
     Present,
     Bool(bool),
@@ -21,36 +22,20 @@ impl FieldValue {
     }
 }
 
-impl Default for FieldValue {
-    fn default() -> Self {
-        Self::Empty
-    }
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Default)]
 pub enum FieldValidationMode {
+    #[default]
     OnSubmit,
     OnBlur,
     OnChange,
 }
 
-impl Default for FieldValidationMode {
-    fn default() -> Self {
-        Self::OnSubmit
-    }
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Default)]
 pub enum FieldErrorMatch {
+    #[default]
     Default,
     Always,
     Key(FieldValidityKey),
-}
-
-impl Default for FieldErrorMatch {
-    fn default() -> Self {
-        Self::Default
-    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -68,7 +53,7 @@ pub enum FieldValidityKey {
     Valid,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Default)]
 pub struct FieldValidityState {
     pub bad_input: bool,
     pub custom_error: bool,
@@ -120,24 +105,6 @@ impl FieldValidityState {
             FieldValidityKey::TypeMismatch => self.type_mismatch,
             FieldValidityKey::ValueMissing => self.value_missing,
             FieldValidityKey::Valid => self.valid == Some(true),
-        }
-    }
-}
-
-impl Default for FieldValidityState {
-    fn default() -> Self {
-        Self {
-            bad_input: false,
-            custom_error: false,
-            pattern_mismatch: false,
-            range_overflow: false,
-            range_underflow: false,
-            step_mismatch: false,
-            too_long: false,
-            too_short: false,
-            type_mismatch: false,
-            value_missing: false,
-            valid: None,
         }
     }
 }

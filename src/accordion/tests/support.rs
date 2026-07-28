@@ -230,7 +230,7 @@ impl AccordionTestView {
             })
             .style_with_state(move |state, item| {
                 item_state_observations.borrow_mut().item_states.push(state);
-                item.debug_selector(move || format!("accordion-item-{selector_suffix}").into())
+                item.debug_selector(move || format!("accordion-item-{selector_suffix}"))
             });
 
         let header = AccordionHeader::new()
@@ -239,7 +239,7 @@ impl AccordionTestView {
                     .borrow_mut()
                     .header_states
                     .push(state);
-                header.debug_selector(move || format!("accordion-header-{selector_suffix}").into())
+                header.debug_selector(move || format!("accordion-header-{selector_suffix}"))
             })
             .child(
                 AccordionTrigger::new()
@@ -251,9 +251,8 @@ impl AccordionTestView {
                             .borrow_mut()
                             .trigger_states
                             .push(state);
-                        trigger.debug_selector(move || {
-                            format!("accordion-trigger-{selector_suffix}").into()
-                        })
+                        trigger
+                            .debug_selector(move || format!("accordion-trigger-{selector_suffix}"))
                     })
                     .child(if index == 0 { "Trigger 1" } else { "Trigger 2" }),
             );
@@ -269,8 +268,7 @@ impl AccordionTestView {
                         .borrow_mut()
                         .panel_states
                         .push(state);
-                    panel
-                        .debug_selector(move || format!("accordion-panel-{selector_suffix}").into())
+                    panel.debug_selector(move || format!("accordion-panel-{selector_suffix}"))
                 })
                 .child(if index == 0 { "Panel 1" } else { "Panel 2" });
 

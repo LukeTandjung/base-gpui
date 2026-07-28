@@ -17,11 +17,11 @@ use crate::{
 
 #[derive(Clone, Copy)]
 enum IntegrationCase {
-    CheckboxRootDisabled,
-    CheckboxItemDisabled,
-    SwitchRootDisabled,
-    RadioGroupRootDisabled,
-    RadioGroupItemRadioDisabled,
+    CheckboxRoot,
+    CheckboxItem,
+    SwitchRoot,
+    RadioGroupRoot,
+    RadioGroupItemRadio,
 }
 
 #[derive(Clone, Default)]
@@ -57,7 +57,7 @@ impl Render for IntegrationView {
         let observations = Rc::clone(&self.observations);
 
         let content = match self.case {
-            IntegrationCase::CheckboxRootDisabled => FieldRoot::new()
+            IntegrationCase::CheckboxRoot => FieldRoot::new()
                 .id("checkbox-field")
                 .disabled(true)
                 .child_any(
@@ -70,7 +70,7 @@ impl Render for IntegrationView {
                         }),
                 )
                 .into_any_element(),
-            IntegrationCase::CheckboxItemDisabled => FieldRoot::new()
+            IntegrationCase::CheckboxItem => FieldRoot::new()
                 .id("checkbox-item-field")
                 .child(
                     FieldItem::new().disabled(true).child_any(
@@ -84,7 +84,7 @@ impl Render for IntegrationView {
                     ),
                 )
                 .into_any_element(),
-            IntegrationCase::SwitchRootDisabled => FieldRoot::new()
+            IntegrationCase::SwitchRoot => FieldRoot::new()
                 .id("switch-field")
                 .disabled(true)
                 .child_any(
@@ -97,7 +97,7 @@ impl Render for IntegrationView {
                         }),
                 )
                 .into_any_element(),
-            IntegrationCase::RadioGroupRootDisabled => FieldRoot::new()
+            IntegrationCase::RadioGroupRoot => FieldRoot::new()
                 .id("radio-field")
                 .disabled(true)
                 .child_any(
@@ -110,7 +110,7 @@ impl Render for IntegrationView {
                         }),
                 )
                 .into_any_element(),
-            IntegrationCase::RadioGroupItemRadioDisabled => FieldRoot::new()
+            IntegrationCase::RadioGroupItemRadio => FieldRoot::new()
                 .id("radio-item-field")
                 .child(
                     FieldItem::new().disabled(true).child_any(
@@ -156,35 +156,35 @@ fn read_observations(
 
 #[gpui::test]
 fn checkbox_consumes_field_root_disabled_state(cx: &mut TestAppContext) {
-    let window = open_integration(cx, IntegrationCase::CheckboxRootDisabled);
+    let window = open_integration(cx, IntegrationCase::CheckboxRoot);
 
     assert_eq!(read_observations(cx, window).disabled, vec![true]);
 }
 
 #[gpui::test]
 fn checkbox_inside_disabled_field_item_is_disabled(cx: &mut TestAppContext) {
-    let window = open_integration(cx, IntegrationCase::CheckboxItemDisabled);
+    let window = open_integration(cx, IntegrationCase::CheckboxItem);
 
     assert_eq!(read_observations(cx, window).disabled, vec![true]);
 }
 
 #[gpui::test]
 fn switch_consumes_field_root_disabled_state(cx: &mut TestAppContext) {
-    let window = open_integration(cx, IntegrationCase::SwitchRootDisabled);
+    let window = open_integration(cx, IntegrationCase::SwitchRoot);
 
     assert_eq!(read_observations(cx, window).disabled, vec![true]);
 }
 
 #[gpui::test]
 fn radio_group_consumes_field_root_disabled_state(cx: &mut TestAppContext) {
-    let window = open_integration(cx, IntegrationCase::RadioGroupRootDisabled);
+    let window = open_integration(cx, IntegrationCase::RadioGroupRoot);
 
     assert_eq!(read_observations(cx, window).disabled, vec![true]);
 }
 
 #[gpui::test]
 fn radio_group_radio_inside_disabled_field_item_is_disabled(cx: &mut TestAppContext) {
-    let window = open_integration(cx, IntegrationCase::RadioGroupItemRadioDisabled);
+    let window = open_integration(cx, IntegrationCase::RadioGroupItemRadio);
 
     assert_eq!(read_observations(cx, window).disabled, vec![true]);
 }

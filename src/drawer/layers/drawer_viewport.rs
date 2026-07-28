@@ -181,10 +181,7 @@ impl<P: Clone + 'static> RenderOnce for DrawerViewport<P> {
             }) {
                 return;
             }
-            if !event
-                .pressed_button
-                .map_or(false, |button| button == MouseButton::Left)
-            {
+            if !(event.pressed_button == Some(MouseButton::Left)) {
                 // Losing the primary button without a release event cancels.
                 context.update(cx, |runtime| runtime.cancel_swipe());
                 return;

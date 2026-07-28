@@ -67,7 +67,7 @@ impl<P: Clone + 'static> DrawerContext<P> {
         update: impl FnOnce(&mut DrawerRuntime) -> Output,
     ) -> Output {
         let props = Rc::clone(&self.props);
-        let controlled = self.controlled_snap_point.as_ref().clone();
+        let controlled = *self.controlled_snap_point.as_ref();
         self.drawer.update(cx, |runtime, cx| {
             runtime.sync_props(
                 props.swipe_direction(),
@@ -142,10 +142,12 @@ pub struct DrawerNestedReport {
     pub swipe_progress: f32,
 }
 
+type DrawerNestedReportHandler = Rc<dyn Fn(&DrawerNestedReport, &mut App) + 'static>;
+
 /// Parent-linked reporting channel for nested drawers, type-erased so the
 /// parent and nested drawer payload types may differ.
 pub struct DrawerNestedReporter {
-    report: Rc<dyn Fn(&DrawerNestedReport, &mut App) + 'static>,
+    report: DrawerNestedReportHandler,
 }
 
 impl Clone for DrawerNestedReporter {

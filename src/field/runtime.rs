@@ -124,7 +124,7 @@ impl RegisteredControl {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct FieldRuntime {
     controls: Vec<RegisteredControl>,
     generation: u64,
@@ -138,25 +138,6 @@ pub struct FieldRuntime {
     needs_validation: bool,
     needs_refresh: bool,
     form_external_errors: Vec<SharedString>,
-}
-
-impl Default for FieldRuntime {
-    fn default() -> Self {
-        Self {
-            controls: Vec::new(),
-            generation: 0,
-            touched: false,
-            was_focused: false,
-            validity_data: FieldValidityData::default(),
-            label_registered: false,
-            label_text: None,
-            description_count: 0,
-            error_count: 0,
-            needs_validation: false,
-            needs_refresh: false,
-            form_external_errors: Vec::new(),
-        }
-    }
 }
 
 impl FieldRuntime {
