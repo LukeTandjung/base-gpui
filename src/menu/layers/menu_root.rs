@@ -14,14 +14,20 @@ use crate::menu::{
 
 type MenuRootStyle = Rc<dyn Fn(MenuRootStyleState, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MenuRoot<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<MenuChild<P>>,
     default_open: bool,
+    #[setters(strip_option)]
     open: Option<bool>,
+    #[setters(skip)]
     trigger_id: Option<Option<ElementId>>,
+    #[setters(skip)]
     default_trigger_id: Option<ElementId>,
     disabled: bool,
     modal: bool,
@@ -29,10 +35,15 @@ pub struct MenuRoot<P: Clone + 'static = ()> {
     orientation: MenuOrientation,
     close_parent_on_esc: bool,
     highlight_item_on_hover: bool,
+    #[setters(skip)]
     on_open_change: Option<MenuOpenChangeHandler<P>>,
+    #[setters(skip)]
     on_open_change_complete: Option<MenuOpenChangeCompleteHandler<P>>,
+    #[setters(skip)]
     style_with_state: Option<MenuRootStyle>,
+    #[setters(skip)]
     menubar_link: Option<MenuMenubarLink>,
+    #[setters(skip)]
     context_menu_parent: bool,
 }
 
@@ -215,21 +226,6 @@ impl<P: Clone + 'static> MenuRoot<P> {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: bool) -> Self {
-        self.open = Some(open);
-        self
-    }
-
     pub fn trigger_id(mut self, trigger_id: impl Into<ElementId>) -> Self {
         self.trigger_id = Some(Some(trigger_id.into()));
         self
@@ -237,36 +233,6 @@ impl<P: Clone + 'static> MenuRoot<P> {
 
     pub fn default_trigger_id(mut self, trigger_id: impl Into<ElementId>) -> Self {
         self.default_trigger_id = Some(trigger_id.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn modal(mut self, modal: bool) -> Self {
-        self.modal = modal;
-        self
-    }
-
-    pub fn loop_focus(mut self, loop_focus: bool) -> Self {
-        self.loop_focus = loop_focus;
-        self
-    }
-
-    pub fn orientation(mut self, orientation: MenuOrientation) -> Self {
-        self.orientation = orientation;
-        self
-    }
-
-    pub fn close_parent_on_esc(mut self, close_parent_on_esc: bool) -> Self {
-        self.close_parent_on_esc = close_parent_on_esc;
-        self
-    }
-
-    pub fn highlight_item_on_hover(mut self, highlight_item_on_hover: bool) -> Self {
-        self.highlight_item_on_hover = highlight_item_on_hover;
         self
     }
 

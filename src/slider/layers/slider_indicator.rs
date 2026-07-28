@@ -8,11 +8,15 @@ use gpui::{
 use crate::slider::{SliderContext, SliderIndicatorStyleState, SliderOrientation};
 use crate::utils::current_direction;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SliderIndicator {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<SliderContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SliderIndicatorStyleState, Div) -> Div + 'static>>,
 }
 
@@ -76,11 +80,6 @@ impl SliderIndicator {
 
     pub fn with_slider_context(mut self, context: SliderContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

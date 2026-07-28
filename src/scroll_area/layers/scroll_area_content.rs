@@ -15,12 +15,17 @@ use crate::scroll_area::{
     child_wiring::ScrollAreaChildNode, ScrollAreaContext, ScrollAreaRootStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ScrollAreaContent {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ScrollAreaRootStyleState, Div) -> Div + 'static>>,
+    #[setters(skip)]
     context: Option<ScrollAreaContext>,
 }
 
@@ -45,11 +50,6 @@ impl Styled for ScrollAreaContent {
 impl ScrollAreaContent {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     pub fn child(mut self, child: impl IntoElement) -> Self {

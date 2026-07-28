@@ -15,6 +15,7 @@ use crate::navigation_menu::{
 type NavigationMenuLinkStyle = Rc<dyn Fn(NavigationMenuLinkStyleState, Div) -> Div + 'static>;
 type NavigationMenuLinkActivateHandler = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Link item: GPUI has no href, so activation is a callback. With
 /// `close_on_click(true)` a click closes the menu with reason `LinkPress`.
 ///
@@ -25,15 +26,27 @@ type NavigationMenuLinkActivateHandler = Rc<dyn Fn(&mut Window, &mut App) + 'sta
 /// upstream — `aria_selected` is deliberately not abused for it).
 #[derive(IntoElement)]
 pub struct NavigationMenuLink<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<NavigationMenuContext<T>>,
     active: bool,
     close_on_click: bool,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     order: usize,
+    #[setters(skip)]
     on_activate: Option<NavigationMenuLinkActivateHandler>,
+    /// Accessible name for the link; pass one when the visible caption is not
+    /// plain accessible text (no id-reference labelling exists). Render the
+    /// visible caption with `Text::new_inaccessible(...)` when set, to avoid
+    /// double announcement.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<NavigationMenuLinkStyle>,
 }
 
@@ -168,25 +181,6 @@ fn link_focus_handle(id: &ElementId, window: &mut Window, cx: &mut App) -> Focus
 impl<T: Clone + Eq + 'static> NavigationMenuLink<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn active(mut self, active: bool) -> Self {
-        self.active = active;
-        self
-    }
-
-    pub fn close_on_click(mut self, close_on_click: bool) -> Self {
-        self.close_on_click = close_on_click;
-        self
-    }
-
-    /// Accessible name for the link; pass one when the visible caption is not
-    /// plain accessible text (no id-reference labelling exists). Render the
-    /// visible caption with `Text::new_inaccessible(...)` when set, to avoid
-    /// double announcement.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
-        self
     }
 
     pub fn on_activate(mut self, on_activate: impl Fn(&mut Window, &mut App) + 'static) -> Self {

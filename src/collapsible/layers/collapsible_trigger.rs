@@ -13,14 +13,27 @@ use crate::collapsible::{
     CollapsibleTriggerStyleState, COLLAPSIBLE_TRIGGER_KEY_CONTEXT,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct CollapsibleTrigger {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<CollapsibleContext>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    /// Sets the accessible label announced for this trigger.
+    ///
+    /// Required for icon-only triggers. When the trigger also has a visible text
+    /// label child, pass that child as `Text::new_inaccessible(...)` so screen
+    /// readers do not announce the label twice; without an `aria_label`, leave
+    /// child text accessible (`text!(...)`) so it names the button.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(CollapsibleTriggerStyleState, Div) -> Div + 'static>>,
 }
 
@@ -147,22 +160,6 @@ impl CollapsibleChildNode for CollapsibleTrigger {
 impl CollapsibleTrigger {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    /// Sets the accessible label announced for this trigger.
-    ///
-    /// Required for icon-only triggers. When the trigger also has a visible text
-    /// label child, pass that child as `Text::new_inaccessible(...)` so screen
-    /// readers do not announce the label twice; without an `aria_label`, leave
-    /// child text accessible (`text!(...)`) so it names the button.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
-        self
     }
 
     pub fn style_with_state(

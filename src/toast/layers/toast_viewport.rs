@@ -15,17 +15,24 @@ use crate::toast::{
 type ToastViewportStyle = Rc<dyn Fn(ToastViewportStyleState, Div) -> Div + 'static>;
 type ToastContentBuilder<P> = Rc<dyn Fn(&ToastFacts<P>) -> ToastRoot<P> + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// The toast stack region: renders one `ToastRoot` per toast through the typed
 /// content builder (the explicit Rust replacement for Base UI's render-prop
 /// children), pauses all dismiss timers while hovered or keyboard-focused, and
 /// exits focus via Shift+Tab restoring the previously focused element.
 #[derive(IntoElement)]
 pub struct ToastViewport<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<ToastContext<P>>,
+    #[setters(skip)]
     content_builder: Option<ToastContentBuilder<P>>,
+    #[setters(skip)]
     aria_label: SharedString,
+    #[setters(skip)]
     style_with_state: Option<ToastViewportStyle>,
 }
 
@@ -122,11 +129,6 @@ impl<P: Clone + 'static> RenderOnce for ToastViewport<P> {
 impl<P: Clone + 'static> ToastViewport<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     /// Accessible label for the notifications region; defaults to

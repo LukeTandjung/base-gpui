@@ -7,14 +7,20 @@ use crate::{
     toolbar::{ToolbarContext, ToolbarOrientation},
 };
 
+#[derive(derive_setters::Setters)]
 /// A toolbar separator wrapping the ported `Separator`. It is not a
 /// composite item and is never focused by roving navigation. Without an
 /// explicit orientation it renders perpendicular to the toolbar.
 #[derive(IntoElement)]
 pub struct ToolbarSeparator {
+    #[setters(skip)]
     inner: Separator,
+    /// Overrides the derived perpendicular orientation.
+    #[setters(strip_option)]
     orientation: Option<SeparatorOrientation>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SeparatorStyleState, Div) -> Div + 'static>>,
+    #[setters(skip)]
     toolbar: Option<ToolbarContext>,
 }
 
@@ -60,12 +66,6 @@ impl RenderOnce for ToolbarSeparator {
 impl ToolbarSeparator {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    /// Overrides the derived perpendicular orientation.
-    pub fn orientation(mut self, orientation: SeparatorOrientation) -> Self {
-        self.orientation = Some(orientation);
-        self
     }
 
     pub fn style_with_state(

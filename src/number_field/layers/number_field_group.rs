@@ -10,12 +10,17 @@ use crate::number_field::{
     NumberFieldGroupStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct NumberFieldGroup {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<NumberFieldGroupChild>,
+    #[setters(skip)]
     context: Option<NumberFieldContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(NumberFieldGroupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -63,11 +68,6 @@ impl NumberFieldGroup {
 
     pub fn with_number_field_context(mut self, context: NumberFieldContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

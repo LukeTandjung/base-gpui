@@ -14,18 +14,27 @@ use crate::menu::{
 
 type MenuItemStyle = Rc<dyn Fn(MenuItemStyleState, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MenuItem<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
     disabled: bool,
     close_on_click: bool,
+    #[setters(skip)]
     on_click: Option<MenuActivationHandler>,
+    #[setters(skip)]
     index: Option<usize>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     style_with_state: Option<MenuItemStyle>,
 }
 
@@ -230,26 +239,6 @@ impl<P: Clone + 'static> MenuChildNode<P> for MenuItem<P> {
 impl<P: Clone + 'static> MenuItem<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn close_on_click(mut self, close_on_click: bool) -> Self {
-        self.close_on_click = close_on_click;
-        self
     }
 
     pub fn on_click(mut self, on_click: impl Fn(&mut Window, &mut App) + 'static) -> Self {

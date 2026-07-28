@@ -15,6 +15,7 @@ use crate::navigation_menu::{
 
 type NavigationMenuRootStyle = Rc<dyn Fn(NavigationMenuRootStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Value-driven root: open is derived from `value: Option<T>` (`None` =
 /// closed). Base UI's `actionsRef.unmount` manual-unmount escape hatch is
 /// deferred alongside transition infrastructure.
@@ -27,18 +28,30 @@ type NavigationMenuRootStyle = Rc<dyn Fn(NavigationMenuRootStyleState, Div) -> D
 /// upstream).
 #[derive(IntoElement)]
 pub struct NavigationMenuRoot<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<NavigationMenuChild<T>>,
     default_value: Option<T>,
+    #[setters(strip_option)]
     value: Option<Option<T>>,
     delay: Duration,
     close_delay: Duration,
     orientation: NavigationMenuOrientation,
+    /// Marks this root as nested inside another navigation menu's content
+    /// (renders inline; style state reports `nested`).
     nested: bool,
+    #[setters(skip)]
     on_value_change: Option<NavigationMenuValueChangeHandler<T>>,
+    #[setters(skip)]
     on_open_change_complete: Option<NavigationMenuOpenChangeCompleteHandler<T>>,
+    /// Accessible label for the navigation landmark (non-nested roots only;
+    /// nested roots carry no role).
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<NavigationMenuRootStyle>,
 }
 
@@ -121,11 +134,6 @@ impl<T: Clone + Eq + 'static> NavigationMenuRoot<T> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<NavigationMenuChild<T>>) -> Self {
         self.children.push(child.into());
         self
@@ -142,45 +150,6 @@ impl<T: Clone + Eq + 'static> NavigationMenuRoot<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(NavigationMenuChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn default_value(mut self, default_value: Option<T>) -> Self {
-        self.default_value = default_value;
-        self
-    }
-
-    pub fn value(mut self, value: Option<T>) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn delay(mut self, delay: Duration) -> Self {
-        self.delay = delay;
-        self
-    }
-
-    pub fn close_delay(mut self, close_delay: Duration) -> Self {
-        self.close_delay = close_delay;
-        self
-    }
-
-    pub fn orientation(mut self, orientation: NavigationMenuOrientation) -> Self {
-        self.orientation = orientation;
-        self
-    }
-
-    /// Marks this root as nested inside another navigation menu's content
-    /// (renders inline; style state reports `nested`).
-    pub fn nested(mut self, nested: bool) -> Self {
-        self.nested = nested;
-        self
-    }
-
-    /// Accessible label for the navigation landmark (non-nested roots only;
-    /// nested roots carry no role).
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

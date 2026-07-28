@@ -12,16 +12,22 @@ use crate::tooltip::{
     TooltipPopupStyleState, TooltipSide, TOOLTIP_KEY_CONTEXT,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct TooltipPopup<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<TooltipPopupChild<P>>,
+    #[setters(skip)]
     context: Option<TooltipContext<P>>,
     side: TooltipSide,
     align: TooltipAlign,
     keep_mounted: bool,
+    #[setters(skip)]
     payload_content: Option<TooltipPayloadContentBuilder<P>>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(TooltipPopupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -217,11 +223,6 @@ impl<P: Clone + 'static> TooltipPopup<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<TooltipPopupChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -230,21 +231,6 @@ impl<P: Clone + 'static> TooltipPopup<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(TooltipPopupChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: TooltipSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: TooltipAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

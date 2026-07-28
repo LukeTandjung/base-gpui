@@ -10,12 +10,16 @@ use crate::combobox::{
     ComboboxChangeSource, ComboboxContext,
 };
 
+#[derive(derive_setters::Setters)]
 /// Combobox-local equivalent of `popover_backdrop.rs`.
 #[derive(IntoElement)]
 pub struct ComboboxBackdrop<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
     force_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ComboboxBackdropStyleState, Div) -> Div + 'static>>,
 }
 
@@ -83,11 +87,6 @@ impl<T: Clone + Eq + 'static> ComboboxChildNode<T> for ComboboxBackdrop<T> {
 impl<T: Clone + Eq + 'static> ComboboxBackdrop<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn force_mounted(mut self, force_mounted: bool) -> Self {
-        self.force_mounted = force_mounted;
-        self
     }
 
     pub fn style_with_state(

@@ -10,11 +10,14 @@ use crate::popover::{
     PopoverOpenChangeReason, PopoverOpenChangeSource,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct PopoverBackdrop<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<PopoverContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PopoverBackdropStyleState, Div) -> Div + 'static>>,
 }
 
@@ -83,11 +86,6 @@ impl<P: Clone + 'static> PopoverChildNode<P> for PopoverBackdrop<P> {
 impl<P: Clone + 'static> PopoverBackdrop<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn style_with_state(

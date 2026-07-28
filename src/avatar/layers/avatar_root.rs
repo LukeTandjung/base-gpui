@@ -9,12 +9,17 @@ use crate::avatar::{
     child_wiring::wire_children, AvatarChild, AvatarContext, AvatarRootStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct AvatarRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AvatarChild>,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(AvatarRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -87,11 +92,6 @@ impl AvatarRoot {
     /// live-region API, so loading status is never announced.
     pub fn aria_label(mut self, label: impl Into<SharedString>) -> Self {
         self.aria_label = Some(label.into());
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
         self
     }
 

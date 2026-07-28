@@ -8,12 +8,17 @@ use gpui::{
 
 use crate::otp_field::{layers::OtpSlotElement, OTPFieldContext, OTPFieldInputStyleState};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct OTPFieldInput {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<OTPFieldContext>,
+    #[setters(skip)]
     slot_index: usize,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(OTPFieldInputStyleState, Div) -> Div + 'static>>,
 }
 
@@ -115,11 +120,6 @@ impl OTPFieldInput {
 
     pub fn with_slot_index(mut self, index: usize) -> Self {
         self.slot_index = index;
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

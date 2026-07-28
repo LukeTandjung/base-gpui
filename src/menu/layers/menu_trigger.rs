@@ -19,19 +19,27 @@ use crate::{
 
 type MenuTriggerStyle<P> = Rc<dyn Fn(MenuTriggerStyleState<P>, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MenuTrigger<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
     disabled: bool,
+    #[setters(strip_option)]
     payload: Option<P>,
     open_on_hover: bool,
     delay: Duration,
     close_delay: Duration,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<MenuTriggerStyle<P>>,
 }
 
@@ -509,36 +517,6 @@ impl<P: Clone + 'static> MenuChildNode<P> for MenuTrigger<P> {
 impl<P: Clone + 'static> MenuTrigger<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn payload(mut self, payload: P) -> Self {
-        self.payload = Some(payload);
-        self
-    }
-
-    pub fn open_on_hover(mut self, open_on_hover: bool) -> Self {
-        self.open_on_hover = open_on_hover;
-        self
-    }
-
-    pub fn delay(mut self, delay: Duration) -> Self {
-        self.delay = delay;
-        self
-    }
-
-    pub fn close_delay(mut self, close_delay: Duration) -> Self {
-        self.close_delay = close_delay;
-        self
     }
 
     /// Accessible label announced for the trigger. When set, render the

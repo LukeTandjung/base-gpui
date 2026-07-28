@@ -16,17 +16,22 @@ use crate::{
     utils::direction::{current_direction, TextDirection},
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct TooltipPositioner<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<TooltipPositionerChild<P>>,
+    #[setters(skip)]
     context: Option<TooltipContext<P>>,
     side: TooltipSide,
     align: TooltipAlign,
     side_offset: Pixels,
     align_offset: Pixels,
     collision_padding: Pixels,
+    #[setters(skip)]
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(TooltipPositionerStyleState, Div) -> Div + 'static>>,
 }
 
@@ -168,31 +173,6 @@ impl<P: Clone + 'static> TooltipPositioner<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(TooltipPositionerChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: TooltipSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: TooltipAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn side_offset(mut self, side_offset: Pixels) -> Self {
-        self.side_offset = side_offset;
-        self
-    }
-
-    pub fn align_offset(mut self, align_offset: Pixels) -> Self {
-        self.align_offset = align_offset;
-        self
-    }
-
-    pub fn collision_padding(mut self, collision_padding: Pixels) -> Self {
-        self.collision_padding = collision_padding;
         self
     }
 

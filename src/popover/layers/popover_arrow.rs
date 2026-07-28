@@ -10,13 +10,17 @@ use crate::popover::{
     PopoverContext, PopoverSide,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct PopoverArrow<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<PopoverContext<P>>,
     side: PopoverSide,
     align: PopoverAlign,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PopoverArrowStyleState, Div) -> Div + 'static>>,
 }
 
@@ -106,16 +110,6 @@ impl<P: Clone + 'static> PopoverChildNode<P> for PopoverArrow<P> {
 impl<P: Clone + 'static> PopoverArrow<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn side(mut self, side: PopoverSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: PopoverAlign) -> Self {
-        self.align = align;
-        self
     }
 
     pub fn style_with_state(

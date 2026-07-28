@@ -11,13 +11,18 @@ use crate::fieldset::{
     FieldsetChild, FieldsetContext, FieldsetProps, FieldsetRootStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct FieldsetRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<FieldsetChild>,
     disabled: bool,
+    #[setters(skip)]
     label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(FieldsetRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -94,11 +99,6 @@ impl FieldsetRoot {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     /// Accessible label for the group, announced by screen readers.
     ///
     /// Substitutes for Base UI's `aria-labelledby` -> legend-id wiring, which
@@ -107,11 +107,6 @@ impl FieldsetRoot {
     /// `Text::new_inaccessible(...)` so it is not announced twice.
     pub fn aria_label(mut self, label: impl Into<SharedString>) -> Self {
         self.label = Some(label.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
         self
     }
 

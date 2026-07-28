@@ -10,14 +10,20 @@ use crate::combobox::{
     ComboboxItemStyleState,
 };
 
+#[derive(derive_setters::Setters)]
 /// Renders only when its item is selected, unless `keep_mounted`.
 #[derive(IntoElement)]
 pub struct ComboboxItemIndicator<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
+    #[setters(skip)]
     item_state: Option<ComboboxItemStyleState<T>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ComboboxItemIndicatorStyleState, Div) -> Div + 'static>>,
 }
 
@@ -94,11 +100,6 @@ impl<T: Clone + Eq + 'static> ComboboxChildNode<T> for ComboboxItemIndicator<T> 
 impl<T: Clone + Eq + 'static> ComboboxItemIndicator<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn with_item_state(mut self, state: ComboboxItemStyleState<T>) -> Self {

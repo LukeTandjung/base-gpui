@@ -13,14 +13,24 @@ use crate::accordion::{
     AccordionToggle, AccordionTriggerStyleState, ACCORDION_TRIGGER_KEY_CONTEXT,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct AccordionTrigger<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<AccordionItemContext<T>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    /// Accessible name for triggers whose visible content is iconic/non-textual.
+    /// When set, render the visible label with `Text::new_inaccessible(...)` so
+    /// screen readers do not announce the name twice.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(AccordionTriggerStyleState<T>, Div) -> Div + 'static>>,
 }
 
@@ -174,19 +184,6 @@ impl<T: Clone + Eq + 'static> AccordionHeaderChildNode<T> for AccordionTrigger<T
 impl<T: Clone + Eq + 'static> AccordionTrigger<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    /// Accessible name for triggers whose visible content is iconic/non-textual.
-    /// When set, render the visible label with `Text::new_inaccessible(...)` so
-    /// screen readers do not announce the name twice.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
-        self
     }
 
     pub fn style_with_state(

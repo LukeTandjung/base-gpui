@@ -10,11 +10,14 @@ use crate::select::{
     SelectOpenChangeSource,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectBackdrop<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
     force_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectBackdropStyleState, Div) -> Div + 'static>>,
 }
 
@@ -82,11 +85,6 @@ impl<T: Clone + Eq + 'static> SelectChildNode<T> for SelectBackdrop<T> {
 impl<T: Clone + Eq + 'static> SelectBackdrop<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn force_mounted(mut self, force_mounted: bool) -> Self {
-        self.force_mounted = force_mounted;
-        self
     }
 
     pub fn style_with_state(

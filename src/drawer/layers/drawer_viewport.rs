@@ -14,16 +14,22 @@ use crate::drawer::{
 
 type DrawerViewportStyle<P> = Rc<dyn Fn(DrawerViewportStyleState<P>, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// The drawer positioning container and swipe-to-dismiss gesture engine: mouse
 /// events translate into runtime gesture commands; release outcomes route
 /// through the dialog context (`Swipe` reason) or the drawer snap-point change.
 #[derive(IntoElement)]
 pub struct DrawerViewport<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<DrawerViewportChild<P>>,
+    #[setters(skip)]
     context: Option<DrawerContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<DrawerViewportStyle<P>>,
 }
 
@@ -252,11 +258,6 @@ impl<P: Clone + 'static> DrawerViewport<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<DrawerViewportChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -265,11 +266,6 @@ impl<P: Clone + 'static> DrawerViewport<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(DrawerViewportChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

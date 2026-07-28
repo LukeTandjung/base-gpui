@@ -13,20 +13,30 @@ use crate::dialog::{
 
 type DialogRootStyle<P> = Rc<dyn Fn(DialogRootStyleState<P>, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct DialogRoot<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<DialogChild<P>>,
     default_open: bool,
+    #[setters(strip_option)]
     open: Option<bool>,
+    #[setters(skip)]
     default_trigger_id: Option<ElementId>,
+    #[setters(skip)]
     trigger_id: Option<Option<ElementId>>,
     modal_mode: DialogModalMode,
     disable_pointer_dismissal: bool,
+    #[setters(strip_option)]
     handle: Option<DialogHandle<P>>,
+    #[setters(skip)]
     on_open_change: Option<DialogOpenChangeHandler<P>>,
+    #[setters(skip)]
     on_open_change_complete: Option<DialogOpenChangeCompleteHandler<P>>,
+    #[setters(skip)]
     style_with_state: Option<DialogRootStyle<P>>,
 }
 
@@ -139,21 +149,6 @@ impl<P: Clone + 'static> DialogRoot<P> {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: bool) -> Self {
-        self.open = Some(open);
-        self
-    }
-
     pub fn on_open_change(
         mut self,
         on_open_change: impl Fn(bool, &mut DialogOpenChangeDetails<P>, &mut Window, &mut App) + 'static,
@@ -180,18 +175,8 @@ impl<P: Clone + 'static> DialogRoot<P> {
         self
     }
 
-    pub fn modal_mode(mut self, modal_mode: DialogModalMode) -> Self {
-        self.modal_mode = modal_mode;
-        self
-    }
-
     pub fn trap_focus(mut self) -> Self {
         self.modal_mode = DialogModalMode::TrapFocus;
-        self
-    }
-
-    pub fn disable_pointer_dismissal(mut self, disable_pointer_dismissal: bool) -> Self {
-        self.disable_pointer_dismissal = disable_pointer_dismissal;
         self
     }
 
@@ -207,11 +192,6 @@ impl<P: Clone + 'static> DialogRoot<P> {
 
     pub fn default_trigger_id(mut self, trigger_id: impl Into<ElementId>) -> Self {
         self.default_trigger_id = Some(trigger_id.into());
-        self
-    }
-
-    pub fn handle(mut self, handle: DialogHandle<P>) -> Self {
-        self.handle = Some(handle);
         self
     }
 

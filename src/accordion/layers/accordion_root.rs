@@ -11,18 +11,24 @@ use crate::accordion::{
     AccordionValueChangeHandler,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct AccordionRoot<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AccordionRootChild<T>>,
     default_value: Vec<T>,
+    #[setters(strip_option)]
     value: Option<Vec<T>>,
     disabled: bool,
     multiple: bool,
     keep_mounted: bool,
     orientation: AccordionOrientation,
+    #[setters(skip)]
     on_value_change: Option<AccordionValueChangeHandler<T>>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(AccordionRootStyleState<T>, Div) -> Div + 'static>>,
 }
 
@@ -105,41 +111,6 @@ impl<T: Clone + Eq + 'static> AccordionRoot<T> {
         children: impl IntoIterator<Item = impl Into<AccordionRootChild<T>>>,
     ) -> Self {
         self.children.extend(children.into_iter().map(Into::into));
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn default_value(mut self, default_value: Vec<T>) -> Self {
-        self.default_value = default_value;
-        self
-    }
-
-    pub fn value(mut self, value: Vec<T>) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn multiple(mut self, multiple: bool) -> Self {
-        self.multiple = multiple;
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
-    }
-
-    pub fn orientation(mut self, orientation: AccordionOrientation) -> Self {
-        self.orientation = orientation;
         self
     }
 

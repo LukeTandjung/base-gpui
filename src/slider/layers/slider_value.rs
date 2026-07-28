@@ -9,12 +9,17 @@ use crate::slider::{SliderContext, SliderValueStyleState};
 
 pub type SliderValueDisplayHandler = Rc<dyn Fn(&[SharedString], &[f64]) -> SharedString + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SliderValue {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<SliderContext>,
+    #[setters(skip)]
     display: Option<SliderValueDisplayHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SliderValueStyleState, Div) -> Div + 'static>>,
 }
 
@@ -77,11 +82,6 @@ impl SliderValue {
 
     pub fn with_slider_context(mut self, context: SliderContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

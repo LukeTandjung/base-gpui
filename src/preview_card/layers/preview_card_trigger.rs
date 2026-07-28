@@ -21,6 +21,7 @@ use crate::{
 
 type PreviewCardTriggerStyle<P> = Rc<dyn Fn(PreviewCardTriggerStyleState<P>, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Link-like trigger: opens on mouse hover (after the open delay) and on
 /// focus, never on press; pressing an open trigger dismisses. GPUI has no
 /// anchor element, so this is an interactive `div` — link navigation is the
@@ -31,18 +32,31 @@ type PreviewCardTriggerStyle<P> = Rc<dyn Fn(PreviewCardTriggerStyleState<P>, Div
 /// focus-open, matching the Tooltip port.
 #[derive(IntoElement)]
 pub struct PreviewCardTrigger<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<PreviewCardContext<P>>,
+    #[setters(strip_option)]
     handle: Option<PreviewCardHandle<P>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     scoped: bool,
+    #[setters(strip_option)]
     payload: Option<P>,
+    #[setters(strip_option)]
     delay: Option<Duration>,
+    #[setters(strip_option)]
     close_delay: Option<Duration>,
+    #[setters(skip)]
     order: usize,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<PreviewCardTriggerStyle<P>>,
 }
 
@@ -360,31 +374,6 @@ impl<P: Clone + 'static> PreviewCardChildNode<P> for PreviewCardTrigger<P> {
 impl<P: Clone + 'static> PreviewCardTrigger<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn payload(mut self, payload: P) -> Self {
-        self.payload = Some(payload);
-        self
-    }
-
-    pub fn handle(mut self, handle: PreviewCardHandle<P>) -> Self {
-        self.handle = Some(handle);
-        self
-    }
-
-    pub fn delay(mut self, delay: Duration) -> Self {
-        self.delay = Some(delay);
-        self
-    }
-
-    pub fn close_delay(mut self, close_delay: Duration) -> Self {
-        self.close_delay = Some(close_delay);
-        self
     }
 
     /// Accessible name for the link trigger. When set, construct the visible

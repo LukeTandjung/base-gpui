@@ -9,14 +9,19 @@ use crate::combobox::{
     ComboboxContext, ComboboxPortalChild, ComboboxPortalStyleState,
 };
 
+#[derive(derive_setters::Setters)]
 /// Renders overlay content only while open (or force-mounted for
 /// measurement). Combobox-local equivalent of `select_portal.rs`.
 #[derive(IntoElement)]
 pub struct ComboboxPortal<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ComboboxPortalChild<T>>,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
     force_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ComboboxPortalStyleState, Div) -> Div + 'static>>,
 }
 
@@ -99,11 +104,6 @@ impl<T: Clone + Eq + 'static> ComboboxPortal<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(ComboboxPortalChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn force_mounted(mut self, force_mounted: bool) -> Self {
-        self.force_mounted = force_mounted;
         self
     }
 

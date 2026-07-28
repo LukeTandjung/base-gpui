@@ -9,14 +9,18 @@ use crate::select::{
     SelectAlign, SelectContext, SelectPopupChild, SelectPopupStyleState, SelectSide,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectPopup<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SelectPopupChild<T>>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
     side: SelectSide,
     align: SelectAlign,
     force_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectPopupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -107,21 +111,6 @@ impl<T: Clone + Eq + 'static> SelectPopup<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(SelectPopupChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: SelectSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: SelectAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn force_mounted(mut self, force_mounted: bool) -> Self {
-        self.force_mounted = force_mounted;
         self
     }
 

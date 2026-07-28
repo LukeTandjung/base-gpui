@@ -18,22 +18,33 @@ use crate::primitives::safe_polygon::SafePolygonVerdict;
 
 type PopoverTriggerStyle<P> = Rc<dyn Fn(PopoverTriggerStyleState<P>, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct PopoverTrigger<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<PopoverContext<P>>,
+    #[setters(strip_option)]
     handle: Option<PopoverHandle<P>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     scoped: bool,
     disabled: bool,
+    #[setters(strip_option)]
     payload: Option<P>,
     open_on_hover: bool,
     delay: Duration,
     close_delay: Duration,
+    #[setters(skip)]
     order: usize,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<PopoverTriggerStyle<P>>,
 }
 
@@ -370,41 +381,6 @@ impl<P: Clone + 'static> PopoverChildNode<P> for PopoverTrigger<P> {
 impl<P: Clone + 'static> PopoverTrigger<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn payload(mut self, payload: P) -> Self {
-        self.payload = Some(payload);
-        self
-    }
-
-    pub fn handle(mut self, handle: PopoverHandle<P>) -> Self {
-        self.handle = Some(handle);
-        self
-    }
-
-    pub fn open_on_hover(mut self, open_on_hover: bool) -> Self {
-        self.open_on_hover = open_on_hover;
-        self
-    }
-
-    pub fn delay(mut self, delay: Duration) -> Self {
-        self.delay = delay;
-        self
-    }
-
-    pub fn close_delay(mut self, close_delay: Duration) -> Self {
-        self.close_delay = close_delay;
-        self
     }
 
     /// Accessible label for the trigger; set this when the visible child is

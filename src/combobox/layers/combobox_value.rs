@@ -14,15 +14,21 @@ type ComboboxValueFormatter<T> = Rc<dyn Fn(&ComboboxValueStyleState<T>) -> Share
 
 type ComboboxValueStyle<T> = Rc<dyn Fn(ComboboxValueStyleState<T>, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Displays the selected value: placeholder when nothing is selected, the
 /// selected label in single mode, joined labels (or a caller formatter) in
 /// multiple mode.
 #[derive(IntoElement)]
 pub struct ComboboxValue<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
+    #[setters(into, strip_option)]
     placeholder: Option<SharedString>,
+    #[setters(skip)]
     formatter: Option<ComboboxValueFormatter<T>>,
+    #[setters(skip)]
     style_with_state: Option<ComboboxValueStyle<T>>,
 }
 
@@ -88,11 +94,6 @@ impl<T: Clone + Eq + 'static> ComboboxChildNode<T> for ComboboxValue<T> {
 impl<T: Clone + Eq + 'static> ComboboxValue<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn placeholder(mut self, placeholder: impl Into<SharedString>) -> Self {
-        self.placeholder = Some(placeholder.into());
-        self
     }
 
     /// Rust-native formatter closure over the current selection.

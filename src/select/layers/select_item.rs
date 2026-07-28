@@ -17,17 +17,35 @@ use crate::{
     },
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectItem<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SelectItemChild<T>>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
+    /// Assigns the item value that participates in selection.
+    ///
+    /// Values are compared with `Eq`, so callers should prefer values that are
+    /// unique within a `SelectRoot`. If duplicate values are registered, the
+    /// selected state is value-based for every matching item, while value-label
+    /// lookup and typeahead use the first matching item in render order.
+    ///
+    /// An item without a value is rendered but is not registered as selectable;
+    /// use `T = Option<U>` when a selectable null-like value is needed.
+    #[setters(strip_option)]
     value: Option<T>,
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
     disabled: bool,
+    #[setters(skip)]
     index: Option<usize>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     style_with_state: Option<SelectItemStyle<T>>,
 }
 
@@ -241,35 +259,6 @@ impl<T: Clone + Eq + 'static> SelectItem<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(SelectItemChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    /// Assigns the item value that participates in selection.
-    ///
-    /// Values are compared with `Eq`, so callers should prefer values that are
-    /// unique within a `SelectRoot`. If duplicate values are registered, the
-    /// selected state is value-based for every matching item, while value-label
-    /// lookup and typeahead use the first matching item in render order.
-    ///
-    /// An item without a value is rendered but is not registered as selectable;
-    /// use `T = Option<U>` when a selectable null-like value is needed.
-    pub fn value(mut self, value: T) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
         self
     }
 

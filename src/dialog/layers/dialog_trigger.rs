@@ -15,19 +15,30 @@ use crate::dialog::{
 
 type DialogTriggerStyle<P> = Rc<dyn Fn(DialogTriggerStyleState<P>, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct DialogTrigger<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<DialogContext<P>>,
+    #[setters(strip_option)]
     handle: Option<DialogHandle<P>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     scoped: bool,
     disabled: bool,
+    #[setters(strip_option)]
     payload: Option<P>,
+    #[setters(skip)]
     order: usize,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<DialogTriggerStyle<P>>,
 }
 
@@ -233,26 +244,6 @@ impl<P: Clone + 'static> DialogChildNode<P> for DialogTrigger<P> {
 impl<P: Clone + 'static> DialogTrigger<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn payload(mut self, payload: P) -> Self {
-        self.payload = Some(payload);
-        self
-    }
-
-    pub fn handle(mut self, handle: DialogHandle<P>) -> Self {
-        self.handle = Some(handle);
-        self
     }
 
     pub fn aria_label(mut self, label: impl Into<SharedString>) -> Self {

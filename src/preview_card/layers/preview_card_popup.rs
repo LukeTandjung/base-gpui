@@ -14,16 +14,22 @@ use crate::preview_card::{
     PreviewCardPopupStyleState, PreviewCardSide, PREVIEW_CARD_KEY_CONTEXT,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct PreviewCardPopup<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<PreviewCardPopupChild<P>>,
+    #[setters(skip)]
     context: Option<PreviewCardContext<P>>,
     side: PreviewCardSide,
     align: PreviewCardAlign,
     keep_mounted: bool,
+    #[setters(skip)]
     payload_content: Option<PreviewCardPayloadContentBuilder<P>>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PreviewCardPopupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -203,11 +209,6 @@ impl<P: Clone + 'static> PreviewCardPopup<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<PreviewCardPopupChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -216,21 +217,6 @@ impl<P: Clone + 'static> PreviewCardPopup<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(PreviewCardPopupChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: PreviewCardSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: PreviewCardAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

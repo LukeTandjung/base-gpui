@@ -11,6 +11,7 @@ use crate::toggle_group::{
     ToggleGroupValueChangeHandler,
 };
 
+#[derive(derive_setters::Setters)]
 /// Accessibility: the root renders with `Role::Group` (Base UI's `role="group"`);
 /// pass `.aria_label(...)` to name the group for assistive technology. Base UI
 /// deliberately renders no `aria-orientation` on the group, so none is set here.
@@ -19,17 +20,24 @@ use crate::toggle_group::{
 /// (activation guards and tab-stop removal already apply).
 #[derive(IntoElement)]
 pub struct ToggleGroup<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     children: Vec<ToggleGroupChild<T>>,
     default_value: Vec<T>,
+    #[setters(strip_option)]
     value: Option<Vec<T>>,
     disabled: bool,
     orientation: ToggleGroupOrientation,
     multiple: bool,
     loop_focus: bool,
+    #[setters(skip)]
     on_value_change: Option<ToggleGroupValueChangeHandler<T>>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ToggleGroupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -128,46 +136,6 @@ impl<T: Clone + Eq + 'static> ToggleGroup<T> {
         children: impl IntoIterator<Item = impl Into<ToggleGroupChild<T>>>,
     ) -> Self {
         self.children.extend(children.into_iter().map(Into::into));
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
-        self
-    }
-
-    pub fn default_value(mut self, default_value: Vec<T>) -> Self {
-        self.default_value = default_value;
-        self
-    }
-
-    pub fn value(mut self, value: Vec<T>) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn orientation(mut self, orientation: ToggleGroupOrientation) -> Self {
-        self.orientation = orientation;
-        self
-    }
-
-    pub fn multiple(mut self, multiple: bool) -> Self {
-        self.multiple = multiple;
-        self
-    }
-
-    pub fn loop_focus(mut self, loop_focus: bool) -> Self {
-        self.loop_focus = loop_focus;
         self
     }
 

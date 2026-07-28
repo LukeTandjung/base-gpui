@@ -10,12 +10,16 @@ use crate::dialog::{
     DialogOpenChangeSource,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct DialogBackdrop<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<DialogContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     force_rendered: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(DialogBackdropStyleState, Div) -> Div + 'static>>,
 }
 
@@ -97,11 +101,6 @@ impl<P: Clone + 'static> DialogChildNode<P> for DialogBackdrop<P> {
 impl<P: Clone + 'static> DialogBackdrop<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn force_render(mut self, force_render: bool) -> Self {

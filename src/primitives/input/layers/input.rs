@@ -15,31 +15,54 @@ use super::InputTextElement;
 
 type InputStyleStateHandler = Rc<dyn Fn(InputStyleState, &mut Window, &mut App) + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct Input {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(into, strip_option)]
     name: Option<SharedString>,
+    #[setters(into, strip_option)]
     value: Option<SharedString>,
+    #[setters(into)]
     default_value: SharedString,
+    #[setters(into)]
     placeholder: SharedString,
     disabled: bool,
     read_only: bool,
     required: bool,
     auto_focus: bool,
     tab_index: isize,
+    /// Overrides whether the input participates in window Tab order.
+    /// Composite containers such as the Toolbar use this to keep a single
+    /// roving tab stop. Defaults to `!disabled`.
+    #[setters(strip_option)]
     tab_stop: Option<bool>,
+    #[setters(skip)]
     on_value_change: Option<InputValueChangeHandler>,
+    #[setters(skip)]
     on_enter: Option<InputEnterHandler>,
+    #[setters(skip)]
     on_home: Option<InputBoundaryHandler>,
+    #[setters(skip)]
     on_end: Option<InputBoundaryHandler>,
+    #[setters(skip)]
     on_edge_left: Option<InputBoundaryHandler>,
+    #[setters(skip)]
     on_edge_right: Option<InputBoundaryHandler>,
+    #[setters(skip)]
     on_backspace: Option<InputBoundaryHandler>,
+    #[setters(skip)]
     on_delete: Option<InputBoundaryHandler>,
+    /// Selects the whole text whenever the input gains focus, matching
+    /// composite-container focus behavior.
     select_all_on_focus: bool,
+    #[setters(skip)]
     on_style_state: Option<InputStyleStateHandler>,
+    #[setters(strip_option)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(InputStyleState, Div) -> Div + 'static>>,
 }
 
@@ -195,64 +218,6 @@ impl Input {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn name(mut self, name: impl Into<SharedString>) -> Self {
-        self.name = Some(name.into());
-        self
-    }
-
-    pub fn value(mut self, value: impl Into<SharedString>) -> Self {
-        self.value = Some(value.into());
-        self
-    }
-
-    pub fn default_value(mut self, default_value: impl Into<SharedString>) -> Self {
-        self.default_value = default_value.into();
-        self
-    }
-
-    pub fn placeholder(mut self, placeholder: impl Into<SharedString>) -> Self {
-        self.placeholder = placeholder.into();
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn read_only(mut self, read_only: bool) -> Self {
-        self.read_only = read_only;
-        self
-    }
-
-    pub fn required(mut self, required: bool) -> Self {
-        self.required = required;
-        self
-    }
-
-    pub fn auto_focus(mut self, auto_focus: bool) -> Self {
-        self.auto_focus = auto_focus;
-        self
-    }
-
-    pub fn tab_index(mut self, tab_index: isize) -> Self {
-        self.tab_index = tab_index;
-        self
-    }
-
-    /// Overrides whether the input participates in window Tab order.
-    /// Composite containers such as the Toolbar use this to keep a single
-    /// roving tab stop. Defaults to `!disabled`.
-    pub fn tab_stop(mut self, tab_stop: bool) -> Self {
-        self.tab_stop = Some(tab_stop);
-        self
-    }
-
     pub fn on_value_change(mut self, on_value_change: impl Fn(SharedString) + 'static) -> Self {
         self.on_value_change = Some(Rc::new(move |value, _window, _cx| on_value_change(value)));
         self
@@ -339,23 +304,11 @@ impl Input {
         self
     }
 
-    /// Selects the whole text whenever the input gains focus, matching
-    /// composite-container focus behavior.
-    pub fn select_all_on_focus(mut self, select_all_on_focus: bool) -> Self {
-        self.select_all_on_focus = select_all_on_focus;
-        self
-    }
-
     pub fn on_style_state(
         mut self,
         on_style_state: impl Fn(InputStyleState, &mut Window, &mut App) + 'static,
     ) -> Self {
         self.on_style_state = Some(Rc::new(on_style_state));
-        self
-    }
-
-    pub fn focus_handle(mut self, focus_handle: FocusHandle) -> Self {
-        self.focus_handle = Some(focus_handle);
         self
     }
 

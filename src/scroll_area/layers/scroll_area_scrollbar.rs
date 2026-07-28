@@ -21,14 +21,22 @@ use crate::scroll_area::{
     ScrollAreaScrollbarChild, ScrollAreaScrollbarStyleState, ScrollAreaThumb,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ScrollAreaScrollbar {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    /// Which axis this scrollbar tracks; defaults to vertical.
     orientation: ScrollAreaOrientation,
+    /// Keep the scrollbar in the tree while its axis has no overflow;
+    /// defaults to false.
     keep_mounted: bool,
+    #[setters(skip)]
     thumb: Option<ScrollAreaThumb>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ScrollAreaScrollbarStyleState, Div) -> Div + 'static>>,
+    #[setters(skip)]
     context: Option<ScrollAreaContext>,
 }
 
@@ -150,24 +158,6 @@ impl RenderOnce for ScrollAreaScrollbar {
 impl ScrollAreaScrollbar {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    /// Which axis this scrollbar tracks; defaults to vertical.
-    pub fn orientation(mut self, orientation: ScrollAreaOrientation) -> Self {
-        self.orientation = orientation;
-        self
-    }
-
-    /// Keep the scrollbar in the tree while its axis has no overflow;
-    /// defaults to false.
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn child(mut self, child: impl Into<ScrollAreaScrollbarChild>) -> Self {

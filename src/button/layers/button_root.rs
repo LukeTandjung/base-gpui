@@ -10,15 +10,21 @@ use crate::button::{ButtonActivate, ButtonRootStyleState, BUTTON_ROOT_KEY_CONTEX
 
 type ButtonClickHandler = Rc<dyn Fn(&ClickEvent, &mut Window, &mut App) + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ButtonRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
     disabled: bool,
     focusable_when_disabled: bool,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     on_click: Option<ButtonClickHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ButtonRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -103,21 +109,6 @@ impl RenderOnce for ButtonRoot {
 impl ButtonRoot {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn focusable_when_disabled(mut self, focusable_when_disabled: bool) -> Self {
-        self.focusable_when_disabled = focusable_when_disabled;
-        self
     }
 
     /// Accessible name for the button. Required for icon-only buttons; when

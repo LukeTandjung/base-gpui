@@ -14,15 +14,25 @@ use crate::slider::{
 };
 use crate::utils::{current_direction, HorizontalArrowKey, HorizontalDirection, TextDirection};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SliderThumb {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<gpui::AnyElement>,
+    #[setters(skip)]
     context: Option<SliderContext>,
+    #[setters(skip)]
     index: usize,
     disabled: bool,
+    /// Accessible label for this thumb (e.g. "Minimum" / "Maximum" on a
+    /// range slider). A plain string per thumb replaces Base UI's optional
+    /// `getAriaLabel(index)` closure.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SliderThumbStyleState, Div) -> Div + 'static>>,
 }
 
@@ -354,24 +364,6 @@ impl SliderThumb {
 
     pub fn thumb_disabled(&self) -> bool {
         self.disabled
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    /// Accessible label for this thumb (e.g. "Minimum" / "Maximum" on a
-    /// range slider). A plain string per thumb replaces Base UI's optional
-    /// `getAriaLabel(index)` closure.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
-        self
     }
 
     pub fn child(mut self, child: impl IntoElement) -> Self {

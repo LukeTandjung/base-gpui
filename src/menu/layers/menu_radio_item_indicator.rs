@@ -4,12 +4,18 @@ use gpui::{div, AnyElement, Div, IntoElement, ParentElement, StyleRefinement, St
 
 use crate::menu::MenuRadioItemIndicatorStyleState;
 
+#[derive(derive_setters::Setters)]
 pub struct MenuRadioItemIndicator<P: Clone + 'static, V: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
     keep_mounted: bool,
+    #[setters(skip)]
     facts: Option<(bool, bool, bool)>,
+    #[setters(skip)]
     _payload: std::marker::PhantomData<(P, V)>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MenuRadioItemIndicatorStyleState, Div) -> Div + 'static>>,
 }
 
@@ -65,11 +71,6 @@ impl<P: Clone + 'static, V: Clone + Eq + 'static> IntoElement for MenuRadioItemI
 impl<P: Clone + 'static, V: Clone + Eq + 'static> MenuRadioItemIndicator<P, V> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn with_item_facts(mut self, checked: bool, highlighted: bool, disabled: bool) -> Self {

@@ -9,12 +9,16 @@ use crate::checkbox::{
     child_wiring::CheckboxChildNode, CheckboxContext, CheckboxIndicatorStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct CheckboxIndicator {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<CheckboxContext>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(CheckboxIndicatorStyleState, Div) -> Div + 'static>>,
 }
 
@@ -75,10 +79,6 @@ impl CheckboxChildNode for CheckboxIndicator {
 impl CheckboxIndicator {
     pub fn new() -> Self {
         Self::default()
-    }
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
     pub fn style_with_state(
         mut self,

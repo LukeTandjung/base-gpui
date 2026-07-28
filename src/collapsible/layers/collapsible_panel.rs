@@ -9,12 +9,16 @@ use crate::collapsible::{
     child_wiring::CollapsibleChildNode, CollapsibleContext, CollapsiblePanelStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct CollapsiblePanel {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<CollapsibleContext>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(CollapsiblePanelStyleState, Div) -> Div + 'static>>,
 }
 
@@ -89,11 +93,6 @@ impl CollapsibleChildNode for CollapsiblePanel {
 impl CollapsiblePanel {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn style_with_state(

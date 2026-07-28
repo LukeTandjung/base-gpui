@@ -20,16 +20,23 @@ use crate::{
     utils::direction::{current_direction, HorizontalArrowKey, HorizontalDirection},
 };
 
+#[derive(derive_setters::Setters)]
 /// Menu popup. A `final_focus` override is deferred, matching the Popover
 /// focus-return audit; closing returns focus to the active trigger.
 #[derive(IntoElement)]
 pub struct MenuPopup<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<MenuPopupChild<P>>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MenuPopupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -441,11 +448,6 @@ impl<P: Clone + 'static> MenuPopup<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<MenuPopupChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -454,11 +456,6 @@ impl<P: Clone + 'static> MenuPopup<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(MenuPopupChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

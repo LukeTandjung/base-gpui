@@ -18,30 +18,45 @@ use crate::drawer::{
 
 type DrawerRootStyle<P> = Rc<dyn Fn(DialogRootStyleState<P>, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// The drawer root: composes the existing Dialog root machinery (open/close,
 /// triggers, focus, dismissal) beneath the drawer marker and drawer runtime,
 /// mirroring Base UI's `IsDrawerContext` + `useRenderDialogRoot(props, 'drawer')`.
 #[derive(IntoElement)]
 pub struct DrawerRoot<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<DrawerChild<P>>,
     default_open: bool,
+    #[setters(strip_option)]
     open: Option<bool>,
+    #[setters(skip)]
     default_trigger_id: Option<ElementId>,
+    #[setters(skip)]
     trigger_id: Option<Option<ElementId>>,
     modal_mode: DialogModalMode,
     disable_pointer_dismissal: bool,
+    #[setters(strip_option)]
     handle: Option<DialogHandle<P>>,
+    #[setters(skip)]
     on_open_change: Option<DialogOpenChangeHandler<P>>,
+    #[setters(skip)]
     on_open_change_complete: Option<DialogOpenChangeCompleteHandler<P>>,
     swipe_direction: DrawerSwipeDirection,
     snap_points: Vec<DrawerSnapPoint>,
     snap_to_sequential_points: bool,
     default_snap_point: Option<DrawerSnapPoint>,
+    /// Calling this builder marks the snap point controlled even when `None`.
+    #[setters(strip_option)]
     snap_point: Option<Option<DrawerSnapPoint>>,
+    #[setters(skip)]
     on_snap_point_change: Option<DrawerSnapPointChangeHandler>,
+    #[setters(skip)]
     nested_in: Option<DrawerNestedReporter>,
+    #[setters(skip)]
     style_with_state: Option<DrawerRootStyle<P>>,
 }
 
@@ -231,21 +246,6 @@ impl<P: Clone + 'static> DrawerRoot<P> {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: bool) -> Self {
-        self.open = Some(open);
-        self
-    }
-
     pub fn on_open_change(
         mut self,
         on_open_change: impl Fn(bool, &mut DialogOpenChangeDetails<P>, &mut Window, &mut App) + 'static,
@@ -272,18 +272,8 @@ impl<P: Clone + 'static> DrawerRoot<P> {
         self
     }
 
-    pub fn modal_mode(mut self, modal_mode: DialogModalMode) -> Self {
-        self.modal_mode = modal_mode;
-        self
-    }
-
     pub fn trap_focus(mut self) -> Self {
         self.modal_mode = DialogModalMode::TrapFocus;
-        self
-    }
-
-    pub fn disable_pointer_dismissal(mut self, disable_pointer_dismissal: bool) -> Self {
-        self.disable_pointer_dismissal = disable_pointer_dismissal;
         self
     }
 
@@ -299,37 +289,6 @@ impl<P: Clone + 'static> DrawerRoot<P> {
 
     pub fn default_trigger_id(mut self, trigger_id: impl Into<ElementId>) -> Self {
         self.default_trigger_id = Some(trigger_id.into());
-        self
-    }
-
-    pub fn handle(mut self, handle: DialogHandle<P>) -> Self {
-        self.handle = Some(handle);
-        self
-    }
-
-    pub fn swipe_direction(mut self, swipe_direction: DrawerSwipeDirection) -> Self {
-        self.swipe_direction = swipe_direction;
-        self
-    }
-
-    pub fn snap_points(mut self, snap_points: Vec<DrawerSnapPoint>) -> Self {
-        self.snap_points = snap_points;
-        self
-    }
-
-    pub fn snap_to_sequential_points(mut self, snap_to_sequential_points: bool) -> Self {
-        self.snap_to_sequential_points = snap_to_sequential_points;
-        self
-    }
-
-    pub fn default_snap_point(mut self, default_snap_point: Option<DrawerSnapPoint>) -> Self {
-        self.default_snap_point = default_snap_point;
-        self
-    }
-
-    /// Calling this builder marks the snap point controlled even when `None`.
-    pub fn snap_point(mut self, snap_point: Option<DrawerSnapPoint>) -> Self {
-        self.snap_point = Some(snap_point);
         self
     }
 

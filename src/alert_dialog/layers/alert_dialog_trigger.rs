@@ -6,11 +6,14 @@ use gpui::{
 use crate::alert_dialog::AlertDialogHandle;
 use crate::dialog::{DialogChild, DialogTrigger, DialogTriggerStyleState};
 
+#[derive(derive_setters::Setters)]
 /// Base UI Alert Dialog trigger: a Dialog trigger whose detached binding is
 /// typed to [`AlertDialogHandle`], so it cannot be wired to a plain Dialog.
 #[derive(IntoElement)]
 pub struct AlertDialogTrigger<P: Clone + 'static = ()> {
+    #[setters(skip)]
     inner: DialogTrigger<P>,
+    #[setters(strip_option)]
     handle: Option<AlertDialogHandle<P>>,
 }
 
@@ -72,11 +75,6 @@ impl<P: Clone + 'static> AlertDialogTrigger<P> {
 
     pub fn payload(mut self, payload: P) -> Self {
         self.inner = self.inner.payload(payload);
-        self
-    }
-
-    pub fn handle(mut self, handle: AlertDialogHandle<P>) -> Self {
-        self.handle = Some(handle);
         self
     }
 

@@ -14,16 +14,24 @@ use crate::accordion::{
     AccordionItemOpenChangeHandler, AccordionItemStyleState, AccordionOrientation,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct AccordionItem<T: Clone + Eq + 'static> {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AccordionItemChild<T>>,
+    #[setters(skip)]
     context: Option<AccordionContext<T>>,
+    #[setters(skip)]
     value: T,
     disabled: bool,
+    #[setters(skip)]
     index: Option<usize>,
+    #[setters(skip)]
     on_open_change: Option<AccordionItemOpenChangeHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(AccordionItemStyleState<T>, Div) -> Div + 'static>>,
 }
 
@@ -138,11 +146,6 @@ impl<T: Clone + Eq + 'static> AccordionItem<T> {
         }
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
-        self
-    }
-
     pub fn child(mut self, child: impl Into<AccordionItemChild<T>>) -> Self {
         self.children.push(child.into());
         self
@@ -153,11 +156,6 @@ impl<T: Clone + Eq + 'static> AccordionItem<T> {
         children: impl IntoIterator<Item = impl Into<AccordionItemChild<T>>>,
     ) -> Self {
         self.children.extend(children.into_iter().map(Into::into));
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
         self
     }
 

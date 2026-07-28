@@ -11,14 +11,21 @@ use crate::combobox::{
     ComboboxChipRemoveStyleState, ComboboxContext,
 };
 
+#[derive(derive_setters::Setters)]
 /// Removes its chip's value (chip-remove-press reason) and refocuses the
 /// input.
 #[derive(IntoElement)]
 pub struct ComboboxChipRemove<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
+    /// Selection-order position of the owning chip; assigned by `ComboboxChip`.
+    #[setters(strip_option)]
     index: Option<usize>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ComboboxChipRemoveStyleState, Div) -> Div + 'static>>,
 }
 
@@ -114,12 +121,6 @@ impl<T: Clone + Eq + 'static> ComboboxChildNode<T> for ComboboxChipRemove<T> {
 impl<T: Clone + Eq + 'static> ComboboxChipRemove<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    /// Selection-order position of the owning chip; assigned by `ComboboxChip`.
-    pub fn index(mut self, index: usize) -> Self {
-        self.index = Some(index);
-        self
     }
 
     pub fn style_with_state(

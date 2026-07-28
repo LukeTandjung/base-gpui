@@ -7,12 +7,17 @@ use gpui::{
 
 use crate::progress::{ProgressContext, ProgressStyleState, ProgressTrackChild};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ProgressTrack {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ProgressTrackChild>,
+    #[setters(skip)]
     context: Option<ProgressContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ProgressStyleState, Div) -> Div + 'static>>,
 }
 
@@ -69,11 +74,6 @@ impl ProgressTrack {
 
     pub fn with_progress_context(mut self, context: ProgressContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

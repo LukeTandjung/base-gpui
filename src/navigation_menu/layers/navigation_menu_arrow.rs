@@ -12,15 +12,20 @@ use crate::navigation_menu::{
 
 type NavigationMenuArrowStyle = Rc<dyn Fn(NavigationMenuArrowStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Decorative arrow following the resolved side/align of the **active**
 /// trigger; it retargets with the anchor and exposes `uncentered`.
 #[derive(IntoElement)]
 pub struct NavigationMenuArrow<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<NavigationMenuContext<T>>,
     side: NavigationMenuSide,
     align: NavigationMenuAlign,
+    #[setters(skip)]
     style_with_state: Option<NavigationMenuArrowStyle>,
 }
 
@@ -102,16 +107,6 @@ impl<T: Clone + Eq + 'static> NavigationMenuChildNode<T> for NavigationMenuArrow
 impl<T: Clone + Eq + 'static> NavigationMenuArrow<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn side(mut self, side: NavigationMenuSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: NavigationMenuAlign) -> Self {
-        self.align = align;
-        self
     }
 
     pub fn style_with_state(

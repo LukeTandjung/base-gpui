@@ -14,23 +14,39 @@ use crate::menu::{
 
 type MenuRadioItemStyle = Rc<dyn Fn(MenuRadioItemStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 pub struct MenuRadioItem<P: Clone + 'static, V: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<MenuRadioItemChild<P, V>>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
+    #[setters(strip_option)]
     value: Option<V>,
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
     disabled: bool,
     close_on_click: bool,
+    #[setters(skip)]
     index: Option<usize>,
+    #[setters(skip)]
     group_index: Option<usize>,
+    #[setters(skip)]
     group_disabled: bool,
+    #[setters(skip)]
     controlled_checked: Option<bool>,
+    #[setters(skip)]
     group_controlled: bool,
+    #[setters(skip)]
     group_value: Option<Option<V>>,
+    #[setters(skip)]
     on_value_change: Option<MenuValueChangeHandler<V>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     style_with_state: Option<MenuRadioItemStyle>,
 }
 
@@ -278,11 +294,6 @@ impl<P: Clone + 'static, V: Clone + Eq + 'static> MenuRadioItem<P, V> {
         self.value.as_ref()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<MenuRadioItemChild<P, V>>) -> Self {
         self.children.push(child.into());
         self
@@ -291,26 +302,6 @@ impl<P: Clone + 'static, V: Clone + Eq + 'static> MenuRadioItem<P, V> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(MenuRadioItemChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn value(mut self, value: V) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn close_on_click(mut self, close_on_click: bool) -> Self {
-        self.close_on_click = close_on_click;
         self
     }
 

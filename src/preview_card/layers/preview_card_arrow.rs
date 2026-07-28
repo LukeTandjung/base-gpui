@@ -10,16 +10,21 @@ use crate::preview_card::{
     PreviewCardBoundsKind, PreviewCardContext, PreviewCardSide,
 };
 
+#[derive(derive_setters::Setters)]
 /// Base UI marks the arrow `aria-hidden="true"`. This gpui revision has no
 /// `.aria_hidden(...)` builder, so the equivalent is achieved by assigning no
 /// role: an element without a role never enters the AccessKit tree.
 #[derive(IntoElement)]
 pub struct PreviewCardArrow<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<PreviewCardContext<P>>,
     side: PreviewCardSide,
     align: PreviewCardAlign,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PreviewCardArrowStyleState, Div) -> Div + 'static>>,
 }
 
@@ -109,16 +114,6 @@ impl<P: Clone + 'static> PreviewCardChildNode<P> for PreviewCardArrow<P> {
 impl<P: Clone + 'static> PreviewCardArrow<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn side(mut self, side: PreviewCardSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: PreviewCardAlign) -> Self {
-        self.align = align;
-        self
     }
 
     pub fn style_with_state(

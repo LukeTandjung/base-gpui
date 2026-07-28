@@ -15,18 +15,28 @@ use crate::drawer::{
 
 type DrawerSwipeAreaStyle = Rc<dyn Fn(DrawerSwipeAreaStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// An invisible edge area that opens a closed drawer by dragging. Registers as
 /// a drawer trigger so `trigger_id` styling and focus return treat swipe-opens
 /// like trigger opens.
 #[derive(IntoElement)]
 pub struct DrawerSwipeArea<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<DrawerContext<P>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
     disabled: bool,
+    /// Overrides the open direction (default: opposite of the root
+    /// `swipe_direction`).
+    #[setters(strip_option)]
     swipe_direction: Option<DrawerSwipeDirection>,
+    #[setters(skip)]
     style_with_state: Option<DrawerSwipeAreaStyle>,
 }
 
@@ -225,23 +235,6 @@ impl<P: Clone + 'static> DrawerChildNode<P> for DrawerSwipeArea<P> {
 impl<P: Clone + 'static> DrawerSwipeArea<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    /// Overrides the open direction (default: opposite of the root
-    /// `swipe_direction`).
-    pub fn swipe_direction(mut self, swipe_direction: DrawerSwipeDirection) -> Self {
-        self.swipe_direction = Some(swipe_direction);
-        self
     }
 
     pub fn style_with_state(

@@ -13,12 +13,17 @@ use crate::progress::{ProgressContext, ProgressStyleState};
 pub type ProgressValueDisplayHandler =
     Rc<dyn Fn(Option<&str>, Option<f64>) -> SharedString + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ProgressValue {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<ProgressContext>,
+    #[setters(skip)]
     display: Option<ProgressValueDisplayHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ProgressStyleState, Div) -> Div + 'static>>,
 }
 
@@ -75,11 +80,6 @@ impl ProgressValue {
 
     pub fn with_progress_context(mut self, context: ProgressContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

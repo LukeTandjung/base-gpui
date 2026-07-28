@@ -11,12 +11,17 @@ use crate::meter::{MeterContext, MeterStyleState};
 /// text and raw value and returns the text to render.
 pub type MeterValueDisplayHandler = Rc<dyn Fn(&str, f64) -> SharedString + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MeterValue {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<MeterContext>,
+    #[setters(skip)]
     display: Option<MeterValueDisplayHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MeterStyleState, Div) -> Div + 'static>>,
 }
 
@@ -70,11 +75,6 @@ impl MeterValue {
 
     pub fn with_meter_context(mut self, context: MeterContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

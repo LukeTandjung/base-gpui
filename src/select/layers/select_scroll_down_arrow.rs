@@ -10,13 +10,17 @@ use crate::select::{
     SelectScrollArrowStyleState, SelectSide,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectScrollDownArrow<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
     keep_mounted: bool,
     side: SelectSide,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectScrollArrowStyleState, Div) -> Div + 'static>>,
 }
 
@@ -95,16 +99,6 @@ impl<T: Clone + Eq + 'static> SelectChildNode<T> for SelectScrollDownArrow<T> {
 impl<T: Clone + Eq + 'static> SelectScrollDownArrow<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
-    }
-
-    pub fn side(mut self, side: SelectSide) -> Self {
-        self.side = side;
-        self
     }
 
     pub fn style_with_state(

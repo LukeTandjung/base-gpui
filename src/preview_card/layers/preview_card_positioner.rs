@@ -17,14 +17,18 @@ use crate::{
     utils::direction::{current_direction, TextDirection},
 };
 
+#[derive(derive_setters::Setters)]
 /// Anchors the popup to the active trigger's bounds via a deferred overlay.
 /// Inline-rect anchoring (Base UI's hovered-line anchor for wrapped links)
 /// is descoped: DOM client-rect traversal has no GPUI equivalent, so the
 /// whole trigger's bounds anchor the card.
 #[derive(IntoElement)]
 pub struct PreviewCardPositioner<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<PreviewCardPositionerChild<P>>,
+    #[setters(skip)]
     context: Option<PreviewCardContext<P>>,
     side: PreviewCardSide,
     align: PreviewCardAlign,
@@ -32,7 +36,9 @@ pub struct PreviewCardPositioner<P: Clone + 'static = ()> {
     align_offset: Pixels,
     collision_padding: Pixels,
     arrow_padding: Pixels,
+    #[setters(skip)]
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PreviewCardPositionerStyleState, Div) -> Div + 'static>>,
 }
 
@@ -179,36 +185,6 @@ impl<P: Clone + 'static> PreviewCardPositioner<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(PreviewCardPositionerChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: PreviewCardSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: PreviewCardAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn side_offset(mut self, side_offset: Pixels) -> Self {
-        self.side_offset = side_offset;
-        self
-    }
-
-    pub fn align_offset(mut self, align_offset: Pixels) -> Self {
-        self.align_offset = align_offset;
-        self
-    }
-
-    pub fn collision_padding(mut self, collision_padding: Pixels) -> Self {
-        self.collision_padding = collision_padding;
-        self
-    }
-
-    pub fn arrow_padding(mut self, arrow_padding: Pixels) -> Self {
-        self.arrow_padding = arrow_padding;
         self
     }
 

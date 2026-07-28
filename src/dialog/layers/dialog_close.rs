@@ -12,16 +12,24 @@ use crate::dialog::{
     DialogOpenAction, DialogOpenChangeReason, DialogOpenChangeSource, DIALOG_POPUP_KEY_CONTEXT,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct DialogClose<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<DialogContext<P>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     scoped: bool,
     disabled: bool,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(DialogCloseStyleState, Div) -> Div + 'static>>,
 }
 
@@ -158,16 +166,6 @@ impl<P: Clone + 'static> DialogChildNode<P> for DialogClose<P> {
 impl<P: Clone + 'static> DialogClose<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
     }
 
     /// Accessible name for the close button (typically icon-only, e.g. "Close").

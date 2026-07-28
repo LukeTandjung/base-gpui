@@ -8,15 +8,20 @@ use gpui::{
 use crate::dialog::{DialogBackdropStyleState, DialogOpenChangeReason, DialogOpenChangeSource};
 use crate::drawer::{child_wiring::DrawerChildNode, DrawerBackdropStyleState, DrawerContext};
 
+#[derive(derive_setters::Setters)]
 /// The drawer overlay: styled by live swipe progress and suppressed when nested
 /// unless `force_render(true)`. Outside-press dismissal is disabled during a
 /// swipe-area gesture.
 #[derive(IntoElement)]
 pub struct DrawerBackdrop<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<DrawerContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     force_rendered: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(DrawerBackdropStyleState, Div) -> Div + 'static>>,
 }
 
@@ -119,11 +124,6 @@ impl<P: Clone + 'static> DrawerChildNode<P> for DrawerBackdrop<P> {
 impl<P: Clone + 'static> DrawerBackdrop<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     /// Renders a nested drawer's backdrop anyway (default `false`).

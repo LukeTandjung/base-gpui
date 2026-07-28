@@ -14,17 +14,24 @@ use crate::popover::{
     PopoverPopupChild, PopoverPopupStyleState, PopoverSide, POPOVER_KEY_CONTEXT,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct PopoverPopup<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<PopoverPopupChild<P>>,
+    #[setters(skip)]
     context: Option<PopoverContext<P>>,
     side: PopoverSide,
     align: PopoverAlign,
     keep_mounted: bool,
+    #[setters(skip)]
     payload_content: Option<PopoverPayloadContentBuilder<P>>,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PopoverPopupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -196,11 +203,6 @@ impl<P: Clone + 'static> PopoverPopup<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<PopoverPopupChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -209,21 +211,6 @@ impl<P: Clone + 'static> PopoverPopup<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(PopoverPopupChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: PopoverSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: PopoverAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

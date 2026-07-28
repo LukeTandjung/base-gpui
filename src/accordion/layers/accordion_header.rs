@@ -11,13 +11,18 @@ use crate::accordion::{
     AccordionOrientation,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct AccordionHeader<T: Clone + Eq + 'static> {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AccordionHeaderChild<T>>,
+    #[setters(skip)]
     context: Option<AccordionItemContext<T>>,
     heading_level: usize,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(AccordionHeaderStyleState<T>, Div) -> Div + 'static>>,
 }
 
@@ -110,16 +115,6 @@ impl<T: Clone + Eq + 'static> AccordionItemChildNode<T> for AccordionHeader<T> {
 impl<T: Clone + Eq + 'static> AccordionHeader<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
-        self
-    }
-
-    pub fn heading_level(mut self, heading_level: usize) -> Self {
-        self.heading_level = heading_level;
-        self
     }
 
     pub fn child(mut self, child: impl Into<AccordionHeaderChild<T>>) -> Self {

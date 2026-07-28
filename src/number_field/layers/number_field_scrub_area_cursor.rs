@@ -7,12 +7,17 @@ use gpui::{
 
 use crate::number_field::{NumberFieldContext, NumberFieldScrubAreaCursorStyleState};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct NumberFieldScrubAreaCursor {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<NumberFieldContext>,
+    #[setters(skip)]
     style_with_state:
         Option<Rc<dyn Fn(NumberFieldScrubAreaCursorStyleState, Div) -> Div + 'static>>,
 }
@@ -62,11 +67,6 @@ impl NumberFieldScrubAreaCursor {
 
     pub fn with_number_field_context(mut self, context: NumberFieldContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

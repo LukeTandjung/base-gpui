@@ -16,12 +16,17 @@ use crate::scroll_area::{
     ScrollAreaProps, ScrollAreaRootStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ScrollAreaRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ScrollAreaChild>,
+    #[setters(skip)]
     overflow_edge_threshold: ScrollAreaEdgeThreshold,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ScrollAreaRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -118,11 +123,6 @@ impl RenderOnce for ScrollAreaRoot {
 impl ScrollAreaRoot {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     pub fn child(mut self, child: impl Into<ScrollAreaChild>) -> Self {

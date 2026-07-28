@@ -14,15 +14,25 @@ use crate::{
     primitives::input::{input, Input, InputRuntime, InputStyleState},
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct FieldControl {
+    #[setters(skip)]
     id: ElementId,
+    #[setters(skip)]
     input: Input,
+    #[setters(skip)]
     context: Option<FieldContext>,
+    #[setters(skip)]
     name: Option<SharedString>,
+    #[setters(skip)]
     disabled: bool,
+    #[setters(skip)]
     required: bool,
+    /// Overrides the keyed focus handle so composite containers can own the
+    /// control's roving focus handle.
+    #[setters(strip_option)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(InputStyleState, Div) -> Div + 'static>>,
 }
 
@@ -180,13 +190,6 @@ impl FieldControl {
     /// as the Toolbar use this to keep a single roving tab stop.
     pub fn tab_stop(mut self, tab_stop: bool) -> Self {
         self.input = self.input.tab_stop(tab_stop);
-        self
-    }
-
-    /// Overrides the keyed focus handle so composite containers can own the
-    /// control's roving focus handle.
-    pub fn focus_handle(mut self, focus_handle: FocusHandle) -> Self {
-        self.focus_handle = Some(focus_handle);
         self
     }
 

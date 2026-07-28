@@ -9,12 +9,18 @@ use crate::tooltip::{
     TooltipDelayGroup, TooltipProviderChild, TooltipProviderConfig, TooltipProviderStyleState,
 };
 
+#[derive(derive_setters::Setters)]
 #[derive(IntoElement)]
 pub struct TooltipProvider<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<TooltipProviderChild<P>>,
+    #[setters(skip)]
     config: TooltipProviderConfig,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(TooltipProviderStyleState, Div) -> Div + 'static>>,
 }
 
@@ -67,11 +73,6 @@ impl<P: Clone + 'static> RenderOnce for TooltipProvider<P> {
 impl<P: Clone + 'static> TooltipProvider<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     pub fn child(mut self, child: impl Into<TooltipProviderChild<P>>) -> Self {

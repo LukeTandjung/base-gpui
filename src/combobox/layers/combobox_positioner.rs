@@ -11,21 +11,28 @@ use crate::combobox::{
     ComboboxPositionerChild, ComboboxPositionerStyleState, ComboboxSide,
 };
 
+#[derive(derive_setters::Setters)]
 /// Anchored/deferred overlay positioning. Combobox-local equivalent of
 /// `select_positioner.rs`, without the `align_item_with_trigger` mode and
 /// without scroll arrows. The anchor is the input group when present, else
 /// the input, with an explicit `.anchor(...)` override.
 #[derive(IntoElement)]
 pub struct ComboboxPositioner<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ComboboxPositionerChild<T>>,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
+    /// Explicit anchor override; defaults to input-group-else-input.
+    #[setters(strip_option)]
     anchor: Option<Bounds<Pixels>>,
     side: ComboboxSide,
     align: ComboboxAlign,
     side_offset: Pixels,
     align_offset: Pixels,
     collision_padding: Pixels,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ComboboxPositionerStyleState, Div) -> Div + 'static>>,
 }
 
@@ -161,37 +168,6 @@ impl<T: Clone + Eq + 'static> ComboboxPositioner<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(ComboboxPositionerChild::Any(child.into_any_element()));
-        self
-    }
-
-    /// Explicit anchor override; defaults to input-group-else-input.
-    pub fn anchor(mut self, anchor: Bounds<Pixels>) -> Self {
-        self.anchor = Some(anchor);
-        self
-    }
-
-    pub fn side(mut self, side: ComboboxSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: ComboboxAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn side_offset(mut self, side_offset: Pixels) -> Self {
-        self.side_offset = side_offset;
-        self
-    }
-
-    pub fn align_offset(mut self, align_offset: Pixels) -> Self {
-        self.align_offset = align_offset;
-        self
-    }
-
-    pub fn collision_padding(mut self, collision_padding: Pixels) -> Self {
-        self.collision_padding = collision_padding;
         self
     }
 

@@ -9,12 +9,16 @@ use crate::preview_card::{
     PreviewCardContext, PreviewCardPortalChild, PreviewCardPortalStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct PreviewCardPortal<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<PreviewCardPortalChild<P>>,
+    #[setters(skip)]
     context: Option<PreviewCardContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PreviewCardPortalStyleState, Div) -> Div + 'static>>,
 }
 
@@ -105,11 +109,6 @@ impl<P: Clone + 'static> PreviewCardPortal<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(PreviewCardPortalChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

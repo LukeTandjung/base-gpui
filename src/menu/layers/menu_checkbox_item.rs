@@ -15,20 +15,30 @@ use crate::menu::{
 
 type MenuCheckboxItemStyle = Rc<dyn Fn(MenuCheckboxItemStyleState, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MenuCheckboxItem<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<MenuCheckboxItemChild<P>>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
     disabled: bool,
     close_on_click: bool,
+    #[setters(strip_option)]
     checked: Option<bool>,
     default_checked: bool,
+    #[setters(skip)]
     on_checked_change: Option<MenuCheckedChangeHandler>,
+    #[setters(skip)]
     index: Option<usize>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     style_with_state: Option<MenuCheckboxItemStyle>,
 }
 
@@ -220,11 +230,6 @@ impl<P: Clone + 'static> MenuCheckboxItem<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<MenuCheckboxItemChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -233,31 +238,6 @@ impl<P: Clone + 'static> MenuCheckboxItem<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(MenuCheckboxItemChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn close_on_click(mut self, close_on_click: bool) -> Self {
-        self.close_on_click = close_on_click;
-        self
-    }
-
-    pub fn checked(mut self, checked: bool) -> Self {
-        self.checked = Some(checked);
-        self
-    }
-
-    pub fn default_checked(mut self, default_checked: bool) -> Self {
-        self.default_checked = default_checked;
         self
     }
 

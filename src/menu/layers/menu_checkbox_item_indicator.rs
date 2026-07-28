@@ -7,13 +7,18 @@ use gpui::{
 
 use crate::menu::MenuCheckboxItemIndicatorStyleState;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MenuCheckboxItemIndicator<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
     keep_mounted: bool,
+    #[setters(skip)]
     facts: Option<(bool, bool, bool)>,
+    #[setters(skip)]
     _payload: std::marker::PhantomData<P>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MenuCheckboxItemIndicatorStyleState, Div) -> Div + 'static>>,
 }
 
@@ -67,11 +72,6 @@ impl<P: Clone + 'static> RenderOnce for MenuCheckboxItemIndicator<P> {
 impl<P: Clone + 'static> MenuCheckboxItemIndicator<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn with_item_facts(mut self, checked: bool, highlighted: bool, disabled: bool) -> Self {

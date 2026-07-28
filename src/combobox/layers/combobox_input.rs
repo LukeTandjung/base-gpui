@@ -19,6 +19,7 @@ use crate::{
 type ComboboxInputStyle<T> = Rc<dyn Fn(ComboboxInputStyleState<T>, Div) -> Div + 'static>;
 type InnerInputStyle = Rc<dyn Fn(InputStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// The text field: composes the `primitives/input` `Input` (no second
 /// text-editing implementation) and only adds Combobox wiring — input value
 /// sync, open-on-type, chip navigation hand-off, and key dispatch for list
@@ -31,14 +32,22 @@ type InnerInputStyle = Rc<dyn Fn(InputStyleState, Div) -> Div + 'static>;
 /// because the input primitive claims those bindings first.
 #[derive(IntoElement)]
 pub struct ComboboxInput<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
+    #[setters(into)]
     placeholder: SharedString,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
     disabled: bool,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     style_with_state: Option<ComboboxInputStyle<T>>,
+    #[setters(skip)]
     input_style_with_state: Option<InnerInputStyle>,
 }
 
@@ -268,25 +277,10 @@ impl<T: Clone + Eq + 'static> ComboboxInput<T> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn placeholder(mut self, placeholder: impl Into<SharedString>) -> Self {
-        self.placeholder = placeholder.into();
-        self
-    }
-
     /// Accessible label for the combobox reference node; substitutes for Base
     /// UI's `aria-labelledby` wiring, which has no gpui builder.
     pub fn aria_label(mut self, label: impl Into<SharedString>) -> Self {
         self.aria_label = Some(label.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
         self
     }
 

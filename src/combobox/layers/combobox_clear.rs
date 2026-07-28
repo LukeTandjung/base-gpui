@@ -11,16 +11,23 @@ use crate::combobox::{
     ComboboxClearStyleState, ComboboxContext,
 };
 
+#[derive(derive_setters::Setters)]
 /// Visible only when there is something to clear; pressing it clears input +
 /// selection + highlight and refocuses the input without opening the popup.
 #[derive(IntoElement)]
 pub struct ComboboxClear<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
     keep_mounted: bool,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ComboboxClearStyleState, Div) -> Div + 'static>>,
 }
 
@@ -109,16 +116,6 @@ impl<T: Clone + Eq + 'static> ComboboxChildNode<T> for ComboboxClear<T> {
 impl<T: Clone + Eq + 'static> ComboboxClear<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     /// Accessible label for the clear button; defaults to "Clear".

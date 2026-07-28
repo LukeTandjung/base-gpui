@@ -8,6 +8,7 @@ use gpui::{
 
 use crate::avatar::{child_wiring::AvatarChildNode, AvatarContext, AvatarFallbackStyleState};
 
+#[derive(derive_setters::Setters)]
 /// Fallback content shown while the avatar image is not loaded.
 ///
 /// Accessibility: this part carries no role or aria props — it is a visual
@@ -18,10 +19,15 @@ use crate::avatar::{child_wiring::AvatarChildNode, AvatarContext, AvatarFallback
 /// `AnyElement`s, so this is a caller convention the layer cannot enforce.
 #[derive(IntoElement)]
 pub struct AvatarFallback {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(strip_option)]
     delay: Option<Duration>,
+    #[setters(skip)]
     context: Option<AvatarContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(AvatarFallbackStyleState, Div) -> Div + 'static>>,
 }
 
@@ -95,11 +101,6 @@ impl AvatarChildNode for AvatarFallback {
 impl AvatarFallback {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn delay(mut self, delay: Duration) -> Self {
-        self.delay = Some(delay);
-        self
     }
 
     pub fn style_with_state(

@@ -20,14 +20,18 @@ use crate::{
 type NavigationMenuPositionerStyle =
     Rc<dyn Fn(NavigationMenuPositionerStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Anchors the shared popup to the **active** trigger's measured bounds via
 /// a deferred overlay, retargeting (without unmount) when the active value
 /// changes, with a last-known-anchor fallback for the close transition after
 /// the active trigger's item unmounts.
 #[derive(IntoElement)]
 pub struct NavigationMenuPositioner<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<NavigationMenuPositionerChild<T>>,
+    #[setters(skip)]
     context: Option<NavigationMenuContext<T>>,
     side: NavigationMenuSide,
     align: NavigationMenuAlign,
@@ -36,6 +40,7 @@ pub struct NavigationMenuPositioner<T: Clone + Eq + 'static> {
     collision_padding: Pixels,
     arrow_padding: Pixels,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<NavigationMenuPositionerStyle>,
 }
 
@@ -205,41 +210,6 @@ impl<T: Clone + Eq + 'static> NavigationMenuPositioner<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(NavigationMenuPositionerChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: NavigationMenuSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: NavigationMenuAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn side_offset(mut self, side_offset: Pixels) -> Self {
-        self.side_offset = side_offset;
-        self
-    }
-
-    pub fn align_offset(mut self, align_offset: Pixels) -> Self {
-        self.align_offset = align_offset;
-        self
-    }
-
-    pub fn collision_padding(mut self, collision_padding: Pixels) -> Self {
-        self.collision_padding = collision_padding;
-        self
-    }
-
-    pub fn arrow_padding(mut self, arrow_padding: Pixels) -> Self {
-        self.arrow_padding = arrow_padding;
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

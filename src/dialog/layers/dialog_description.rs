@@ -12,12 +12,17 @@ use crate::dialog::{
 
 type DialogDescriptionStyle<P> = Rc<dyn Fn(DialogDescriptionStyleState<P>, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct DialogDescription<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<DialogContext<P>>,
+    #[setters(skip)]
     style_with_state: Option<DialogDescriptionStyle<P>>,
 }
 
@@ -82,11 +87,6 @@ impl<P: Clone + 'static> DialogChildNode<P> for DialogDescription<P> {
 impl<P: Clone + 'static> DialogDescription<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     pub fn style_with_state(

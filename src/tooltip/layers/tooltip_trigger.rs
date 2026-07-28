@@ -15,22 +15,35 @@ use crate::tooltip::{
 
 type TooltipTriggerStyle<P> = Rc<dyn Fn(TooltipTriggerStyleState<P>, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct TooltipTrigger<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<TooltipContext<P>>,
+    #[setters(strip_option)]
     handle: Option<TooltipHandle<P>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     scoped: bool,
     disabled: bool,
+    #[setters(strip_option)]
     payload: Option<P>,
+    #[setters(strip_option)]
     delay: Option<Duration>,
+    #[setters(strip_option)]
     close_delay: Option<Duration>,
     close_on_click: bool,
+    #[setters(skip)]
     order: usize,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<TooltipTriggerStyle<P>>,
 }
 
@@ -441,41 +454,6 @@ impl<P: Clone + 'static> TooltipChildNode<P> for TooltipTrigger<P> {
 impl<P: Clone + 'static> TooltipTrigger<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn payload(mut self, payload: P) -> Self {
-        self.payload = Some(payload);
-        self
-    }
-
-    pub fn handle(mut self, handle: TooltipHandle<P>) -> Self {
-        self.handle = Some(handle);
-        self
-    }
-
-    pub fn delay(mut self, delay: Duration) -> Self {
-        self.delay = Some(delay);
-        self
-    }
-
-    pub fn close_delay(mut self, close_delay: Duration) -> Self {
-        self.close_delay = Some(close_delay);
-        self
-    }
-
-    pub fn close_on_click(mut self, close_on_click: bool) -> Self {
-        self.close_on_click = close_on_click;
-        self
     }
 
     /// Accessible name for the trigger. There is no derived default because

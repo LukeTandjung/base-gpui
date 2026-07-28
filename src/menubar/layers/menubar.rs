@@ -15,18 +15,24 @@ use crate::{
     utils::direction::{current_direction, HorizontalArrowKey, HorizontalDirection},
 };
 
+#[derive(derive_setters::Setters)]
 /// The single Menubar part: the trigger row container with roving focus
 /// across the hosted menus' triggers and cross-menu coordination state.
 #[derive(IntoElement)]
 pub struct Menubar {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<MenubarChild>,
     orientation: MenubarOrientation,
     loop_focus: bool,
     modal: bool,
     disabled: bool,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MenubarStyleState, Div) -> Div + 'static>>,
 }
 
@@ -169,11 +175,6 @@ impl Menubar {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<MenubarChild>) -> Self {
         self.children.push(child.into());
         self
@@ -182,26 +183,6 @@ impl Menubar {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(MenubarChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn orientation(mut self, orientation: MenubarOrientation) -> Self {
-        self.orientation = orientation;
-        self
-    }
-
-    pub fn loop_focus(mut self, loop_focus: bool) -> Self {
-        self.loop_focus = loop_focus;
-        self
-    }
-
-    pub fn modal(mut self, modal: bool) -> Self {
-        self.modal = modal;
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
         self
     }
 

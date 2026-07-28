@@ -9,13 +9,19 @@ use crate::select::{
     child_wiring::SelectChildNode, SelectContext, SelectItemStyleState, SelectItemTextStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectItemText<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
+    #[setters(skip)]
     item_state: Option<SelectItemStyleState<T>>,
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectItemTextStyleState, Div) -> Div + 'static>>,
 }
 
@@ -109,11 +115,6 @@ impl<T: Clone + Eq + 'static> SelectChildNode<T> for SelectItemText<T> {
 impl<T: Clone + Eq + 'static> SelectItemText<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
-        self
     }
 
     pub fn text(self, label: impl Into<SharedString>) -> Self {

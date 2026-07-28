@@ -19,6 +19,7 @@ use crate::{
     fieldset::current_fieldset_disabled,
 };
 
+#[derive(derive_setters::Setters)]
 /// The Combobox root: the single non-event mutation site. Its render wires
 /// children, calls `sync_children`, reconciles all three controlled axes
 /// (selected value(s), input value, open), and registers with Field.
@@ -33,19 +34,29 @@ use crate::{
 /// other is ignored.
 #[derive(IntoElement)]
 pub struct ComboboxRoot<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ComboboxChild<T>>,
+    #[setters(skip)]
     props: ComboboxProps<T>,
     multiple: bool,
     default_value: Option<T>,
+    #[setters(strip_option)]
     value: Option<Option<T>>,
     default_values: Vec<T>,
+    #[setters(strip_option)]
     values: Option<Vec<T>>,
+    #[setters(into, strip_option)]
     default_input_value: Option<SharedString>,
+    #[setters(into, strip_option)]
     input_value: Option<SharedString>,
     default_open: bool,
+    #[setters(strip_option)]
     open: Option<bool>,
+    #[setters(skip)]
     style_with_state: Option<ComboboxRootStyle<T>>,
 }
 
@@ -249,23 +260,8 @@ impl<T: Clone + Eq + 'static> ComboboxRoot<T> {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn name(mut self, name: impl Into<SharedString>) -> Self {
         self.props.name = Some(name.into());
-        self
-    }
-
-    pub fn default_value(mut self, default_value: Option<T>) -> Self {
-        self.default_value = default_value;
-        self
-    }
-
-    pub fn value(mut self, value: Option<T>) -> Self {
-        self.value = Some(value);
         self
     }
 
@@ -278,36 +274,11 @@ impl<T: Clone + Eq + 'static> ComboboxRoot<T> {
         self
     }
 
-    pub fn multiple(mut self, multiple: bool) -> Self {
-        self.multiple = multiple;
-        self
-    }
-
-    pub fn default_values(mut self, default_values: Vec<T>) -> Self {
-        self.default_values = default_values;
-        self
-    }
-
-    pub fn values(mut self, values: Vec<T>) -> Self {
-        self.values = Some(values);
-        self
-    }
-
     pub fn on_values_change(
         mut self,
         on_values_change: impl Fn(&[T], &mut ComboboxChangeDetails, &mut Window, &mut App) + 'static,
     ) -> Self {
         self.props.on_values_change = Some(Rc::new(on_values_change));
-        self
-    }
-
-    pub fn default_input_value(mut self, default_input_value: impl Into<SharedString>) -> Self {
-        self.default_input_value = Some(default_input_value.into());
-        self
-    }
-
-    pub fn input_value(mut self, input_value: impl Into<SharedString>) -> Self {
-        self.input_value = Some(input_value.into());
         self
     }
 
@@ -317,16 +288,6 @@ impl<T: Clone + Eq + 'static> ComboboxRoot<T> {
             + 'static,
     ) -> Self {
         self.props.on_input_value_change = Some(Rc::new(on_input_value_change));
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: bool) -> Self {
-        self.open = Some(open);
         self
     }
 

@@ -10,11 +10,14 @@ use crate::menu::{
     MenuBackdropStyleState, MenuContext, MenuOpenChangeReason, MenuOpenChangeSource,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MenuBackdrop<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MenuBackdropStyleState, Div) -> Div + 'static>>,
 }
 
@@ -91,11 +94,6 @@ impl<P: Clone + 'static> MenuChildNode<P> for MenuBackdrop<P> {
 impl<P: Clone + 'static> MenuBackdrop<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn style_with_state(

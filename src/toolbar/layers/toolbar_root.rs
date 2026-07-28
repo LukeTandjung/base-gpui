@@ -16,15 +16,23 @@ use crate::{
     utils::direction::{current_direction, HorizontalArrowKey, HorizontalDirection},
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ToolbarRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ToolbarChild>,
     orientation: ToolbarOrientation,
     loop_focus: bool,
     disabled: bool,
+    /// Accessible name for the toolbar, announced by screen readers. There is
+    /// no `aria-labelledby` id-reference builder in this gpui revision, so
+    /// the name is a literal string.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ToolbarRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -141,11 +149,6 @@ impl ToolbarRoot {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<ToolbarChild>) -> Self {
         self.children.push(child.into());
         self
@@ -153,29 +156,6 @@ impl ToolbarRoot {
 
     pub fn children(mut self, children: impl IntoIterator<Item = impl Into<ToolbarChild>>) -> Self {
         self.children.extend(children.into_iter().map(Into::into));
-        self
-    }
-
-    pub fn orientation(mut self, orientation: ToolbarOrientation) -> Self {
-        self.orientation = orientation;
-        self
-    }
-
-    pub fn loop_focus(mut self, loop_focus: bool) -> Self {
-        self.loop_focus = loop_focus;
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    /// Accessible name for the toolbar, announced by screen readers. There is
-    /// no `aria-labelledby` id-reference builder in this gpui revision, so
-    /// the name is a literal string.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

@@ -11,6 +11,7 @@ use crate::menu::{MenuChild, MenuContext, MenuOpenChangeReason, MenuOpenChangeSo
 
 type ContextMenuTriggerStyle = Rc<dyn Fn(ContextMenuTriggerStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Base UI Context Menu trigger: a plain, non-focusable area `div` that opens
 /// the menu at the cursor on right mouse-down. It is not a button trigger —
 /// left-click and hover do nothing, and disabling is the root's
@@ -30,10 +31,15 @@ type ContextMenuTriggerStyle = Rc<dyn Fn(ContextMenuTriggerStyleState, Div) -> D
 /// unavailable as builders in the pinned gpui revision, so nothing is lost.
 /// The `ContextMenuTriggerStyleState` `open`/`pressed` facts are visual only.
 pub struct ContextMenuTrigger<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     style_with_state: Option<ContextMenuTriggerStyle>,
+    #[setters(skip)]
     marker: std::marker::PhantomData<P>,
 }
 
@@ -72,11 +78,6 @@ impl<P: Clone + 'static> From<ContextMenuTrigger<P>> for MenuChild<P> {
 impl<P: Clone + 'static> ContextMenuTrigger<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     pub fn child_any(mut self, child: impl IntoElement) -> Self {

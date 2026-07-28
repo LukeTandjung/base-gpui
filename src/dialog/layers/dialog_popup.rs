@@ -18,18 +18,29 @@ pub type DialogPayloadContentBuilder<P> =
 
 type DialogPopupStyle<P> = Rc<dyn Fn(DialogPopupStyleState<P>, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct DialogPopup<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<DialogPopupChild<P>>,
+    #[setters(skip)]
     context: Option<DialogContext<P>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     scoped: bool,
     keep_mounted: bool,
+    /// Overrides the popup's accessibility role. Defaults to [`Role::Dialog`];
+    /// Alert Dialog sets [`Role::AlertDialog`].
     role: Role,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     payload_content: Option<DialogPayloadContentBuilder<P>>,
+    #[setters(skip)]
     style_with_state: Option<DialogPopupStyle<P>>,
 }
 
@@ -188,11 +199,6 @@ impl<P: Clone + 'static> DialogPopup<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<DialogPopupChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -201,18 +207,6 @@ impl<P: Clone + 'static> DialogPopup<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(DialogPopupChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
-    }
-
-    /// Overrides the popup's accessibility role. Defaults to [`Role::Dialog`];
-    /// Alert Dialog sets [`Role::AlertDialog`].
-    pub fn role(mut self, role: Role) -> Self {
-        self.role = role;
         self
     }
 

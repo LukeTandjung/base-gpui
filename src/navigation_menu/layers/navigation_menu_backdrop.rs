@@ -9,13 +9,17 @@ use crate::navigation_menu::{
 type NavigationMenuBackdropStyle =
     Rc<dyn Fn(NavigationMenuBackdropStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Presentation-only backdrop: it never captures pointer events and never
 /// dismisses; outside-press dismissal is the positioner's runtime path.
 #[derive(IntoElement)]
 pub struct NavigationMenuBackdrop<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<NavigationMenuContext<T>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<NavigationMenuBackdropStyle>,
 }
 
@@ -64,11 +68,6 @@ impl<T: Clone + Eq + 'static> NavigationMenuChildNode<T> for NavigationMenuBackd
 impl<T: Clone + Eq + 'static> NavigationMenuBackdrop<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn style_with_state(

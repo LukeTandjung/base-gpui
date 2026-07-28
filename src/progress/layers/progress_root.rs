@@ -8,16 +8,27 @@ use gpui::{
 
 use crate::progress::{ProgressChild, ProgressContext, ProgressProps, ProgressStyleState};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ProgressRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ProgressChild>,
+    /// The task-completion value; `None` means indeterminate (Base UI's
+    /// `@default null`).
     value: Option<f64>,
     min: f64,
     max: f64,
+    #[setters(skip)]
     format: Option<Rc<dyn Fn(f64) -> String + 'static>>,
+    /// Accessible label for the progress bar; the literal-string replacement
+    /// for Base UI's `aria-labelledby` wiring to `ProgressLabel`. Pass the
+    /// same string rendered inside `ProgressLabel`.
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ProgressStyleState, Div) -> Div + 'static>>,
 }
 
@@ -98,11 +109,6 @@ impl ProgressRoot {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<ProgressChild>) -> Self {
         self.children.push(child.into());
         self
@@ -122,35 +128,10 @@ impl ProgressRoot {
         self
     }
 
-    /// The task-completion value; `None` means indeterminate (Base UI's
-    /// `@default null`).
-    pub fn value(mut self, value: Option<f64>) -> Self {
-        self.value = value;
-        self
-    }
-
-    pub fn min(mut self, min: f64) -> Self {
-        self.min = min;
-        self
-    }
-
-    pub fn max(mut self, max: f64) -> Self {
-        self.max = max;
-        self
-    }
-
     /// Custom formatter receiving the raw (unclamped) value; never invoked
     /// when indeterminate.
     pub fn format(mut self, format: impl Fn(f64) -> String + 'static) -> Self {
         self.format = Some(Rc::new(format));
-        self
-    }
-
-    /// Accessible label for the progress bar; the literal-string replacement
-    /// for Base UI's `aria-labelledby` wiring to `ProgressLabel`. Pass the
-    /// same string rendered inside `ProgressLabel`.
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
         self
     }
 

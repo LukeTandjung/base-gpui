@@ -11,12 +11,17 @@ use crate::select::{
     child_wiring::SelectChildNode, SelectContext, SelectSelectionMode, SelectValueStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectValue<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
+    #[setters(into, strip_option)]
     placeholder: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<SelectValueStyle<T>>,
 }
 
@@ -108,11 +113,6 @@ impl<T: Clone + Eq + 'static> SelectChildNode<T> for SelectValue<T> {
 impl<T: Clone + Eq + 'static> SelectValue<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn placeholder(mut self, placeholder: impl Into<SharedString>) -> Self {
-        self.placeholder = Some(placeholder.into());
-        self
     }
 
     pub fn style_with_state(

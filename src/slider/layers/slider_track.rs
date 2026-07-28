@@ -7,12 +7,17 @@ use gpui::{
 
 use crate::slider::{SliderContext, SliderTrackChild, SliderTrackStyleState};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SliderTrack {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SliderTrackChild>,
+    #[setters(skip)]
     context: Option<SliderContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SliderTrackStyleState, Div) -> Div + 'static>>,
 }
 
@@ -71,11 +76,6 @@ impl SliderTrack {
         map: impl FnOnce(Vec<SliderTrackChild>) -> Vec<SliderTrackChild>,
     ) -> Self {
         self.children = map(self.children);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

@@ -9,14 +9,18 @@ use crate::combobox::{
     ComboboxAlign, ComboboxContext, ComboboxPopupChild, ComboboxPopupStyleState, ComboboxSide,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ComboboxPopup<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ComboboxPopupChild<T>>,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
     side: ComboboxSide,
     align: ComboboxAlign,
     force_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ComboboxPopupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -107,21 +111,6 @@ impl<T: Clone + Eq + 'static> ComboboxPopup<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(ComboboxPopupChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: ComboboxSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: ComboboxAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn force_mounted(mut self, force_mounted: bool) -> Self {
-        self.force_mounted = force_mounted;
         self
     }
 

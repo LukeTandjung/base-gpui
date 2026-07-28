@@ -8,14 +8,22 @@ use gpui::{
 
 use crate::tabs::{child_wiring::TabsChildNode, TabsContext, TabsOrientation, TabsPanelStyleState};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct TabsPanel<T: Clone + Eq + 'static> {
+    /// Stable element id for the panel. Required for the active panel to
+    /// appear in the accessibility tree with `Role::TabPanel`.
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<TabsContext<T>>,
+    #[setters(strip_option)]
     value: Option<T>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(TabsPanelStyleState, Div) -> Div + 'static>>,
 }
 
@@ -102,23 +110,6 @@ impl<T: Clone + Eq + 'static> TabsChildNode<T> for TabsPanel<T> {
 impl<T: Clone + Eq + 'static> TabsPanel<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn value(mut self, value: T) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    /// Stable element id for the panel. Required for the active panel to
-    /// appear in the accessibility tree with `Role::TabPanel`.
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn style_with_state(

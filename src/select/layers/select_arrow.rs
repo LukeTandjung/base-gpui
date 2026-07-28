@@ -9,13 +9,17 @@ use crate::select::{
     child_wiring::SelectChildNode, SelectAlign, SelectArrowStyleState, SelectContext, SelectSide,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectArrow<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
     side: SelectSide,
     align: SelectAlign,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectArrowStyleState, Div) -> Div + 'static>>,
 }
 
@@ -72,16 +76,6 @@ impl<T: Clone + Eq + 'static> SelectChildNode<T> for SelectArrow<T> {
 impl<T: Clone + Eq + 'static> SelectArrow<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn side(mut self, side: SelectSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: SelectAlign) -> Self {
-        self.align = align;
-        self
     }
 
     pub fn style_with_state(

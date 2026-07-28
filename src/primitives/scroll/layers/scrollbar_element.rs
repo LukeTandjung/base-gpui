@@ -52,43 +52,28 @@ pub fn scrollbar_horizontal<H: ScrollTarget + Clone>(target: &H) -> Scrollbar {
     scrollbar(target).axis(ScrollbarAxis::Horizontal)
 }
 
+#[derive(derive_setters::Setters)]
 /// Overlay scrollbar element. Build with [`scrollbar`].
 pub struct Scrollbar {
+    /// Stable identity for the keyed interaction state (hover, drag, fade).
+    /// Defaults to the constructor call site.
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     target: Rc<dyn ScrollTarget>,
+    /// Which axes to render.
     axis: ScrollbarAxis,
+    /// Visibility policy; defaults to [`ScrollbarVisibility::Scrolling`].
     visibility: ScrollbarVisibility,
+    /// Explicit content-size override; defaults to the target's
+    /// `content_size()`.
+    #[setters(strip_option)]
     content_size: Option<Size<Pixels>>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ScrollbarStyleState, ScrollbarStyle) -> ScrollbarStyle>>,
 }
 
 impl Scrollbar {
-    /// Stable identity for the keyed interaction state (hover, drag, fade).
-    /// Defaults to the constructor call site.
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    /// Which axes to render.
-    pub fn axis(mut self, axis: ScrollbarAxis) -> Self {
-        self.axis = axis;
-        self
-    }
-
-    /// Visibility policy; defaults to [`ScrollbarVisibility::Scrolling`].
-    pub fn visibility(mut self, visibility: ScrollbarVisibility) -> Self {
-        self.visibility = visibility;
-        self
-    }
-
-    /// Explicit content-size override; defaults to the target's
-    /// `content_size()`.
-    pub fn content_size(mut self, content_size: Size<Pixels>) -> Self {
-        self.content_size = Some(content_size);
-        self
-    }
-
     /// Adjust track/thumb appearance from the current typed style state.
     /// Receives [`ScrollbarStyle::default`] and returns the style to use.
     pub fn style_with_state(

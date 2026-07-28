@@ -10,14 +10,19 @@ use crate::combobox::{
     ComboboxSide,
 };
 
+#[derive(derive_setters::Setters)]
 /// Combobox-local equivalent of `popover_arrow.rs`.
 #[derive(IntoElement)]
 pub struct ComboboxArrow<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
     side: ComboboxSide,
     align: ComboboxAlign,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ComboboxArrowStyleState, Div) -> Div + 'static>>,
 }
 
@@ -74,16 +79,6 @@ impl<T: Clone + Eq + 'static> ComboboxChildNode<T> for ComboboxArrow<T> {
 impl<T: Clone + Eq + 'static> ComboboxArrow<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn side(mut self, side: ComboboxSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: ComboboxAlign) -> Self {
-        self.align = align;
-        self
     }
 
     pub fn style_with_state(

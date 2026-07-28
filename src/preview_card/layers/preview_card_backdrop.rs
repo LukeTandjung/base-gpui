@@ -6,6 +6,7 @@ use crate::preview_card::{
     child_wiring::PreviewCardChildNode, PreviewCardBackdropStyleState, PreviewCardContext,
 };
 
+#[derive(derive_setters::Setters)]
 /// Presentation-only backdrop: it never captures pointer events, never closes
 /// the card, and never blocks content beneath it. Outside-press dismissal is
 /// handled by the positioner's `on_mouse_down_out` runtime path — this is the
@@ -17,9 +18,12 @@ use crate::preview_card::{
 /// enters the AccessKit tree.
 #[derive(IntoElement)]
 pub struct PreviewCardBackdrop<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<PreviewCardContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PreviewCardBackdropStyleState, Div) -> Div + 'static>>,
 }
 
@@ -68,11 +72,6 @@ impl<P: Clone + 'static> PreviewCardChildNode<P> for PreviewCardBackdrop<P> {
 impl<P: Clone + 'static> PreviewCardBackdrop<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn style_with_state(

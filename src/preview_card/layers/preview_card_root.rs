@@ -14,22 +14,32 @@ use crate::preview_card::{
     PreviewCardProps, DEFAULT_PREVIEW_CARD_CLOSE_DELAY, DEFAULT_PREVIEW_CARD_DELAY,
 };
 
+#[derive(derive_setters::Setters)]
 /// Provider-less hover/focus root (Base UI Preview Card has no provider or
 /// delay group). Renders no styleable state of its own: Base UI's root state
 /// is empty, so the root stays injection-only.
 #[derive(IntoElement)]
 pub struct PreviewCardRoot<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<PreviewCardChild<P>>,
     default_open: bool,
+    #[setters(strip_option)]
     open: Option<bool>,
+    #[setters(skip)]
     default_trigger_id: Option<ElementId>,
+    #[setters(skip)]
     trigger_id: Option<Option<ElementId>>,
     delay: std::time::Duration,
     close_delay: std::time::Duration,
+    #[setters(strip_option)]
     handle: Option<PreviewCardHandle<P>>,
+    #[setters(skip)]
     on_open_change: Option<PreviewCardOpenChangeHandler<P>>,
+    #[setters(skip)]
     on_open_change_complete: Option<PreviewCardOpenChangeCompleteHandler<P>>,
 }
 
@@ -148,31 +158,6 @@ impl<P: Clone + 'static> PreviewCardRoot<P> {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: bool) -> Self {
-        self.open = Some(open);
-        self
-    }
-
-    pub fn delay(mut self, delay: std::time::Duration) -> Self {
-        self.delay = delay;
-        self
-    }
-
-    pub fn close_delay(mut self, close_delay: std::time::Duration) -> Self {
-        self.close_delay = close_delay;
-        self
-    }
-
     pub fn on_open_change(
         mut self,
         on_open_change: impl Fn(bool, &mut PreviewCardOpenChangeDetails<P>, &mut Window, &mut App)
@@ -203,11 +188,6 @@ impl<P: Clone + 'static> PreviewCardRoot<P> {
 
     pub fn default_trigger_id(mut self, trigger_id: impl Into<ElementId>) -> Self {
         self.default_trigger_id = Some(trigger_id.into());
-        self
-    }
-
-    pub fn handle(mut self, handle: PreviewCardHandle<P>) -> Self {
-        self.handle = Some(handle);
         self
     }
 }

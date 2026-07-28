@@ -11,14 +11,19 @@ use crate::navigation_menu::{
 
 type NavigationMenuPortalStyle = Rc<dyn Fn(NavigationMenuPortalStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Renders the positioner chain only while mounted (or `keep_mounted`);
 /// closed keep-mounted content reports closed style state.
 #[derive(IntoElement)]
 pub struct NavigationMenuPortal<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<NavigationMenuPortalChild<T>>,
+    #[setters(skip)]
     context: Option<NavigationMenuContext<T>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<NavigationMenuPortalStyle>,
 }
 
@@ -136,11 +141,6 @@ impl<T: Clone + Eq + 'static> NavigationMenuPortal<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(NavigationMenuPortalChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

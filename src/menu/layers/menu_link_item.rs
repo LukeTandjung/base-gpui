@@ -14,19 +14,29 @@ use crate::menu::{
 
 type MenuLinkItemStyle = Rc<dyn Fn(MenuLinkItemStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Activatable navigation item. GPUI has no anchor/href; navigation happens
 /// through `on_activate`. No disabled prop, matching Base UI.
 #[derive(IntoElement)]
 pub struct MenuLinkItem<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
     close_on_click: bool,
+    #[setters(skip)]
     on_activate: Option<MenuActivationHandler>,
+    #[setters(skip)]
     index: Option<usize>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     style_with_state: Option<MenuLinkItemStyle>,
 }
 
@@ -180,21 +190,6 @@ impl<P: Clone + 'static> MenuChildNode<P> for MenuLinkItem<P> {
 impl<P: Clone + 'static> MenuLinkItem<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
-        self
-    }
-
-    pub fn close_on_click(mut self, close_on_click: bool) -> Self {
-        self.close_on_click = close_on_click;
-        self
     }
 
     pub fn on_activate(mut self, on_activate: impl Fn(&mut Window, &mut App) + 'static) -> Self {

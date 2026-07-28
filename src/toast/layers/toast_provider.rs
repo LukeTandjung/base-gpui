@@ -11,6 +11,7 @@ use crate::toast::{
     ToastRuntime, TOAST_DEFAULT_LIMIT, TOAST_DEFAULT_TIMEOUT,
 };
 
+#[derive(derive_setters::Setters)]
 /// The per-subtree toast runtime owner (Base UI `ToastProvider` / per-app
 /// `ToastStore` analog): creates the keyed runtime entity, syncs
 /// `timeout`/`limit`, binds an optional imperative `ToastManager`, observes
@@ -19,11 +20,18 @@ use crate::toast::{
 /// passthrough container for its children.
 #[derive(IntoElement)]
 pub struct ToastProvider<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ToastProviderChild<P>>,
+    /// Default auto-dismiss timeout for toasts without their own (5000 ms).
     timeout: Duration,
+    /// Maximum non-limited toasts (older ones are flagged `limited`; default 3).
     limit: usize,
+    /// Binds an imperative manager created with `create_toast_manager`.
+    #[setters(strip_option)]
     manager: Option<ToastManager<P>>,
 }
 
@@ -109,11 +117,6 @@ impl<P: Clone + 'static> ToastProvider<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<ToastProviderChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -122,24 +125,6 @@ impl<P: Clone + 'static> ToastProvider<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(ToastProviderChild::Any(child.into_any_element()));
-        self
-    }
-
-    /// Default auto-dismiss timeout for toasts without their own (5000 ms).
-    pub fn timeout(mut self, timeout: Duration) -> Self {
-        self.timeout = timeout;
-        self
-    }
-
-    /// Maximum non-limited toasts (older ones are flagged `limited`; default 3).
-    pub fn limit(mut self, limit: usize) -> Self {
-        self.limit = limit;
-        self
-    }
-
-    /// Binds an imperative manager created with `create_toast_manager`.
-    pub fn manager(mut self, manager: ToastManager<P>) -> Self {
-        self.manager = Some(manager);
         self
     }
 }

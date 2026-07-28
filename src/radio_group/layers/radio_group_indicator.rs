@@ -10,12 +10,16 @@ use crate::radio_group::{
     RadioGroupRadioStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct RadioGroupIndicator {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     radio_state: Option<RadioGroupRadioStyleState>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(RadioGroupIndicatorStyleState, Div) -> Div + 'static>>,
 }
 
@@ -74,11 +78,6 @@ impl RadioGroupRadioChildNode for RadioGroupIndicator {
 impl RadioGroupIndicator {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn style_with_state(

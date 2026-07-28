@@ -11,17 +11,30 @@ use crate::tabs::{
     TabsContext, TabsOrientation, TabsTabStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct TabsTab<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<TabsContext<T>>,
+    #[setters(strip_option)]
     value: Option<T>,
     disabled: bool,
+    #[setters(strip_option)]
     index: Option<usize>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    /// Accessible name for the tab, for icon-only tabs or when the name
+    /// should differ from the visible child text. When set, create the
+    /// visible label with `Text::new_inaccessible(...)` instead of
+    /// `text!(...)` so the name is not announced twice.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(TabsTabStyleState, Div) -> Div + 'static>>,
 }
 
@@ -129,35 +142,6 @@ impl<T: Clone + Eq + 'static> RenderOnce for TabsTab<T> {
 impl<T: Clone + Eq + 'static> TabsTab<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn value(mut self, value: T) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn index(mut self, index: usize) -> Self {
-        self.index = Some(index);
-        self
-    }
-
-    /// Accessible name for the tab, for icon-only tabs or when the name
-    /// should differ from the visible child text. When set, create the
-    /// visible label with `Text::new_inaccessible(...)` instead of
-    /// `text!(...)` so the name is not announced twice.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
-        self
     }
 
     pub fn style_with_state(

@@ -14,19 +14,29 @@ use crate::popover::{
 
 type PopoverRootStyle<P> = Rc<dyn Fn(PopoverRootStyleState<P>, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct PopoverRoot<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<PopoverChild<P>>,
     default_open: bool,
+    #[setters(strip_option)]
     open: Option<bool>,
+    #[setters(skip)]
     default_trigger_id: Option<ElementId>,
+    #[setters(skip)]
     trigger_id: Option<Option<ElementId>>,
     modal: bool,
+    #[setters(strip_option)]
     handle: Option<PopoverHandle<P>>,
+    #[setters(skip)]
     on_open_change: Option<PopoverOpenChangeHandler<P>>,
+    #[setters(skip)]
     on_open_change_complete: Option<PopoverOpenChangeCompleteHandler<P>>,
+    #[setters(skip)]
     style_with_state: Option<PopoverRootStyle<P>>,
 }
 
@@ -159,21 +169,6 @@ impl<P: Clone + 'static> PopoverRoot<P> {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: bool) -> Self {
-        self.open = Some(open);
-        self
-    }
-
     pub fn on_open_change(
         mut self,
         on_open_change: impl Fn(bool, &mut PopoverOpenChangeDetails<P>, &mut Window, &mut App) + 'static,
@@ -191,11 +186,6 @@ impl<P: Clone + 'static> PopoverRoot<P> {
         self
     }
 
-    pub fn modal(mut self, modal: bool) -> Self {
-        self.modal = modal;
-        self
-    }
-
     pub fn trigger_id(mut self, trigger_id: impl Into<ElementId>) -> Self {
         self.trigger_id = Some(Some(trigger_id.into()));
         self
@@ -208,11 +198,6 @@ impl<P: Clone + 'static> PopoverRoot<P> {
 
     pub fn default_trigger_id(mut self, trigger_id: impl Into<ElementId>) -> Self {
         self.default_trigger_id = Some(trigger_id.into());
-        self
-    }
-
-    pub fn handle(mut self, handle: PopoverHandle<P>) -> Self {
-        self.handle = Some(handle);
         self
     }
 

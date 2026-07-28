@@ -11,12 +11,21 @@ use crate::field::{
     FieldLabelStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct FieldLabel {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    /// Sets the visible label text and registers it on the field runtime so
+    /// the registered control can expose it as its accessible name. Rendered
+    /// with `Text::new_inaccessible` to avoid double-announcing once the
+    /// control carries the `.aria_label`.
+    #[setters(into, strip_option)]
     text: Option<SharedString>,
+    #[setters(skip)]
     context: Option<FieldContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(FieldLabelStyleState, Div) -> Div + 'static>>,
 }
 
@@ -89,15 +98,6 @@ impl FieldLabel {
 
     pub fn with_field_context(mut self, context: FieldContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    /// Sets the visible label text and registers it on the field runtime so
-    /// the registered control can expose it as its accessible name. Rendered
-    /// with `Text::new_inaccessible` to avoid double-announcing once the
-    /// control carries the `.aria_label`.
-    pub fn text(mut self, text: impl Into<SharedString>) -> Self {
-        self.text = Some(text.into());
         self
     }
 

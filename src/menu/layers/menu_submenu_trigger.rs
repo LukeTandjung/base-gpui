@@ -16,24 +16,34 @@ use crate::{
 
 type MenuSubmenuTriggerStyle = Rc<dyn Fn(MenuSubmenuTriggerStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Item of the parent menu and trigger of the child menu at once. Hover
 /// intent consumes the safe-polygon primitive
 /// (`base_gpui::primitives::safe_polygon`) armed on unhover, alongside
 /// delayed open/close timers.
 #[derive(IntoElement)]
 pub struct MenuSubmenuTrigger<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     parent_context: Option<MenuContext<P>>,
+    #[setters(skip)]
     child_context: Option<MenuContext<P>>,
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
     disabled: bool,
     open_on_hover: bool,
     delay: Duration,
     close_delay: Duration,
+    #[setters(skip)]
     index: Option<usize>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     style_with_state: Option<MenuSubmenuTriggerStyle>,
 }
 
@@ -313,36 +323,6 @@ fn spawn_delayed_hover_open<P: Clone + 'static>(
 impl<P: Clone + 'static> MenuSubmenuTrigger<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn open_on_hover(mut self, open_on_hover: bool) -> Self {
-        self.open_on_hover = open_on_hover;
-        self
-    }
-
-    pub fn delay(mut self, delay: Duration) -> Self {
-        self.delay = delay;
-        self
-    }
-
-    pub fn close_delay(mut self, close_delay: Duration) -> Self {
-        self.close_delay = close_delay;
-        self
     }
 
     pub fn label_value(&self) -> Option<SharedString> {

@@ -13,14 +13,22 @@ use crate::tabs::{
     TABS_LIST_KEY_CONTEXT,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct TabsList<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<TabsListChild<T>>,
+    #[setters(skip)]
     context: Option<TabsContext<T>>,
     activate_on_focus: bool,
     loop_focus: bool,
+    /// Accessible name for the tab list. This is the only naming path in this
+    /// gpui revision (no `aria-labelledby`); pair any visible heading with
+    /// `Text::new_inaccessible(...)` so the name is not announced twice.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(TabsListStyleState, Div) -> Div + 'static>>,
 }
 
@@ -253,24 +261,6 @@ impl<T: Clone + Eq + 'static> TabsList<T> {
         children: impl IntoIterator<Item = impl Into<TabsListChild<T>>>,
     ) -> Self {
         self.children.extend(children.into_iter().map(Into::into));
-        self
-    }
-
-    pub fn activate_on_focus(mut self, activate_on_focus: bool) -> Self {
-        self.activate_on_focus = activate_on_focus;
-        self
-    }
-
-    pub fn loop_focus(mut self, loop_focus: bool) -> Self {
-        self.loop_focus = loop_focus;
-        self
-    }
-
-    /// Accessible name for the tab list. This is the only naming path in this
-    /// gpui revision (no `aria-labelledby`); pair any visible heading with
-    /// `Text::new_inaccessible(...)` so the name is not announced twice.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

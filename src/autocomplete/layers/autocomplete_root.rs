@@ -43,6 +43,7 @@ pub fn resolve_mode(mode: AutocompleteMode) -> (bool, bool) {
     }
 }
 
+#[derive(derive_setters::Setters)]
 /// The Autocomplete root: the Combobox core configured with
 /// `selection_mode = None` and `fill_input_on_item_press = true` — the
 /// component's value axis is the input text. Mirrors Base UI, where
@@ -58,15 +59,26 @@ pub fn resolve_mode(mode: AutocompleteMode) -> (bool, bool) {
 /// are silent to AT for now.
 #[derive(IntoElement)]
 pub struct AutocompleteRoot<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AutocompleteChild<T>>,
+    #[setters(skip)]
     props: ComboboxProps<T>,
     mode: AutocompleteMode,
+    /// The Autocomplete value axis is the input text (Base UI maps
+    /// `defaultValue` to Combobox `defaultInputValue`).
+    #[setters(into, strip_option)]
     default_value: Option<SharedString>,
+    /// Controlled input text (Base UI `value` → Combobox `inputValue`).
+    #[setters(into, strip_option)]
     value: Option<SharedString>,
     default_open: bool,
+    #[setters(strip_option)]
     open: Option<bool>,
+    #[setters(skip)]
     style_with_state: Option<AutocompleteRootStyle<T>>,
 }
 
@@ -250,31 +262,8 @@ impl<T: Clone + Eq + 'static> AutocompleteRoot<T> {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn name(mut self, name: impl Into<SharedString>) -> Self {
         self.props.name = Some(name.into());
-        self
-    }
-
-    pub fn mode(mut self, mode: AutocompleteMode) -> Self {
-        self.mode = mode;
-        self
-    }
-
-    /// The Autocomplete value axis is the input text (Base UI maps
-    /// `defaultValue` to Combobox `defaultInputValue`).
-    pub fn default_value(mut self, default_value: impl Into<SharedString>) -> Self {
-        self.default_value = Some(default_value.into());
-        self
-    }
-
-    /// Controlled input text (Base UI `value` → Combobox `inputValue`).
-    pub fn value(mut self, value: impl Into<SharedString>) -> Self {
-        self.value = Some(value.into());
         self
     }
 
@@ -284,16 +273,6 @@ impl<T: Clone + Eq + 'static> AutocompleteRoot<T> {
             + 'static,
     ) -> Self {
         self.props.on_input_value_change = Some(Rc::new(on_value_change));
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: bool) -> Self {
-        self.open = Some(open);
         self
     }
 

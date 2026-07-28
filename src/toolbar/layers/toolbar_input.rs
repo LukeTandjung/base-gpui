@@ -14,6 +14,7 @@ use crate::{
     utils::direction::{current_direction, HorizontalArrowKey, HorizontalDirection},
 };
 
+#[derive(derive_setters::Setters)]
 /// A toolbar text field wrapping the ported `Input` component: text editing,
 /// value state, and change callbacks come from the reused input. As a
 /// composite item it occupies one roving slot; a plain forward/backward
@@ -22,11 +23,15 @@ use crate::{
 /// its whole text.
 #[derive(IntoElement)]
 pub struct ToolbarInput {
+    #[setters(skip)]
     id: ElementId,
+    #[setters(skip)]
     inner: Input,
     disabled: bool,
     focusable_when_disabled: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ToolbarInputStyleState, Div) -> Div + 'static>>,
+    #[setters(skip)]
     toolbar: Option<(ToolbarContext, usize, FocusHandle, bool)>,
 }
 
@@ -160,16 +165,6 @@ impl ToolbarInput {
 
     pub fn on_enter(mut self, on_enter: impl Fn(SharedString) + 'static) -> Self {
         self.inner = self.inner.on_enter(on_enter);
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn focusable_when_disabled(mut self, focusable_when_disabled: bool) -> Self {
-        self.focusable_when_disabled = focusable_when_disabled;
         self
     }
 

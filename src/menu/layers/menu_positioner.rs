@@ -21,17 +21,25 @@ use crate::{
     },
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MenuPositioner<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<MenuPositionerChild<P>>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
+    #[setters(strip_option)]
     side: Option<MenuSide>,
+    #[setters(strip_option)]
     align: Option<MenuAlign>,
+    #[setters(strip_option)]
     side_offset: Option<Pixels>,
+    #[setters(strip_option)]
     align_offset: Option<Pixels>,
     collision_padding: Pixels,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MenuPositionerStyleState, Div) -> Div + 'static>>,
 }
 
@@ -286,36 +294,6 @@ impl<P: Clone + 'static> MenuPositioner<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(MenuPositionerChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: MenuSide) -> Self {
-        self.side = Some(side);
-        self
-    }
-
-    pub fn align(mut self, align: MenuAlign) -> Self {
-        self.align = Some(align);
-        self
-    }
-
-    pub fn side_offset(mut self, side_offset: Pixels) -> Self {
-        self.side_offset = Some(side_offset);
-        self
-    }
-
-    pub fn align_offset(mut self, align_offset: Pixels) -> Self {
-        self.align_offset = Some(align_offset);
-        self
-    }
-
-    pub fn collision_padding(mut self, collision_padding: Pixels) -> Self {
-        self.collision_padding = collision_padding;
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

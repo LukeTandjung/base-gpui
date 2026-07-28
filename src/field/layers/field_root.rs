@@ -16,19 +16,30 @@ use crate::{
     form::{current_form_context, FormFieldRegistration, FormFieldSnapshot},
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct FieldRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<FieldChild>,
+    #[setters(into, strip_option)]
     name: Option<SharedString>,
     disabled: bool,
+    #[setters(strip_option)]
     invalid: Option<bool>,
+    #[setters(strip_option)]
     dirty: Option<bool>,
+    #[setters(strip_option)]
     touched: Option<bool>,
+    #[setters(strip_option)]
     validation_mode: Option<FieldValidationMode>,
+    #[setters(strip_option)]
     validation_debounce: Option<Duration>,
+    #[setters(skip)]
     validate: Option<FieldValidationHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(FieldRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -125,46 +136,6 @@ impl FieldRoot {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(FieldChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn name(mut self, name: impl Into<SharedString>) -> Self {
-        self.name = Some(name.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn invalid(mut self, invalid: bool) -> Self {
-        self.invalid = Some(invalid);
-        self
-    }
-
-    pub fn dirty(mut self, dirty: bool) -> Self {
-        self.dirty = Some(dirty);
-        self
-    }
-
-    pub fn touched(mut self, touched: bool) -> Self {
-        self.touched = Some(touched);
-        self
-    }
-
-    pub fn validation_mode(mut self, validation_mode: FieldValidationMode) -> Self {
-        self.validation_mode = Some(validation_mode);
-        self
-    }
-
-    pub fn validation_debounce(mut self, validation_debounce: Duration) -> Self {
-        self.validation_debounce = Some(validation_debounce);
         self
     }
 

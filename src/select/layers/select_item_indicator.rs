@@ -10,13 +10,18 @@ use crate::select::{
     SelectItemStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectItemIndicator<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
+    #[setters(skip)]
     item_state: Option<SelectItemStyleState<T>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectItemIndicatorStyleState, Div) -> Div + 'static>>,
 }
 
@@ -93,11 +98,6 @@ impl<T: Clone + Eq + 'static> SelectChildNode<T> for SelectItemIndicator<T> {
 impl<T: Clone + Eq + 'static> SelectItemIndicator<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn with_item_state(mut self, state: SelectItemStyleState<T>) -> Self {

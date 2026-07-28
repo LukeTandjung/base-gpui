@@ -7,6 +7,7 @@ use gpui::{
 
 use crate::progress::{ProgressContext, ProgressStyleState};
 
+#[derive(derive_setters::Setters)]
 /// Plain styled text part; Base UI's `aria-labelledby` id plumbing is out of
 /// scope for the GPUI port. Not in the a11y tree (no role), matching Base
 /// UI's `role="presentation"`. Pass label text as
@@ -15,10 +16,15 @@ use crate::progress::{ProgressContext, ProgressStyleState};
 /// through the root's `aria_label`.
 #[derive(IntoElement)]
 pub struct ProgressLabel {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<ProgressContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ProgressStyleState, Div) -> Div + 'static>>,
 }
 
@@ -64,11 +70,6 @@ impl ProgressLabel {
 
     pub fn with_progress_context(mut self, context: ProgressContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

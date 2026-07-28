@@ -10,14 +10,21 @@ use crate::combobox::{
     child_wiring::ComboboxChildNode, ComboboxChipChild, ComboboxChipStyleState, ComboboxContext,
 };
 
+#[derive(derive_setters::Setters)]
 /// One selected value in multiple mode. The chip highlight is virtual
 /// runtime state driven from the input's keyboard.
 #[derive(IntoElement)]
 pub struct ComboboxChip<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ComboboxChipChild<T>>,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
+    /// Selection-order position of this chip; assigned by `ComboboxChips`.
+    #[setters(strip_option)]
     index: Option<usize>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ComboboxChipStyleState, Div) -> Div + 'static>>,
 }
 
@@ -113,12 +120,6 @@ impl<T: Clone + Eq + 'static> ComboboxChip<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(ComboboxChipChild::Any(child.into_any_element()));
-        self
-    }
-
-    /// Selection-order position of this chip; assigned by `ComboboxChips`.
-    pub fn index(mut self, index: usize) -> Self {
-        self.index = Some(index);
         self
     }
 

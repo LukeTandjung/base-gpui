@@ -18,20 +18,30 @@ use crate::drawer::{
 
 type DrawerPopupStyle<P> = Rc<dyn Fn(DrawerPopupStyleState<P>, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// The drawer contents container. Inherits the dialog popup focus/Escape
 /// behavior and merges drawer facts (drag transform, snap offset, nested and
 /// swipe state) into its style state.
 #[derive(IntoElement)]
 pub struct DrawerPopup<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<DrawerPopupChild<P>>,
+    #[setters(skip)]
     context: Option<DrawerContext<P>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     scoped: bool,
     keep_mounted: bool,
+    /// Overrides the popup's accessibility role. Defaults to [`Role::Dialog`].
     role: Role,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<DrawerPopupStyle<P>>,
 }
 
@@ -222,11 +232,6 @@ impl<P: Clone + 'static> DrawerPopup<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<DrawerPopupChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -235,17 +240,6 @@ impl<P: Clone + 'static> DrawerPopup<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(DrawerPopupChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
-    }
-
-    /// Overrides the popup's accessibility role. Defaults to [`Role::Dialog`].
-    pub fn role(mut self, role: Role) -> Self {
-        self.role = role;
         self
     }
 

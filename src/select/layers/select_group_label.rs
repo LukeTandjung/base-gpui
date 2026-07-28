@@ -10,12 +10,17 @@ use crate::select::{
     SelectContext, SelectGroupLabelStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectGroupLabel<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectGroupLabelStyleState, Div) -> Div + 'static>>,
 }
 
@@ -84,11 +89,6 @@ impl<T: Clone + Eq + 'static> SelectChildNode<T> for SelectGroupLabel<T> {
 impl<T: Clone + Eq + 'static> SelectGroupLabel<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
-        self
     }
 
     pub fn text(self, label: impl Into<SharedString>) -> Self {

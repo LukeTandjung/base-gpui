@@ -19,6 +19,7 @@ use crate::{
 
 type NavigationMenuTriggerStyle = Rc<dyn Fn(NavigationMenuTriggerStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Opens its item's content on hover (after the root delay; immediately when
 /// the popup is already open — retarget), on click (with patient-click
 /// stickiness after a hover open), and via list keyboard navigation. GPUI
@@ -37,15 +38,28 @@ type NavigationMenuTriggerStyle = Rc<dyn Fn(NavigationMenuTriggerStyleState, Div
 /// have no gpui builders and are omitted.
 #[derive(IntoElement)]
 pub struct NavigationMenuTrigger<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<NavigationMenuTriggerChild<T>>,
+    #[setters(skip)]
     context: Option<NavigationMenuContext<T>>,
+    #[setters(skip)]
     value: Option<T>,
     disabled: bool,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     entry_index: usize,
+    #[setters(skip)]
     order: usize,
+    /// Accessible name for the trigger button; pass one when the visible
+    /// caption is not plain accessible text (no id-reference labelling
+    /// exists). Render the visible caption with `Text::new_inaccessible(...)`
+    /// when set, to avoid double announcement.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<NavigationMenuTriggerStyle>,
 }
 
@@ -294,22 +308,8 @@ impl<T: Clone + Eq + 'static> NavigationMenuTrigger<T> {
         Self::default()
     }
 
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
     pub fn is_disabled(&self) -> bool {
         self.disabled
-    }
-
-    /// Accessible name for the trigger button; pass one when the visible
-    /// caption is not plain accessible text (no id-reference labelling
-    /// exists). Render the visible caption with `Text::new_inaccessible(...)`
-    /// when set, to avoid double announcement.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
-        self
     }
 
     pub fn child(mut self, child: impl Into<NavigationMenuTriggerChild<T>>) -> Self {

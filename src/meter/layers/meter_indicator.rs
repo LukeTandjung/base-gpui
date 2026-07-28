@@ -7,11 +7,15 @@ use gpui::{
 
 use crate::meter::{MeterContext, MeterStyleState};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MeterIndicator {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<MeterContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MeterStyleState, Div) -> Div + 'static>>,
 }
 
@@ -61,11 +65,6 @@ impl MeterIndicator {
 
     pub fn with_meter_context(mut self, context: MeterContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

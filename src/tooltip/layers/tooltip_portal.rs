@@ -9,12 +9,16 @@ use crate::tooltip::{
     TooltipContext, TooltipPortalChild, TooltipPortalStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct TooltipPortal<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<TooltipPortalChild<P>>,
+    #[setters(skip)]
     context: Option<TooltipContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(TooltipPortalStyleState, Div) -> Div + 'static>>,
 }
 
@@ -105,11 +109,6 @@ impl<P: Clone + 'static> TooltipPortal<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(TooltipPortalChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

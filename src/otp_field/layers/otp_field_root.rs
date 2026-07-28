@@ -23,27 +23,43 @@ use crate::{
     primitives::input::InputRuntime,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct OTPFieldRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<OTPFieldChild>,
+    #[setters(skip)]
     context: Option<FieldContext>,
+    #[setters(into, strip_option)]
     name: Option<SharedString>,
+    /// Accessible name for the OTP group. Mirror the visible `FieldLabel`
+    /// text here manually: relationship props (`aria-labelledby`) do not
+    /// exist in this gpui revision.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
     length: usize,
+    #[setters(into)]
     default_value: SharedString,
+    #[setters(into, strip_option)]
     value: Option<SharedString>,
     validation_type: OTPFieldValidationType,
+    #[setters(skip)]
     normalize_value: Option<OTPFieldNormalizeValueHandler>,
     mask: bool,
     auto_submit: bool,
     disabled: bool,
     read_only: bool,
     required: bool,
+    #[setters(skip)]
     on_value_change: Option<OTPFieldValueChangeHandler>,
+    #[setters(skip)]
     on_value_complete: Option<OTPFieldValueCompleteHandler>,
+    #[setters(skip)]
     on_value_invalid: Option<OTPFieldValueInvalidHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(OTPFieldRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -293,71 +309,8 @@ impl OTPFieldRoot {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn name(mut self, name: impl Into<SharedString>) -> Self {
-        self.name = Some(name.into());
-        self
-    }
-
-    /// Accessible name for the OTP group. Mirror the visible `FieldLabel`
-    /// text here manually: relationship props (`aria-labelledby`) do not
-    /// exist in this gpui revision.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
-        self
-    }
-
-    pub fn length(mut self, length: usize) -> Self {
-        self.length = length;
-        self
-    }
-
-    pub fn default_value(mut self, default_value: impl Into<SharedString>) -> Self {
-        self.default_value = default_value.into();
-        self
-    }
-
-    pub fn value(mut self, value: impl Into<SharedString>) -> Self {
-        self.value = Some(value.into());
-        self
-    }
-
-    pub fn validation_type(mut self, validation_type: OTPFieldValidationType) -> Self {
-        self.validation_type = validation_type;
-        self
-    }
-
     pub fn normalize_value(mut self, normalize_value: impl Fn(String) -> String + 'static) -> Self {
         self.normalize_value = Some(Rc::new(normalize_value));
-        self
-    }
-
-    pub fn mask(mut self, mask: bool) -> Self {
-        self.mask = mask;
-        self
-    }
-
-    pub fn auto_submit(mut self, auto_submit: bool) -> Self {
-        self.auto_submit = auto_submit;
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn read_only(mut self, read_only: bool) -> Self {
-        self.read_only = read_only;
-        self
-    }
-
-    pub fn required(mut self, required: bool) -> Self {
-        self.required = required;
         self
     }
 

@@ -11,12 +11,16 @@ use crate::dialog::{
 
 type DialogViewportStyle<P> = Rc<dyn Fn(DialogViewportStyleState<P>, Div) -> Div + 'static>;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct DialogViewport<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<DialogViewportChild<P>>,
+    #[setters(skip)]
     context: Option<DialogContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<DialogViewportStyle<P>>,
 }
 
@@ -100,11 +104,6 @@ impl<P: Clone + 'static> DialogViewport<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(DialogViewportChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

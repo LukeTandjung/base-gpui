@@ -18,17 +18,26 @@ use crate::{
     fieldset::current_fieldset_disabled,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct CheckboxGroup {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     default_value: Vec<SharedString>,
+    #[setters(skip)]
     value: Option<Vec<SharedString>>,
+    #[setters(skip)]
     all_values: Vec<SharedString>,
     disabled: bool,
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     on_value_change: Option<CheckboxGroupValueChangeHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(CheckboxGroupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -123,11 +132,6 @@ impl CheckboxGroup {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn default_value(
         mut self,
         values: impl IntoIterator<Item = impl Into<SharedString>>,
@@ -145,16 +149,6 @@ impl CheckboxGroup {
 
     pub fn all_values(mut self, values: impl IntoIterator<Item = impl Into<SharedString>>) -> Self {
         self.all_values = normalize_values(values.into_iter().map(Into::into).collect());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

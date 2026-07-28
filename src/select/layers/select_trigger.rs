@@ -17,14 +17,21 @@ use crate::select::{
     SelectValueChangeSource, SELECT_KEY_CONTEXT,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectTrigger<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SelectTriggerChild<T>>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<SelectTriggerStyle<T>>,
 }
 
@@ -325,11 +332,6 @@ impl<T: Clone + Eq + 'static> SelectTrigger<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(SelectTriggerChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
         self
     }
 

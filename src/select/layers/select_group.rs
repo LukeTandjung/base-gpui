@@ -11,13 +11,19 @@ use crate::select::{
     SelectContext, SelectGroupChild, SelectGroupStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectGroup<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SelectGroupChild<T>>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
+    #[setters(skip)]
     index: Option<usize>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectGroupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -107,11 +113,6 @@ impl<T: Clone + Eq + 'static> SelectChildNode<T> for SelectGroup<T> {
 impl<T: Clone + Eq + 'static> SelectGroup<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     pub fn child(mut self, child: impl Into<SelectGroupChild<T>>) -> Self {

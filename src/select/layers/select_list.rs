@@ -13,12 +13,16 @@ use crate::select::{
     SelectOpenChangeReason, SelectOpenChangeSource, SelectValueChangeSource, SELECT_KEY_CONTEXT,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectList<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SelectListChild<T>>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
     loop_focus: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectListStyleState, Div) -> Div + 'static>>,
 }
 
@@ -178,11 +182,6 @@ impl<T: Clone + Eq + 'static> SelectList<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(SelectListChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn loop_focus(mut self, loop_focus: bool) -> Self {
-        self.loop_focus = loop_focus;
         self
     }
 

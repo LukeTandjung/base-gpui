@@ -9,12 +9,16 @@ use crate::menu::{
     MenuContext, MenuPortalChild, MenuPortalStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MenuPortal<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<MenuPortalChild<P>>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MenuPortalStyleState, Div) -> Div + 'static>>,
 }
 
@@ -98,11 +102,6 @@ impl<P: Clone + 'static> MenuPortal<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(MenuPortalChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

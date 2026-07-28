@@ -12,16 +12,22 @@ use crate::navigation_menu::{
 
 type NavigationMenuContentStyle = Rc<dyn Fn(NavigationMenuContentStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// One item's panel, rendered by the shared popup viewport (never in place
 /// under its item — child wiring routes it there; no DOM re-parenting).
 /// `keep_mounted(true)` keeps it mounted hidden with closed style state.
 #[derive(IntoElement)]
 pub struct NavigationMenuContent<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<NavigationMenuContext<T>>,
+    #[setters(skip)]
     value: Option<T>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<NavigationMenuContentStyle>,
 }
 
@@ -89,11 +95,6 @@ impl<T: Clone + Eq + 'static> NavigationMenuChildNode<T> for NavigationMenuConte
 impl<T: Clone + Eq + 'static> NavigationMenuContent<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
-        self
     }
 
     pub fn style_with_state(

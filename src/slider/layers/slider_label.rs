@@ -7,12 +7,17 @@ use gpui::{
 
 use crate::slider::{SliderContext, SliderLabelStyleState};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SliderLabel {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<SliderContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SliderLabelStyleState, Div) -> Div + 'static>>,
 }
 
@@ -68,11 +73,6 @@ impl SliderLabel {
 
     pub fn with_slider_context(mut self, context: SliderContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

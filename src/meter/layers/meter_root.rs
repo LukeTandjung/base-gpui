@@ -8,16 +8,23 @@ use gpui::{
 
 use crate::meter::{MeterChild, MeterContext, MeterProps, MeterStyleState};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MeterRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<MeterChild>,
+    /// The current value of the meter (Base UI's required `value`).
     value: f64,
     min: f64,
     max: f64,
+    #[setters(skip)]
     format: Option<Rc<dyn Fn(f64) -> String + 'static>>,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MeterStyleState, Div) -> Div + 'static>>,
 }
 
@@ -93,11 +100,6 @@ impl MeterRoot {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<MeterChild>) -> Self {
         self.children.push(child.into());
         self
@@ -111,22 +113,6 @@ impl MeterRoot {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(MeterChild::Any(child.into_any_element()));
-        self
-    }
-
-    /// The current value of the meter (Base UI's required `value`).
-    pub fn value(mut self, value: f64) -> Self {
-        self.value = value;
-        self
-    }
-
-    pub fn min(mut self, min: f64) -> Self {
-        self.min = min;
-        self
-    }
-
-    pub fn max(mut self, max: f64) -> Self {
-        self.max = max;
         self
     }
 

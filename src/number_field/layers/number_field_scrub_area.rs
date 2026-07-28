@@ -9,14 +9,19 @@ use crate::number_field::{
     NumberFieldContext, NumberFieldScrubAreaStyleState, NumberFieldScrubDirection,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct NumberFieldScrubArea {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<NumberFieldContext>,
     direction: NumberFieldScrubDirection,
     pixel_sensitivity: f64,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(NumberFieldScrubAreaStyleState, Div) -> Div + 'static>>,
 }
 
@@ -106,21 +111,6 @@ impl NumberFieldScrubArea {
 
     pub fn with_number_field_context(mut self, context: NumberFieldContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
-        self
-    }
-
-    pub fn direction(mut self, direction: NumberFieldScrubDirection) -> Self {
-        self.direction = direction;
-        self
-    }
-
-    pub fn pixel_sensitivity(mut self, pixel_sensitivity: f64) -> Self {
-        self.pixel_sensitivity = pixel_sensitivity;
         self
     }
 

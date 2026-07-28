@@ -17,10 +17,13 @@ use crate::{
     },
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectPositioner<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SelectPositionerChild<T>>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
     side: SelectSide,
     align: SelectAlign,
@@ -28,6 +31,7 @@ pub struct SelectPositioner<T: Clone + Eq + 'static> {
     align_offset: Pixels,
     collision_padding: Pixels,
     align_item_with_trigger: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectPositionerStyleState, Div) -> Div + 'static>>,
 }
 
@@ -230,36 +234,6 @@ impl<T: Clone + Eq + 'static> SelectPositioner<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(SelectPositionerChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: SelectSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: SelectAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn side_offset(mut self, side_offset: Pixels) -> Self {
-        self.side_offset = side_offset;
-        self
-    }
-
-    pub fn align_offset(mut self, align_offset: Pixels) -> Self {
-        self.align_offset = align_offset;
-        self
-    }
-
-    pub fn collision_padding(mut self, collision_padding: Pixels) -> Self {
-        self.collision_padding = collision_padding;
-        self
-    }
-
-    pub fn align_item_with_trigger(mut self, align_item_with_trigger: bool) -> Self {
-        self.align_item_with_trigger = align_item_with_trigger;
         self
     }
 

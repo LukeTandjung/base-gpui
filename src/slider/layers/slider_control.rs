@@ -8,12 +8,17 @@ use gpui::{
 use crate::slider::{SliderContext, SliderControlChild, SliderControlStyleState};
 use crate::utils::current_direction;
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SliderControl {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SliderControlChild>,
+    #[setters(skip)]
     context: Option<SliderContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SliderControlStyleState, Div) -> Div + 'static>>,
 }
 
@@ -133,11 +138,6 @@ impl SliderControl {
         map: impl FnOnce(Vec<SliderControlChild>) -> Vec<SliderControlChild>,
     ) -> Self {
         self.children = map(self.children);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

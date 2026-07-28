@@ -17,15 +17,21 @@ use crate::{
     },
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct Form {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
     validation_mode: FieldValidationMode,
     errors: FormErrors,
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     on_form_submit: Option<FormSubmitHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(FormStyleState, Div) -> Div + 'static>>,
 }
 
@@ -105,26 +111,6 @@ impl Form {
 
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children.push(child.into_any_element());
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn validation_mode(mut self, validation_mode: FieldValidationMode) -> Self {
-        self.validation_mode = validation_mode;
-        self
-    }
-
-    pub fn errors(mut self, errors: FormErrors) -> Self {
-        self.errors = errors;
-        self
-    }
-
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

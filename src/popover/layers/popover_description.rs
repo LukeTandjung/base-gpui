@@ -10,12 +10,17 @@ use crate::popover::{
     PopoverContext, PopoverDescriptionStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct PopoverDescription<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<PopoverContext<P>>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PopoverDescriptionStyleState, Div) -> Div + 'static>>,
 }
 
@@ -80,11 +85,6 @@ impl<P: Clone + 'static> PopoverChildNode<P> for PopoverDescription<P> {
 impl<P: Clone + 'static> PopoverDescription<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     pub fn style_with_state(

@@ -19,13 +19,19 @@ use crate::scroll_area::{
     ScrollAreaViewportChild,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ScrollAreaViewport {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ScrollAreaViewportChild>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ScrollAreaRootStyleState, Div) -> Div + 'static>>,
+    #[setters(skip)]
     context: Option<ScrollAreaContext>,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
 }
 
@@ -155,11 +161,6 @@ impl RenderOnce for ScrollAreaViewport {
 impl ScrollAreaViewport {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     pub fn child(mut self, child: impl Into<ScrollAreaViewportChild>) -> Self {

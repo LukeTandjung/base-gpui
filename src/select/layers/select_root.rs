@@ -21,18 +21,26 @@ use crate::{
     },
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectRoot<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SelectChild<T>>,
+    #[setters(into, strip_option)]
     name: Option<SharedString>,
+    #[setters(into, strip_option)]
     form: Option<SharedString>,
     default_value: Option<T>,
+    #[setters(strip_option)]
     value: Option<Option<T>>,
     default_values: Vec<T>,
+    #[setters(strip_option)]
     values: Option<Vec<T>>,
     default_open: bool,
+    #[setters(strip_option)]
     open: Option<bool>,
     multiple: bool,
     disabled: bool,
@@ -40,13 +48,21 @@ pub struct SelectRoot<T: Clone + Eq + 'static> {
     required: bool,
     modal: bool,
     highlight_item_on_hover: bool,
+    #[setters(skip)]
     label_resolver: Option<SelectLabelResolver<T>>,
+    #[setters(skip)]
     value_serializer: Option<SelectValueSerializer<T>>,
+    #[setters(skip)]
     value_comparator: Option<SelectValueComparator<T>>,
+    #[setters(skip)]
     multiple_value_formatter: Option<SelectMultipleValueFormatter<T>>,
+    #[setters(skip)]
     on_value_change: Option<SelectValueChangeHandler<T>>,
+    #[setters(skip)]
     on_values_change: Option<SelectValuesChangeHandler<T>>,
+    #[setters(skip)]
     on_open_change: Option<SelectOpenChangeHandler>,
+    #[setters(skip)]
     style_with_state: Option<SelectRootStyle<T>>,
 }
 
@@ -266,47 +282,12 @@ impl<T: Clone + Eq + 'static> SelectRoot<T> {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn name(mut self, name: impl Into<SharedString>) -> Self {
-        self.name = Some(name.into());
-        self
-    }
-
-    pub fn form(mut self, form: impl Into<SharedString>) -> Self {
-        self.form = Some(form.into());
-        self
-    }
-
-    pub fn default_value(mut self, default_value: Option<T>) -> Self {
-        self.default_value = default_value;
-        self
-    }
-
-    pub fn value(mut self, value: Option<T>) -> Self {
-        self.value = Some(value);
-        self
-    }
-
     pub fn on_value_change(
         mut self,
         on_value_change: impl Fn(Option<&T>, &mut SelectValueChangeDetails, &mut Window, &mut App)
             + 'static,
     ) -> Self {
         self.on_value_change = Some(Rc::new(on_value_change));
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: bool) -> Self {
-        self.open = Some(open);
         self
     }
 
@@ -318,51 +299,11 @@ impl<T: Clone + Eq + 'static> SelectRoot<T> {
         self
     }
 
-    pub fn multiple(mut self, multiple: bool) -> Self {
-        self.multiple = multiple;
-        self
-    }
-
-    pub fn default_values(mut self, default_values: Vec<T>) -> Self {
-        self.default_values = default_values;
-        self
-    }
-
-    pub fn values(mut self, values: Vec<T>) -> Self {
-        self.values = Some(values);
-        self
-    }
-
     pub fn on_values_change(
         mut self,
         on_values_change: impl Fn(&[T], &mut SelectValueChangeDetails, &mut Window, &mut App) + 'static,
     ) -> Self {
         self.on_values_change = Some(Rc::new(on_values_change));
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn read_only(mut self, read_only: bool) -> Self {
-        self.read_only = read_only;
-        self
-    }
-
-    pub fn required(mut self, required: bool) -> Self {
-        self.required = required;
-        self
-    }
-
-    pub fn highlight_item_on_hover(mut self, highlight_item_on_hover: bool) -> Self {
-        self.highlight_item_on_hover = highlight_item_on_hover;
-        self
-    }
-
-    pub fn modal(mut self, modal: bool) -> Self {
-        self.modal = modal;
         self
     }
 

@@ -10,12 +10,16 @@ use crate::field::{
     item_context::with_field_item_disabled, FieldContext, FieldItemChild, FieldItemStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct FieldItem {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<FieldItemChild>,
+    #[setters(skip)]
     context: Option<FieldContext>,
     disabled: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(FieldItemStyleState, Div) -> Div + 'static>>,
 }
 
@@ -79,11 +83,6 @@ impl FieldItem {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(FieldItemChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
         self
     }
 

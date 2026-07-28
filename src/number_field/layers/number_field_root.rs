@@ -23,18 +23,28 @@ use crate::{
     },
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct NumberFieldRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<NumberFieldChild>,
+    #[setters(skip)]
     context: Option<FieldContext>,
+    #[setters(into, strip_option)]
     name: Option<SharedString>,
+    #[setters(into, strip_option)]
     form: Option<SharedString>,
     default_value: Option<f64>,
+    #[setters(strip_option)]
     value: Option<Option<f64>>,
+    #[setters(strip_option)]
     min: Option<f64>,
+    #[setters(strip_option)]
     max: Option<f64>,
+    #[setters(skip)]
     step: NumberFieldStep,
     small_step: f64,
     large_step: f64,
@@ -44,8 +54,11 @@ pub struct NumberFieldRoot {
     disabled: bool,
     read_only: bool,
     required: bool,
+    #[setters(skip)]
     on_value_change: Option<NumberFieldValueChangeHandler>,
+    #[setters(skip)]
     on_value_committed: Option<NumberFieldValueCommitHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(NumberFieldRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -302,41 +315,6 @@ impl NumberFieldRoot {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn name(mut self, name: impl Into<SharedString>) -> Self {
-        self.name = Some(name.into());
-        self
-    }
-
-    pub fn form(mut self, form: impl Into<SharedString>) -> Self {
-        self.form = Some(form.into());
-        self
-    }
-
-    pub fn default_value(mut self, default_value: Option<f64>) -> Self {
-        self.default_value = default_value;
-        self
-    }
-
-    pub fn value(mut self, value: Option<f64>) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn min(mut self, min: f64) -> Self {
-        self.min = Some(min);
-        self
-    }
-
-    pub fn max(mut self, max: f64) -> Self {
-        self.max = Some(max);
-        self
-    }
-
     pub fn step(mut self, step: f64) -> Self {
         self.step = NumberFieldStep::amount(step);
         self
@@ -344,46 +322,6 @@ impl NumberFieldRoot {
 
     pub fn step_any(mut self) -> Self {
         self.step = NumberFieldStep::any();
-        self
-    }
-
-    pub fn small_step(mut self, small_step: f64) -> Self {
-        self.small_step = small_step;
-        self
-    }
-
-    pub fn large_step(mut self, large_step: f64) -> Self {
-        self.large_step = large_step;
-        self
-    }
-
-    pub fn snap_on_step(mut self, snap_on_step: bool) -> Self {
-        self.snap_on_step = snap_on_step;
-        self
-    }
-
-    pub fn allow_out_of_range(mut self, allow_out_of_range: bool) -> Self {
-        self.allow_out_of_range = allow_out_of_range;
-        self
-    }
-
-    pub fn allow_wheel_scrub(mut self, allow_wheel_scrub: bool) -> Self {
-        self.allow_wheel_scrub = allow_wheel_scrub;
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn read_only(mut self, read_only: bool) -> Self {
-        self.read_only = read_only;
-        self
-    }
-
-    pub fn required(mut self, required: bool) -> Self {
-        self.required = required;
         self
     }
 

@@ -15,26 +15,36 @@ use crate::menu::{
 
 type MenuSubmenuRootStyle = Rc<dyn Fn(MenuRootStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// Submenu root: simultaneously anchors an item of the parent menu (its
 /// trigger) and owns a child menu runtime linked to the parent, matching
 /// Base UI's `MenuSubmenuRoot`. Submenus never apply modal behavior and omit
 /// `modal`, `trigger_id`, and `default_trigger_id` from the root surface.
 #[derive(IntoElement)]
 pub struct MenuSubmenuRoot<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<MenuSubmenuRootChild<P>>,
+    #[setters(skip)]
     parent_context: Option<MenuContext<P>>,
+    #[setters(skip)]
     item_index: Option<usize>,
     default_open: bool,
+    #[setters(strip_option)]
     open: Option<bool>,
     disabled: bool,
     loop_focus: bool,
     orientation: MenuOrientation,
     close_parent_on_esc: bool,
     highlight_item_on_hover: bool,
+    #[setters(skip)]
     on_open_change: Option<MenuOpenChangeHandler<P>>,
+    #[setters(skip)]
     on_open_change_complete: Option<MenuOpenChangeCompleteHandler<P>>,
+    #[setters(skip)]
     style_with_state: Option<MenuSubmenuRootStyle>,
 }
 
@@ -264,11 +274,6 @@ impl<P: Clone + 'static> MenuSubmenuRoot<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<MenuSubmenuRootChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -277,41 +282,6 @@ impl<P: Clone + 'static> MenuSubmenuRoot<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(MenuSubmenuRootChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: bool) -> Self {
-        self.open = Some(open);
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn loop_focus(mut self, loop_focus: bool) -> Self {
-        self.loop_focus = loop_focus;
-        self
-    }
-
-    pub fn orientation(mut self, orientation: MenuOrientation) -> Self {
-        self.orientation = orientation;
-        self
-    }
-
-    pub fn close_parent_on_esc(mut self, close_parent_on_esc: bool) -> Self {
-        self.close_parent_on_esc = close_parent_on_esc;
-        self
-    }
-
-    pub fn highlight_item_on_hover(mut self, highlight_item_on_hover: bool) -> Self {
-        self.highlight_item_on_hover = highlight_item_on_hover;
         self
     }
 

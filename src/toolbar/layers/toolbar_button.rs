@@ -13,19 +13,32 @@ use crate::toolbar::{
 
 type ToolbarClickHandler = Rc<dyn Fn(&ClickEvent, &mut Window, &mut App) + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// A pressable toolbar item. Designed to later host trigger-style children
 /// (menu/select/dialog triggers) without changing the toolbar registration
 /// contract.
 #[derive(IntoElement)]
 pub struct ToolbarButton {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
     disabled: bool,
     focusable_when_disabled: bool,
+    /// Accessible name for icon-only buttons. When set alongside a visible
+    /// text child, render that text with `Text::new_inaccessible(...)` instead
+    /// of `text!(...)` so screen readers do not announce the name twice;
+    /// without an `aria_label`, keep `text!(...)` so the child text remains
+    /// the accessible name source.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     on_click: Option<ToolbarClickHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ToolbarButtonStyleState, Div) -> Div + 'static>>,
+    #[setters(skip)]
     toolbar: Option<(ToolbarContext, usize, FocusHandle, bool)>,
 }
 
@@ -142,31 +155,6 @@ impl RenderOnce for ToolbarButton {
 impl ToolbarButton {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn focusable_when_disabled(mut self, focusable_when_disabled: bool) -> Self {
-        self.focusable_when_disabled = focusable_when_disabled;
-        self
-    }
-
-    /// Accessible name for icon-only buttons. When set alongside a visible
-    /// text child, render that text with `Text::new_inaccessible(...)` instead
-    /// of `text!(...)` so screen readers do not announce the name twice;
-    /// without an `aria_label`, keep `text!(...)` so the child text remains
-    /// the accessible name source.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
-        self
     }
 
     pub fn on_click(

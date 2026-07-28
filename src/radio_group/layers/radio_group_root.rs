@@ -15,20 +15,34 @@ use crate::{
     },
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct RadioGroupRoot<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<RadioGroupChild<T>>,
+    #[setters(into, strip_option)]
     name: Option<SharedString>,
+    #[setters(into, strip_option)]
     form: Option<SharedString>,
     default_value: Option<T>,
+    #[setters(strip_option)]
     value: Option<Option<T>>,
     disabled: bool,
     read_only: bool,
     required: bool,
+    /// Sets the accessible label announced by screen readers. This is the
+    /// literal-string substitute for Base UI's `aria-labelledby` id wiring,
+    /// which has no gpui builder. When set, render the group's visible label
+    /// text with `Text::new_inaccessible(...)` instead of `text!(...)` so the
+    /// label is not announced twice.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     on_value_change: Option<RadioGroupValueChangeHandler<T>>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(RadioGroupRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -153,56 +167,6 @@ impl<T: Clone + Eq + 'static> RadioGroupRoot<T> {
         children: impl IntoIterator<Item = impl Into<RadioGroupChild<T>>>,
     ) -> Self {
         self.children.extend(children.into_iter().map(Into::into));
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn name(mut self, name: impl Into<SharedString>) -> Self {
-        self.name = Some(name.into());
-        self
-    }
-
-    pub fn form(mut self, form: impl Into<SharedString>) -> Self {
-        self.form = Some(form.into());
-        self
-    }
-
-    pub fn default_value(mut self, default_value: Option<T>) -> Self {
-        self.default_value = default_value;
-        self
-    }
-
-    pub fn value(mut self, value: Option<T>) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn read_only(mut self, read_only: bool) -> Self {
-        self.read_only = read_only;
-        self
-    }
-
-    pub fn required(mut self, required: bool) -> Self {
-        self.required = required;
-        self
-    }
-
-    /// Sets the accessible label announced by screen readers. This is the
-    /// literal-string substitute for Base UI's `aria-labelledby` id wiring,
-    /// which has no gpui builder. When set, render the group's visible label
-    /// text with `Text::new_inaccessible(...)` instead of `text!(...)` so the
-    /// label is not announced twice.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

@@ -7,11 +7,15 @@ use gpui::{
 
 use crate::progress::{ProgressContext, ProgressStyleState};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ProgressIndicator {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     context: Option<ProgressContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ProgressStyleState, Div) -> Div + 'static>>,
 }
 
@@ -64,11 +68,6 @@ impl ProgressIndicator {
 
     pub fn with_progress_context(mut self, context: ProgressContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

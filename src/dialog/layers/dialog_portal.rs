@@ -10,12 +10,16 @@ use crate::dialog::{
     DialogContext, DialogPortalChild, DialogPortalStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct DialogPortal<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<DialogPortalChild<P>>,
+    #[setters(skip)]
     context: Option<DialogContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(DialogPortalStyleState, Div) -> Div + 'static>>,
 }
 
@@ -119,11 +123,6 @@ impl<P: Clone + 'static> DialogPortal<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(DialogPortalChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

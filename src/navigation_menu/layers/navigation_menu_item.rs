@@ -14,17 +14,25 @@ use crate::navigation_menu::{
 
 type NavigationMenuItemStyle = Rc<dyn Fn(NavigationMenuItemStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// One menu item keyed by a required value (Base UI's auto-generated
 /// fallback id is not portable to a generic `T`). Hosts the trigger; the
 /// item's content is routed to the shared popup viewport by child wiring and
 /// never rendered in place.
 #[derive(IntoElement)]
 pub struct NavigationMenuItem<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<NavigationMenuItemChild<T>>,
+    #[setters(skip)]
     context: Option<NavigationMenuContext<T>>,
+    /// Required: the item's value. Items without a value are not registered.
+    #[setters(strip_option)]
     value: Option<T>,
+    #[setters(skip)]
     order: usize,
+    #[setters(skip)]
     style_with_state: Option<NavigationMenuItemStyle>,
 }
 
@@ -170,12 +178,6 @@ pub fn item_trigger_focus_handle(id: &ElementId, window: &mut Window, cx: &mut A
 impl<T: Clone + Eq + 'static> NavigationMenuItem<T> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    /// Required: the item's value. Items without a value are not registered.
-    pub fn value(mut self, value: T) -> Self {
-        self.value = Some(value);
-        self
     }
 
     pub fn child(mut self, child: impl Into<NavigationMenuItemChild<T>>) -> Self {

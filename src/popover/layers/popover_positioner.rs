@@ -17,10 +17,13 @@ use crate::{
     },
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct PopoverPositioner<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<PopoverPositionerChild<P>>,
+    #[setters(skip)]
     context: Option<PopoverContext<P>>,
     side: PopoverSide,
     align: PopoverAlign,
@@ -28,6 +31,7 @@ pub struct PopoverPositioner<P: Clone + 'static = ()> {
     align_offset: Pixels,
     collision_padding: Pixels,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PopoverPositionerStyleState, Div) -> Div + 'static>>,
 }
 
@@ -217,36 +221,6 @@ impl<P: Clone + 'static> PopoverPositioner<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(PopoverPositionerChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: PopoverSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: PopoverAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    pub fn side_offset(mut self, side_offset: Pixels) -> Self {
-        self.side_offset = side_offset;
-        self
-    }
-
-    pub fn align_offset(mut self, align_offset: Pixels) -> Self {
-        self.align_offset = align_offset;
-        self
-    }
-
-    pub fn collision_padding(mut self, collision_padding: Pixels) -> Self {
-        self.collision_padding = collision_padding;
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

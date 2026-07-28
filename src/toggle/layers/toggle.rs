@@ -21,20 +21,34 @@ use crate::{
     utils::direction::{current_direction, HorizontalArrowKey, HorizontalDirection},
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct Toggle<T: Clone + Eq + 'static = SharedString> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
     default_pressed: bool,
     pressed: Option<bool>,
+    #[setters(strip_option)]
     value: Option<T>,
     disabled: bool,
+    /// The accessible label announced by assistive technology. Icon-only
+    /// toggles must set this; there is no `aria-labelledby` id-reference
+    /// wiring in this gpui revision, so the literal string is the only
+    /// labelling mechanism.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     on_pressed_change: Option<TogglePressedChangeHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ToggleStyleState, Div) -> Div + 'static>>,
+    #[setters(skip)]
     group_context: Option<ToggleGroupContext<T>>,
+    #[setters(skip)]
     group_index: Option<usize>,
+    #[setters(skip)]
     group_focus_handle: Option<FocusHandle>,
 }
 
@@ -149,26 +163,6 @@ impl<T: Clone + Eq + 'static> Toggle<T> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn default_pressed(mut self, default_pressed: bool) -> Self {
-        self.default_pressed = default_pressed;
-        self
-    }
-
-    pub fn pressed(mut self, pressed: Option<bool>) -> Self {
-        self.pressed = pressed;
-        self
-    }
-
-    pub fn value(mut self, value: T) -> Self {
-        self.value = Some(value);
-        self
-    }
-
     /// The group-membership identity, consumed by the Toggle Group wiring.
     /// Has no standalone behavior.
     pub fn group_value(&self) -> Option<&T> {
@@ -198,20 +192,6 @@ impl<T: Clone + Eq + 'static> Toggle<T> {
         self.group_context = Some(context);
         self.group_index = Some(index);
         self.group_focus_handle = Some(focus_handle);
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    /// The accessible label announced by assistive technology. Icon-only
-    /// toggles must set this; there is no `aria-labelledby` id-reference
-    /// wiring in this gpui revision, so the literal string is the only
-    /// labelling mechanism.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

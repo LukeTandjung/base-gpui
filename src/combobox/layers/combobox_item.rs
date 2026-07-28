@@ -17,6 +17,7 @@ use crate::{
     field::current_field_item_disabled,
 };
 
+#[derive(derive_setters::Setters)]
 /// A selectable option. Focus never moves to items — the highlight is
 /// virtual runtime state while focus stays on the input.
 ///
@@ -25,14 +26,23 @@ use crate::{
 /// lookup uses the first matching item in render order.
 #[derive(IntoElement)]
 pub struct ComboboxItem<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<ComboboxItemChild<T>>,
+    #[setters(skip)]
     context: Option<ComboboxContext<T>>,
+    #[setters(strip_option)]
     value: Option<T>,
+    /// Label used for display and filtering.
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
     disabled: bool,
+    #[setters(skip)]
     index: Option<usize>,
+    #[setters(skip)]
     style_with_state: Option<ComboboxItemStyle<T>>,
 }
 
@@ -220,27 +230,6 @@ impl<T: Clone + Eq + 'static> ComboboxItem<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(ComboboxItemChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn value(mut self, value: T) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    /// Label used for display and filtering.
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
         self
     }
 

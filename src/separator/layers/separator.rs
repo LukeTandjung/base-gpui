@@ -7,11 +7,17 @@ use gpui::{
 
 use crate::separator::{SeparatorOrientation, SeparatorStyleState};
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct Separator {
+    /// Overrides the default `"separator"` element id. Give each separator in
+    /// a window a distinct, stable id so assistive technology sees stable
+    /// accessibility nodes across frames.
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
     orientation: SeparatorOrientation,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SeparatorStyleState, Div) -> Div + 'static>>,
 }
 
@@ -59,19 +65,6 @@ impl RenderOnce for Separator {
 impl Separator {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    /// Overrides the default `"separator"` element id. Give each separator in
-    /// a window a distinct, stable id so assistive technology sees stable
-    /// accessibility nodes across frames.
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn orientation(mut self, orientation: SeparatorOrientation) -> Self {
-        self.orientation = orientation;
-        self
     }
 
     pub fn horizontal(self) -> Self {

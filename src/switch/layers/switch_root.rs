@@ -18,22 +18,32 @@ use crate::{
     },
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SwitchRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SwitchChild>,
+    #[setters(into, strip_option)]
     name: Option<SharedString>,
     default_checked: bool,
     checked: Option<bool>,
+    #[setters(into, strip_option)]
     value: Option<SharedString>,
+    #[setters(into, strip_option)]
     form: Option<SharedString>,
+    #[setters(into, strip_option)]
     unchecked_value: Option<SharedString>,
     disabled: bool,
     read_only: bool,
     required: bool,
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     on_checked_change: Option<SwitchCheckedChangeHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SwitchRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -179,61 +189,6 @@ impl SwitchRoot {
 
     pub fn children(mut self, children: impl IntoIterator<Item = impl Into<SwitchChild>>) -> Self {
         self.children.extend(children.into_iter().map(Into::into));
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn name(mut self, name: impl Into<SharedString>) -> Self {
-        self.name = Some(name.into());
-        self
-    }
-
-    pub fn default_checked(mut self, default_checked: bool) -> Self {
-        self.default_checked = default_checked;
-        self
-    }
-
-    pub fn checked(mut self, checked: Option<bool>) -> Self {
-        self.checked = checked;
-        self
-    }
-
-    pub fn value(mut self, value: impl Into<SharedString>) -> Self {
-        self.value = Some(value.into());
-        self
-    }
-
-    pub fn form(mut self, form: impl Into<SharedString>) -> Self {
-        self.form = Some(form.into());
-        self
-    }
-
-    pub fn unchecked_value(mut self, unchecked_value: impl Into<SharedString>) -> Self {
-        self.unchecked_value = Some(unchecked_value.into());
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn read_only(mut self, read_only: bool) -> Self {
-        self.read_only = read_only;
-        self
-    }
-
-    pub fn required(mut self, required: bool) -> Self {
-        self.required = required;
-        self
-    }
-
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

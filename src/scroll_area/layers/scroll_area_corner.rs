@@ -13,11 +13,15 @@ use crate::scroll_area::{
     child_wiring::ScrollAreaChildNode, ScrollAreaContext, ScrollAreaCornerStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct ScrollAreaCorner {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ScrollAreaCornerStyleState, Div) -> Div + 'static>>,
+    #[setters(skip)]
     context: Option<ScrollAreaContext>,
 }
 
@@ -74,11 +78,6 @@ impl RenderOnce for ScrollAreaCorner {
 impl ScrollAreaCorner {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     pub fn style_with_state(

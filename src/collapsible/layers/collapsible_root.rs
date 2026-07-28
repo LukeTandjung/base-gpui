@@ -11,15 +11,20 @@ use crate::collapsible::{
     CollapsibleRootStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct CollapsibleRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<CollapsibleChild>,
     default_open: bool,
     open: Option<bool>,
     disabled: bool,
+    #[setters(skip)]
     on_open_change: Option<CollapsibleOpenChangeHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(CollapsibleRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -86,26 +91,6 @@ impl CollapsibleRoot {
         children: impl IntoIterator<Item = impl Into<CollapsibleChild>>,
     ) -> Self {
         self.children.extend(children.into_iter().map(Into::into));
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: Option<bool>) -> Self {
-        self.open = open;
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
         self
     }
 

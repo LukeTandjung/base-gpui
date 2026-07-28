@@ -10,15 +10,21 @@ use crate::tabs::{
     TabsRootStyleState, TabsValueChangeHandler,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct TabsRoot<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<TabsChild<T>>,
     default_value: Option<T>,
+    #[setters(strip_option)]
     value: Option<Option<T>>,
+    #[setters(skip)]
     on_value_change: Option<TabsValueChangeHandler<T>>,
     orientation: TabsOrientation,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(TabsRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -99,31 +105,11 @@ impl<T: Clone + Eq + 'static> TabsRoot<T> {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn value(mut self, value: Option<T>) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn default_value(mut self, default_value: Option<T>) -> Self {
-        self.default_value = default_value;
-        self
-    }
-
     pub fn on_value_change(
         mut self,
         on_value_change: impl Fn(Option<&T>, &mut Window, &mut App) + 'static,
     ) -> Self {
         self.on_value_change = Some(Rc::new(on_value_change));
-        self
-    }
-
-    pub fn orientation(mut self, orientation: TabsOrientation) -> Self {
-        self.orientation = orientation;
         self
     }
 

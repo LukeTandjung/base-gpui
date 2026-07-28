@@ -11,13 +11,19 @@ use crate::menu::{
     MenuContext, MenuGroupChild, MenuGroupStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct MenuGroup<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<MenuGroupChild<P>>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MenuGroupStyleState, Div) -> Div + 'static>>,
 }
 
@@ -95,11 +101,6 @@ impl<P: Clone + 'static> MenuChildNode<P> for MenuGroup<P> {
 impl<P: Clone + 'static> MenuGroup<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
     }
 
     /// Accessible group label. Defaults to the label registered by a

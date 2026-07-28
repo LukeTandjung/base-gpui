@@ -10,14 +10,20 @@ use crate::menu::{
     MenuContext, MenuGroupLabelStyleState,
 };
 
+#[derive(derive_setters::Setters)]
 /// Group label. Label metadata is registered in the runtime for the AccessKit
 /// follow-up; labels never consume item indices.
 #[derive(IntoElement)]
 pub struct MenuGroupLabel<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
+    #[setters(into, strip_option)]
     label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MenuGroupLabelStyleState, Div) -> Div + 'static>>,
 }
 
@@ -86,11 +92,6 @@ impl<P: Clone + 'static> MenuChildNode<P> for MenuGroupLabel<P> {
 impl<P: Clone + 'static> MenuGroupLabel<P> {
     pub fn new() -> Self {
         Self::default()
-    }
-
-    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
-        self.label = Some(label.into());
-        self
     }
 
     /// Registered label string, read by the parent group's wiring to source

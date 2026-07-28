@@ -9,12 +9,16 @@ use crate::popover::{
     PopoverContext, PopoverPortalChild, PopoverPortalStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct PopoverPortal<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<PopoverPortalChild<P>>,
+    #[setters(skip)]
     context: Option<PopoverContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PopoverPortalStyleState, Div) -> Div + 'static>>,
 }
 
@@ -102,11 +106,6 @@ impl<P: Clone + 'static> PopoverPortal<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(PopoverPortalChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

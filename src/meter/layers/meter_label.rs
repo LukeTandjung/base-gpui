@@ -7,14 +7,20 @@ use gpui::{
 
 use crate::meter::{MeterContext, MeterStyleState};
 
+#[derive(derive_setters::Setters)]
 /// Plain styled text part; Base UI's `aria-labelledby` id plumbing is out of
 /// scope for the GPUI port.
 #[derive(IntoElement)]
 pub struct MeterLabel {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<MeterContext>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(MeterStyleState, Div) -> Div + 'static>>,
 }
 
@@ -60,11 +66,6 @@ impl MeterLabel {
 
     pub fn with_meter_context(mut self, context: MeterContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
         self
     }
 

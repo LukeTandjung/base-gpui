@@ -13,17 +13,27 @@ use crate::menu::{
 
 type MenuRadioGroupStyle = Rc<dyn Fn(MenuRadioGroupStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 pub struct MenuRadioGroup<P: Clone + 'static, V: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     children: Vec<MenuRadioGroupChild<P, V>>,
+    #[setters(skip)]
     context: Option<MenuContext<P>>,
+    #[setters(strip_option)]
     value: Option<Option<V>>,
     default_value: Option<V>,
     disabled: bool,
+    #[setters(skip)]
     on_value_change: Option<MenuValueChangeHandler<V>>,
+    #[setters(skip)]
     group_index: Option<usize>,
+    #[setters(skip)]
     style_with_state: Option<MenuRadioGroupStyle>,
 }
 
@@ -158,11 +168,6 @@ impl<P: Clone + 'static, V: Clone + Eq + 'static> MenuRadioGroup<P, V> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     /// Accessible group label. Defaults to the label registered by a
     /// `MenuGroupLabel` child.
     pub fn aria_label(mut self, label: impl Into<SharedString>) -> Self {
@@ -178,21 +183,6 @@ impl<P: Clone + 'static, V: Clone + Eq + 'static> MenuRadioGroup<P, V> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(MenuRadioGroupChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn value(mut self, value: Option<V>) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn default_value(mut self, default_value: Option<V>) -> Self {
-        self.default_value = default_value;
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
         self
     }
 

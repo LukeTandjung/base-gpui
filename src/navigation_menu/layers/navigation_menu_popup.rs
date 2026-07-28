@@ -16,6 +16,7 @@ use crate::navigation_menu::{
 
 type NavigationMenuPopupStyle = Rc<dyn Fn(NavigationMenuPopupStyleState, Div) -> Div + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// The single shared popup surface: one element serving every trigger,
 /// retargeted (never re-created) when the active value changes. Hovering it
 /// keeps the menu open; unhovering schedules the close delay.
@@ -27,13 +28,20 @@ type NavigationMenuPopupStyle = Rc<dyn Fn(NavigationMenuPopupStyleState, Div) ->
 /// blocked pending gpui upstream).
 #[derive(IntoElement)]
 pub struct NavigationMenuPopup<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<NavigationMenuPopupChild<T>>,
+    #[setters(skip)]
     context: Option<NavigationMenuContext<T>>,
     side: NavigationMenuSide,
     align: NavigationMenuAlign,
     keep_mounted: bool,
+    /// Accessible label for the popup group; use the same text as the root's
+    /// `.aria_label(...)`.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<NavigationMenuPopupStyle>,
 }
 
@@ -204,28 +212,6 @@ impl<T: Clone + Eq + 'static> NavigationMenuPopup<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(NavigationMenuPopupChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn side(mut self, side: NavigationMenuSide) -> Self {
-        self.side = side;
-        self
-    }
-
-    pub fn align(mut self, align: NavigationMenuAlign) -> Self {
-        self.align = align;
-        self
-    }
-
-    /// Accessible label for the popup group; use the same text as the root's
-    /// `.aria_label(...)`.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

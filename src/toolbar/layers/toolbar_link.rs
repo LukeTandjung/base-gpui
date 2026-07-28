@@ -13,17 +13,30 @@ use crate::toolbar::{
 
 type ToolbarClickHandler = Rc<dyn Fn(&ClickEvent, &mut Window, &mut App) + 'static>;
 
+#[derive(derive_setters::Setters)]
 /// A plain focusable styled item with an `on_click` action (no anchor
 /// semantics). Links can never be disabled: they ignore the toolbar/group
 /// disabled cascade and always occupy a roving slot.
 #[derive(IntoElement)]
 pub struct ToolbarLink {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    /// Accessible name for icon-only links. When set alongside a visible text
+    /// child, render that text with `Text::new_inaccessible(...)` instead of
+    /// `text!(...)` so screen readers do not announce the name twice; without
+    /// an `aria_label`, keep `text!(...)` so the child text remains the
+    /// accessible name source.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     on_click: Option<ToolbarClickHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(ToolbarLinkStyleState, Div) -> Div + 'static>>,
+    #[setters(skip)]
     toolbar: Option<(ToolbarContext, usize, FocusHandle)>,
 }
 
@@ -122,26 +135,11 @@ impl ToolbarLink {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn on_click(
         mut self,
         on_click: impl Fn(&ClickEvent, &mut Window, &mut App) + 'static,
     ) -> Self {
         self.on_click = Some(Rc::new(on_click));
-        self
-    }
-
-    /// Accessible name for icon-only links. When set alongside a visible text
-    /// child, render that text with `Text::new_inaccessible(...)` instead of
-    /// `text!(...)` so screen readers do not announce the name twice; without
-    /// an `aria_label`, keep `text!(...)` so the child text remains the
-    /// accessible name source.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

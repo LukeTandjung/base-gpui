@@ -9,15 +9,20 @@ use crate::dialog::child_wiring::DialogChildWiring;
 use crate::dialog::DialogPortalStyleState;
 use crate::drawer::{child_wiring::DrawerChildNode, DrawerContext, DrawerPortalChild};
 
+#[derive(derive_setters::Setters)]
 /// The drawer portal. Structurally identical to `DialogPortal` but typed over
 /// drawer portal children so the drawer-specific backdrop/viewport receive the
 /// drawer context (GPUI's typed children forbid a literal re-export here).
 #[derive(IntoElement)]
 pub struct DrawerPortal<P: Clone + 'static = ()> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<DrawerPortalChild<P>>,
+    #[setters(skip)]
     context: Option<DrawerContext<P>>,
     keep_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(DialogPortalStyleState, Div) -> Div + 'static>>,
 }
 
@@ -129,11 +134,6 @@ impl<P: Clone + 'static> DrawerPortal<P> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(DrawerPortalChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn keep_mounted(mut self, keep_mounted: bool) -> Self {
-        self.keep_mounted = keep_mounted;
         self
     }
 

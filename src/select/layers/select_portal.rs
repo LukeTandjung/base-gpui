@@ -9,12 +9,16 @@ use crate::select::{
     SelectContext, SelectPortalChild, SelectPortalStyleState,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SelectPortal<T: Clone + Eq + 'static> {
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SelectPortalChild<T>>,
+    #[setters(skip)]
     context: Option<SelectContext<T>>,
     force_mounted: bool,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SelectPortalStyleState, Div) -> Div + 'static>>,
 }
 
@@ -97,11 +101,6 @@ impl<T: Clone + Eq + 'static> SelectPortal<T> {
     pub fn child_any(mut self, child: impl IntoElement) -> Self {
         self.children
             .push(SelectPortalChild::Any(child.into_any_element()));
-        self
-    }
-
-    pub fn force_mounted(mut self, force_mounted: bool) -> Self {
-        self.force_mounted = force_mounted;
         self
     }
 

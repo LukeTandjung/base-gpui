@@ -11,13 +11,22 @@ use crate::number_field::{
     NumberFieldIncrementStyleState, NumberFieldStepAmount, NumberFieldStepDirection,
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct NumberFieldIncrement {
+    #[setters(into, strip_option)]
     id: Option<ElementId>,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<AnyElement>,
+    #[setters(skip)]
     context: Option<NumberFieldContext>,
+    /// Override the default `"Increase"` accessible label. Visible glyph children
+    /// (e.g. `"+"`) should use `Text::new_inaccessible(...)` to avoid being announced
+    /// in addition to this label.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(NumberFieldIncrementStyleState, Div) -> Div + 'static>>,
 }
 
@@ -87,19 +96,6 @@ impl NumberFieldIncrement {
 
     pub fn with_number_field_context(mut self, context: NumberFieldContext) -> Self {
         self.context = Some(context);
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = Some(id.into());
-        self
-    }
-
-    /// Override the default `"Increase"` accessible label. Visible glyph children
-    /// (e.g. `"+"`) should use `Text::new_inaccessible(...)` to avoid being announced
-    /// in addition to this label.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

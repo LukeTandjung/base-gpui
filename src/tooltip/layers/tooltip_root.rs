@@ -51,12 +51,17 @@ impl<P: Clone + 'static> TooltipProviderChild<P> {
     }
 }
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct TooltipProvider<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<TooltipProviderChild<P>>,
+    #[setters(skip)]
     config: TooltipProviderConfig,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(TooltipProviderStyleState, Div) -> Div + 'static>>,
 }
 
@@ -111,11 +116,6 @@ impl<P: Clone + 'static> TooltipProvider<P> {
         Self::default()
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
     pub fn child(mut self, child: impl Into<TooltipProviderChild<P>>) -> Self {
         self.children.push(child.into());
         self
@@ -151,23 +151,35 @@ impl<P: Clone + 'static> TooltipProvider<P> {
     }
 }
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct TooltipRoot<P: Clone + 'static = ()> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<TooltipChild<P>>,
     default_open: bool,
+    #[setters(strip_option)]
     open: Option<bool>,
+    #[setters(skip)]
     default_trigger_id: Option<ElementId>,
+    #[setters(skip)]
     trigger_id: Option<Option<ElementId>>,
     disabled: bool,
     disable_hoverable_popup: bool,
     track_cursor_axis: TooltipTrackCursorAxis,
+    #[setters(skip)]
     provider_config: TooltipProviderConfig,
+    #[setters(skip)]
     delay_group: TooltipDelayGroup,
+    #[setters(strip_option)]
     handle: Option<TooltipHandle<P>>,
+    #[setters(skip)]
     on_open_change: Option<TooltipOpenChangeHandler<P>>,
+    #[setters(skip)]
     on_open_change_complete: Option<TooltipOpenChangeCompleteHandler<P>>,
+    #[setters(skip)]
     style_with_state: Option<TooltipRootStyle<P>>,
 }
 
@@ -345,21 +357,6 @@ impl<P: Clone + 'static> TooltipRoot<P> {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn default_open(mut self, default_open: bool) -> Self {
-        self.default_open = default_open;
-        self
-    }
-
-    pub fn open(mut self, open: bool) -> Self {
-        self.open = Some(open);
-        self
-    }
-
     pub fn on_open_change(
         mut self,
         on_open_change: impl Fn(bool, &mut TooltipOpenChangeDetails<P>, &mut Window, &mut App) + 'static,
@@ -377,21 +374,6 @@ impl<P: Clone + 'static> TooltipRoot<P> {
         self
     }
 
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn disable_hoverable_popup(mut self, disable_hoverable_popup: bool) -> Self {
-        self.disable_hoverable_popup = disable_hoverable_popup;
-        self
-    }
-
-    pub fn track_cursor_axis(mut self, track_cursor_axis: TooltipTrackCursorAxis) -> Self {
-        self.track_cursor_axis = track_cursor_axis;
-        self
-    }
-
     pub fn trigger_id(mut self, trigger_id: impl Into<ElementId>) -> Self {
         self.trigger_id = Some(Some(trigger_id.into()));
         self
@@ -404,11 +386,6 @@ impl<P: Clone + 'static> TooltipRoot<P> {
 
     pub fn default_trigger_id(mut self, trigger_id: impl Into<ElementId>) -> Self {
         self.default_trigger_id = Some(trigger_id.into());
-        self
-    }
-
-    pub fn handle(mut self, handle: TooltipHandle<P>) -> Self {
-        self.handle = Some(handle);
         self
     }
 

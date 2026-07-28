@@ -18,19 +18,33 @@ use crate::{
     utils::direction::{current_direction, HorizontalArrowKey, HorizontalDirection},
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct RadioGroupRadio<T: Clone + Eq + 'static> {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<RadioGroupRadioChild>,
+    #[setters(skip)]
     context: Option<RadioGroupContext<T>>,
+    #[setters(strip_option)]
     value: Option<T>,
     disabled: bool,
     read_only: bool,
     required: bool,
+    #[setters(skip)]
     index: Option<usize>,
+    #[setters(skip)]
     focus_handle: Option<FocusHandle>,
+    /// Sets the accessible label announced by screen readers. This is the
+    /// literal-string substitute for Base UI's `aria-labelledby` id wiring,
+    /// which has no gpui builder. When set, render the radio's visible label
+    /// text with `Text::new_inaccessible(...)` instead of `text!(...)` so the
+    /// label is not announced twice.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(RadioGroupRadioStyleState, Div) -> Div + 'static>>,
 }
 
@@ -262,41 +276,6 @@ impl<T: Clone + Eq + 'static> RadioGroupRadio<T> {
         children: impl IntoIterator<Item = impl Into<RadioGroupRadioChild>>,
     ) -> Self {
         self.children.extend(children.into_iter().map(Into::into));
-        self
-    }
-
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn value(mut self, value: T) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    pub fn read_only(mut self, read_only: bool) -> Self {
-        self.read_only = read_only;
-        self
-    }
-
-    pub fn required(mut self, required: bool) -> Self {
-        self.required = required;
-        self
-    }
-
-    /// Sets the accessible label announced by screen readers. This is the
-    /// literal-string substitute for Base UI's `aria-labelledby` id wiring,
-    /// which has no gpui builder. When set, render the radio's visible label
-    /// text with `Text::new_inaccessible(...)` instead of `text!(...)` so the
-    /// label is not announced twice.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 

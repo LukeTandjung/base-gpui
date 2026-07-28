@@ -20,14 +20,21 @@ use crate::{
     },
 };
 
-#[derive(IntoElement)]
+#[derive(derive_setters::Setters, IntoElement)]
 pub struct SliderRoot {
+    #[setters(into)]
     id: ElementId,
+    #[setters(skip)]
     base: Div,
+    #[setters(skip)]
     children: Vec<SliderChild>,
+    #[setters(skip)]
     field_context: Option<FieldContext>,
+    #[setters(into, strip_option)]
     name: Option<SharedString>,
+    #[setters(strip_option)]
     default_value: Option<SliderValues>,
+    #[setters(strip_option)]
     value: Option<SliderValues>,
     min: f64,
     max: f64,
@@ -35,13 +42,24 @@ pub struct SliderRoot {
     large_step: f64,
     min_steps_between_values: f64,
     orientation: SliderOrientation,
+    #[setters(skip)]
     thumb_collision_behavior: SliderThumbCollisionBehavior,
     thumb_alignment: SliderThumbAlignment,
     disabled: bool,
+    /// Accessible label for the slider group, mirroring what `SliderLabel`
+    /// displays. Base UI links the label by id via `aria-labelledby`; gpui
+    /// has no id-reference builder, so the text is supplied literally.
+    /// Callers who set this should render the visible `SliderLabel` text
+    /// with `Text::new_inaccessible(...)` to avoid double-announcing.
+    #[setters(into, strip_option)]
     aria_label: Option<SharedString>,
+    #[setters(skip)]
     format: Option<SliderFormatHandler>,
+    #[setters(skip)]
     on_value_change: Option<SliderValueChangeHandler>,
+    #[setters(skip)]
     on_value_committed: Option<SliderValueCommitHandler>,
+    #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(SliderRootStyleState, Div) -> Div + 'static>>,
 }
 
@@ -220,78 +238,8 @@ impl SliderRoot {
         self
     }
 
-    pub fn id(mut self, id: impl Into<ElementId>) -> Self {
-        self.id = id.into();
-        self
-    }
-
-    pub fn name(mut self, name: impl Into<SharedString>) -> Self {
-        self.name = Some(name.into());
-        self
-    }
-
-    pub fn default_value(mut self, default_value: SliderValues) -> Self {
-        self.default_value = Some(default_value);
-        self
-    }
-
-    pub fn value(mut self, value: SliderValues) -> Self {
-        self.value = Some(value);
-        self
-    }
-
-    pub fn min(mut self, min: f64) -> Self {
-        self.min = min;
-        self
-    }
-
-    pub fn max(mut self, max: f64) -> Self {
-        self.max = max;
-        self
-    }
-
-    pub fn step(mut self, step: f64) -> Self {
-        self.step = step;
-        self
-    }
-
-    pub fn large_step(mut self, large_step: f64) -> Self {
-        self.large_step = large_step;
-        self
-    }
-
-    pub fn min_steps_between_values(mut self, min_steps_between_values: f64) -> Self {
-        self.min_steps_between_values = min_steps_between_values;
-        self
-    }
-
-    pub fn orientation(mut self, orientation: SliderOrientation) -> Self {
-        self.orientation = orientation;
-        self
-    }
-
     pub fn thumb_collision_behavior(mut self, behavior: SliderThumbCollisionBehavior) -> Self {
         self.thumb_collision_behavior = behavior;
-        self
-    }
-
-    pub fn thumb_alignment(mut self, thumb_alignment: SliderThumbAlignment) -> Self {
-        self.thumb_alignment = thumb_alignment;
-        self
-    }
-
-    pub fn disabled(mut self, disabled: bool) -> Self {
-        self.disabled = disabled;
-        self
-    }
-
-    /// Accessible label for the slider group, mirroring what `SliderLabel`
-    /// displays. Base UI links the label by id via `aria-labelledby`; gpui
-    /// has no id-reference builder, so the text is supplied literally.
-    /// Callers who set this should render the visible `SliderLabel` text
-    /// with `Text::new_inaccessible(...)` to avoid double-announcing.
-    pub fn aria_label(mut self, aria_label: impl Into<SharedString>) -> Self {
-        self.aria_label = Some(aria_label.into());
         self
     }
 
