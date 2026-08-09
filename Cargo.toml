@@ -13,7 +13,7 @@ publish = false
 
 [dependencies]
 derive_setters = "0.1.9"
-gpui = { version = "0.2.2", git = "https://github.com/zed-industries/zed", rev = "1764c2fa6776c545ece60357e0e6dd9856a241bc" }
+gpui = { version = "0.2.2", git = "https://github.com/zed-industries/zed", rev = "59b2ebf10351b5c0b5cd4403f01ed0460eeec06d" }
 unicode-segmentation = "1"
 # std::time::{Instant, SystemTime} panic on wasm32-unknown-unknown ("time not
 # implemented on this platform"). web-time re-exports the std types unchanged
@@ -22,7 +22,7 @@ unicode-segmentation = "1"
 web-time = "1"
 
 [dev-dependencies]
-gpui = { version = "0.2.2", git = "https://github.com/zed-industries/zed", rev = "1764c2fa6776c545ece60357e0e6dd9856a241bc", features = ["test-support"] }
+gpui = { version = "0.2.2", git = "https://github.com/zed-industries/zed", rev = "59b2ebf10351b5c0b5cd4403f01ed0460eeec06d", features = ["test-support"] }
 
 [lints.clippy]
 large_enum_variant = "allow"
