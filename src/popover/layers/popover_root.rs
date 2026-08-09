@@ -102,9 +102,12 @@ impl<P: Clone + 'static> RenderOnce for PopoverRoot<P> {
         let popup_focus_handles = wired_children.popup_focus_handles;
         let children = wired_children.children;
 
+        // `contains_focused`, not `is_focused`: focus landing on a control
+        // INSIDE the popup (slider thumb, switch, input) must still count as
+        // the popover holding focus, or it would dismiss itself as FocusOut.
         let focused = focus_handles
             .iter()
-            .any(|focus_handle| focus_handle.is_focused(window));
+            .any(|focus_handle| focus_handle.contains_focused(window, cx));
         let close_for_focus_out = context.update(cx, |runtime| {
             runtime.sync_triggers(triggers);
             runtime.clear_label_metadata();

@@ -1,9 +1,10 @@
 use std::rc::Rc;
+use std::sync::Arc;
 
 use gpui::{
-    div, prelude::FluentBuilder as _, App, Div, ElementId, InteractiveElement as _, IntoElement,
-    ParentElement, RenderOnce, Role, SharedString, StatefulInteractiveElement as _,
-    StyleRefinement, Styled, Window,
+    div, prelude::FluentBuilder as _, App, Div, ElementId, Entity, FocusHandle,
+    InteractiveElement as _, IntoElement, ParentElement, RenderOnce, Role, SharedString,
+    StatefulInteractiveElement as _, StyleRefinement, Styled, Window,
 };
 
 use crate::popover::{
@@ -30,6 +31,8 @@ pub struct PopoverPopup<P: Clone + 'static = ()> {
     #[setters(skip)]
     payload_content: Option<PopoverPayloadContentBuilder<P>>,
     #[setters(skip)]
+    focus_handle: Option<FocusHandle>,
+    #[setters(skip)]
     aria_label: Option<SharedString>,
     #[setters(skip)]
     style_with_state: Option<Rc<dyn Fn(PopoverPopupStyleState, Div) -> Div + 'static>>,
@@ -46,6 +49,7 @@ impl<P: Clone + 'static> Default for PopoverPopup<P> {
             align: PopoverAlign::Center,
             keep_mounted: false,
             payload_content: None,
+            focus_handle: None,
             aria_label: None,
             style_with_state: None,
         }
@@ -104,6 +108,13 @@ impl<P: Clone + 'static> RenderOnce for PopoverPopup<P> {
         // kept in PopoverRuntime for future wiring) and no `aria-modal`
         // builder for modal roots, so a literal aria_label is the fallback.
         .role(Role::Dialog)
+        // Track a focus handle so focusable content inside the popup (sliders,
+        // switches, inputs) keeps the popover's focus scope: the root checks
+        // `contains_focused` against this handle to distinguish focus moving
+        // WITHIN the popup from focus leaving the popover entirely.
+        .when_some(self.focus_handle.as_ref(), |this, focus_handle| {
+            this.track_focus(focus_handle)
+        })
         .when_some(self.aria_label, |this, label| this.aria_label(label))
         .key_context(POPOVER_KEY_CONTEXT)
         .on_action(move |_: &PopoverCloseAction, window, cx| {
@@ -193,9 +204,22 @@ impl<P: Clone + 'static> PopoverChildNode<P> for PopoverPopup<P> {
         window: &mut Window,
         cx: &mut App,
     ) -> Self {
+        let focus_handle = popup_focus_handle(&self.id, window, cx);
+        wiring.register_focus_scope_handle(focus_handle.clone());
+        self.focus_handle = Some(focus_handle);
         self.children = wiring.wire_popup_children(self.children, window, cx);
         self
     }
+}
+
+fn popup_focus_handle(id: &ElementId, window: &mut Window, cx: &mut App) -> FocusHandle {
+    let focus_handle_entity: Entity<FocusHandle> = window.use_keyed_state(
+        ElementId::NamedChild(Arc::new(id.clone()), SharedString::from("focus")),
+        cx,
+        |_, cx| cx.focus_handle(),
+    );
+
+    focus_handle_entity.read(cx).clone()
 }
 
 impl<P: Clone + 'static> PopoverPopup<P> {

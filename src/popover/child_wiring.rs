@@ -135,6 +135,13 @@ impl<P: Clone + 'static> PopoverChildWiring<P> {
         self.popup_focus_handles.push(focus_handle);
     }
 
+    /// Registers a handle that only widens the popover's focus scope (the
+    /// root's focus-out check); unlike popup focus handles it takes no part
+    /// in focus-on-open or keyboard traversal.
+    pub fn register_focus_scope_handle(&mut self, focus_handle: FocusHandle) {
+        self.focus_handles.push(focus_handle);
+    }
+
     fn finish(self, children: Vec<PopoverChild<P>>) -> WiredPopoverChildren<P> {
         WiredPopoverChildren {
             triggers: self.triggers,

@@ -420,6 +420,21 @@ impl<P: Clone + 'static> PopoverRuntime<P> {
 
     /// Replaces walked child trigger metadata while retaining detached handle triggers.
     pub fn sync_triggers(&mut self, mut triggers: Vec<PopoverTriggerMetadata<P>>) {
+        // Wired metadata arrives unmeasured every render; carry the bounds
+        // recorded during previous prepaints over by id, or the positioner
+        // reads `None` anchor bounds forever (measurement lands after the
+        // positioner renders, and the next sync would wipe it again).
+        for trigger in &mut triggers {
+            if let Some(bounds) = self
+                .triggers
+                .iter()
+                .rev()
+                .find(|candidate| candidate.id() == trigger.id())
+                .and_then(PopoverTriggerMetadata::bounds)
+            {
+                trigger.bounds = Some(bounds);
+            }
+        }
         let mut detached = self
             .triggers
             .iter()
