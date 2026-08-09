@@ -118,10 +118,13 @@ impl<P: Clone + 'static> RenderOnce for MenuRoot<P> {
             .as_ref()
             .map(|trigger| trigger.disabled())
             .unwrap_or(false);
+        // `contains_focused`, not `is_focused`: focus landing on a control
+        // INSIDE the popup must count as the menu holding focus, or it would
+        // dismiss itself as FocusOut (same fix as the popover root).
         let focused = wired
             .focus_handles
             .iter()
-            .any(|focus_handle| focus_handle.is_focused(window));
+            .any(|focus_handle| focus_handle.contains_focused(window, cx));
         let close_for_focus_out = context.update(cx, |runtime| {
             runtime.sync_trigger(wired.trigger);
             runtime.sync_items(wired.items);
