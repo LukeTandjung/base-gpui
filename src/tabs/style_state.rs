@@ -40,6 +40,7 @@ impl TabsListStyleState {
 pub struct TabsTabStyleState {
     pub active: bool,
     pub disabled: bool,
+    pub focused: bool,
     pub highlighted: bool,
     pub orientation: TabsOrientation,
 }
@@ -48,12 +49,14 @@ impl TabsTabStyleState {
     pub fn new(
         active: bool,
         disabled: bool,
+        focused: bool,
         highlighted: bool,
         orientation: TabsOrientation,
     ) -> Self {
         Self {
             active,
             disabled,
+            focused,
             highlighted,
             orientation,
         }

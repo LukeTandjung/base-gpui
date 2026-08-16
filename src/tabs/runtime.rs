@@ -287,6 +287,7 @@ impl<T: Clone + Eq + 'static> TabsRuntime<T> {
         TabsTabStyleState::new(
             active,
             disabled,
+            false,
             self.highlighted_tab_index == index,
             orientation,
         )

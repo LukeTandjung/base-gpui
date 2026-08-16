@@ -214,7 +214,7 @@ Style-state structs:
 
 - `TabsRootStyleState`: orientation and activation direction.
 - `TabsListStyleState`: orientation and activation direction.
-- `TabsTabStyleState`: active, disabled, highlighted, and orientation.
+- `TabsTabStyleState`: active, disabled, focused, highlighted, and orientation.
 - `TabsPanelStyleState`: hidden, orientation, and activation direction.
 - `TabsIndicatorStyleState`: selected state, active tab position/size, orientation, and activation direction.
 
