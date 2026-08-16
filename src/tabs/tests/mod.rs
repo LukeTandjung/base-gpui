@@ -4,6 +4,7 @@ mod controlled_selection;
 mod disabled_tabs;
 mod fallback_disabled_selected;
 mod fallback_removed_selected;
+mod focused_state;
 mod indicator_movement;
 mod keyboard_navigation;
 mod loop_focus;

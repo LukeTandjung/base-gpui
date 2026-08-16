@@ -96,10 +96,20 @@ impl<T: Clone + Eq + 'static> RenderOnce for TabsTab<T> {
             })
             .unwrap_or_else(|| {
                 (
-                    TabsTabStyleState::new(false, disabled, false, TabsOrientation::Horizontal),
+                    TabsTabStyleState::new(
+                        false,
+                        disabled,
+                        false,
+                        false,
+                        TabsOrientation::Horizontal,
+                    ),
                     0,
                 )
             });
+        let state = TabsTabStyleState {
+            focused: focus_handle.is_focused(window),
+            ..state
+        };
         let active = state.active;
         let highlighted = state.highlighted;
 
