@@ -56,6 +56,10 @@ Accessibility semantics and keyboard behavior are built into components where GP
 
 See [the component architecture](docs/component-architecture.md) for details.
 
+## Contributing
+
+External contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, validation requirements, and pull request guidance.
+
 ## Project relationships
 
 Base GPUI is an independent community project. It is not affiliated with, endorsed by, or maintained by the Base UI or Zed teams.
