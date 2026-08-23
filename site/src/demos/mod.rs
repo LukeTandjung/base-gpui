@@ -12,6 +12,7 @@ mod dialog;
 mod drawer;
 mod field;
 mod fieldset;
+mod file_tree;
 mod form;
 mod input;
 mod menu;
@@ -120,6 +121,11 @@ pub fn all() -> &'static [DemoEntry] {
             slug: "fieldset",
             title: "Fieldset",
             render: || fieldset::render().into_any_element(),
+        },
+        DemoEntry {
+            slug: "file-tree",
+            title: "File Tree",
+            render: || file_tree::render().into_any_element(),
         },
         DemoEntry {
             slug: "form",

@@ -20,6 +20,7 @@ The public API portions are generated from source. Guides marked as curated cont
 | [Drawer](drawer.md) | `DrawerBackdrop`, `DrawerContent`, `DrawerIndent`, `DrawerIndentBackground`, `DrawerPopup`, `DrawerPortal`, `DrawerProvider`, `DrawerRoot`, `DrawerSwipeArea`, `DrawerViewport` |
 | [Field](field.md) | `FieldControl`, `FieldDescription`, `FieldError`, `FieldItem`, `FieldLabel`, `FieldRoot`, `FieldValidity` |
 | [Fieldset](fieldset.md) | `FieldsetLegend`, `FieldsetRoot` |
+| [File Tree](file_tree.md) | `FileTree` |
 | [Form](form.md) | `Form` |
 | [Input](input.md) | `Input` |
 | [Menu](menu.md) | `MenuArrow`, `MenuBackdrop`, `MenuCheckboxItem`, `MenuCheckboxItemIndicator`, `MenuGroup`, `MenuGroupLabel`, `MenuItem`, `MenuLinkItem`, `MenuPopup`, `MenuPortal`, `MenuPositioner`, `MenuRadioGroup`, `MenuRadioItem`, `MenuRadioItemIndicator`, `MenuRoot`, `MenuSeparator`, `MenuSubmenuRoot`, `MenuSubmenuTrigger`, `MenuTrigger` |
