@@ -7,8 +7,8 @@ use gpui::{
 };
 
 use crate::primitives::input::{
-    InputBoundaryHandler, InputEnterHandler, InputRuntime, InputStyleState,
-    InputValueChangeHandler, INPUT_KEY_CONTEXT,
+    InputBoundaryHandler, InputEnterHandler, InputEscapeHandler, InputFocusChangeHandler,
+    InputRuntime, InputStyleState, InputValueChangeHandler, INPUT_KEY_CONTEXT,
 };
 
 use super::InputTextElement;
@@ -43,6 +43,12 @@ pub struct Input {
     on_value_change: Option<InputValueChangeHandler>,
     #[setters(skip)]
     on_enter: Option<InputEnterHandler>,
+    #[setters(skip)]
+    on_escape: Option<InputEscapeHandler>,
+    #[setters(skip)]
+    on_focus: Option<InputFocusChangeHandler>,
+    #[setters(skip)]
+    on_blur: Option<InputFocusChangeHandler>,
     #[setters(skip)]
     on_home: Option<InputBoundaryHandler>,
     #[setters(skip)]
@@ -83,6 +89,9 @@ impl Default for Input {
             tab_stop: None,
             on_value_change: None,
             on_enter: None,
+            on_escape: None,
+            on_focus: None,
+            on_blur: None,
             on_home: None,
             on_end: None,
             on_edge_left: None,
@@ -143,12 +152,14 @@ impl RenderOnce for Input {
                 self.on_edge_right.clone(),
                 self.select_all_on_focus,
             );
+            runtime.sync_focus_handlers(self.on_focus.clone(), self.on_blur.clone());
+            runtime.sync_escape_handler(self.on_escape.clone());
         });
 
         let focus_handle = state.read(cx).focus_handle();
         let focused_now = focus_handle.is_focused(window);
         state.update(cx, |runtime, cx| {
-            runtime.sync_focus_observed(focused_now, cx);
+            runtime.sync_focus_observed(focused_now, window, cx);
         });
         let auto_focus_done_id = ElementId::NamedChild(
             Arc::new(self.id.clone()),
@@ -188,6 +199,7 @@ impl RenderOnce for Input {
             .on_action(window.listener_for(&state, InputRuntime::end))
             .on_action(window.listener_for(&state, InputRuntime::copy))
             .on_action(window.listener_for(&state, InputRuntime::enter))
+            .on_key_down(window.listener_for(&state, InputRuntime::key_down))
             .when(!disabled && !self.read_only, |this| {
                 this.on_action(window.listener_for(&state, InputRuntime::backspace))
                     .on_action(window.listener_for(&state, InputRuntime::delete))
@@ -241,6 +253,30 @@ impl Input {
         on_enter: impl Fn(SharedString, &mut Window, &mut gpui::Context<InputRuntime>) + 'static,
     ) -> Self {
         self.on_enter = Some(Rc::new(on_enter));
+        self
+    }
+
+    pub fn on_escape_with_context(
+        mut self,
+        on_escape: impl Fn(&mut Window, &mut gpui::Context<InputRuntime>) + 'static,
+    ) -> Self {
+        self.on_escape = Some(Rc::new(on_escape));
+        self
+    }
+
+    pub fn on_focus_with_context(
+        mut self,
+        on_focus: impl Fn(&mut Window, &mut gpui::Context<InputRuntime>) + 'static,
+    ) -> Self {
+        self.on_focus = Some(Rc::new(on_focus));
+        self
+    }
+
+    pub fn on_blur_with_context(
+        mut self,
+        on_blur: impl Fn(&mut Window, &mut gpui::Context<InputRuntime>) + 'static,
+    ) -> Self {
+        self.on_blur = Some(Rc::new(on_blur));
         self
     }
 

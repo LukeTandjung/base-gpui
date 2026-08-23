@@ -1,15 +1,17 @@
 use std::ops::Range;
 
 use gpui::{
-    ClipboardItem, Context, EntityInputHandler, FocusHandle, MouseDownEvent, MouseMoveEvent,
-    MouseUpEvent, Point, ShapedLine, SharedString, Subscription, UTF16Selection, Window,
+    ClipboardItem, Context, EntityInputHandler, FocusHandle, KeyDownEvent, MouseDownEvent,
+    MouseMoveEvent, MouseUpEvent, Point, ShapedLine, SharedString, Subscription, UTF16Selection,
+    Window,
 };
 use unicode_segmentation::UnicodeSegmentation;
 
 use crate::primitives::input::{
     InputBackspace, InputBoundaryHandler, InputCopy, InputCut, InputDelete, InputEnd, InputEnter,
-    InputEnterHandler, InputHome, InputLeft, InputPaste, InputPasteHandler, InputRight,
-    InputSelectAll, InputSelectLeft, InputSelectRight, InputStyleState, InputValueChangeHandler,
+    InputEnterHandler, InputEscapeHandler, InputFocusChangeHandler, InputHome, InputLeft,
+    InputPaste, InputPasteHandler, InputRight, InputSelectAll, InputSelectLeft, InputSelectRight,
+    InputStyleState, InputValueChangeHandler,
 };
 
 pub struct InputRuntime {
@@ -30,6 +32,9 @@ pub struct InputRuntime {
     controlled: bool,
     on_value_change: Option<InputValueChangeHandler>,
     on_enter: Option<InputEnterHandler>,
+    on_escape: Option<InputEscapeHandler>,
+    on_focus_change: Option<InputFocusChangeHandler>,
+    on_blur_change: Option<InputFocusChangeHandler>,
     on_home: Option<InputBoundaryHandler>,
     on_end: Option<InputBoundaryHandler>,
     on_paste: Option<InputPasteHandler>,
@@ -77,6 +82,9 @@ impl InputRuntime {
             controlled: false,
             on_value_change: None,
             on_enter: None,
+            on_escape: None,
+            on_focus_change: None,
+            on_blur_change: None,
             on_home: None,
             on_end: None,
             on_paste: None,
@@ -106,14 +114,39 @@ impl InputRuntime {
         self.select_all_on_focus = select_all_on_focus;
     }
 
-    /// Observes the focus fact each render; when focus newly arrives and
-    /// `select_all_on_focus` is set, the whole text is selected, matching
-    /// composite-container focus behavior.
-    pub fn sync_focus_observed(&mut self, focused: bool, cx: &mut Context<Self>) {
-        if focused && !self.was_focused && self.select_all_on_focus {
-            self.selected_range = 0..self.value.len();
-            self.selection_reversed = false;
-            cx.notify();
+    pub fn sync_focus_handlers(
+        &mut self,
+        on_focus: Option<InputFocusChangeHandler>,
+        on_blur: Option<InputFocusChangeHandler>,
+    ) {
+        self.on_focus_change = on_focus;
+        self.on_blur_change = on_blur;
+    }
+
+    pub fn sync_escape_handler(&mut self, on_escape: Option<InputEscapeHandler>) {
+        self.on_escape = on_escape;
+    }
+
+    /// Observes focus each render and emits configured transition handlers.
+    pub fn sync_focus_observed(
+        &mut self,
+        focused: bool,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        if focused && !self.was_focused {
+            if self.select_all_on_focus {
+                self.selected_range = 0..self.value.len();
+                self.selection_reversed = false;
+                cx.notify();
+            }
+            if let Some(on_focus) = self.on_focus_change.clone() {
+                on_focus(window, cx);
+            }
+        } else if !focused && self.was_focused {
+            if let Some(on_blur) = self.on_blur_change.clone() {
+                on_blur(window, cx);
+            }
         }
 
         self.was_focused = focused;
@@ -396,8 +429,30 @@ impl InputRuntime {
     }
 
     pub fn enter(&mut self, _: &InputEnter, window: &mut Window, cx: &mut Context<Self>) {
+        if self.marked_range.is_some() {
+            cx.stop_propagation();
+            return;
+        }
         if let Some(on_enter) = self.on_enter.clone() {
             on_enter(self.value.clone(), window, cx);
+            cx.stop_propagation();
+        }
+    }
+
+    pub fn key_down(&mut self, event: &KeyDownEvent, window: &mut Window, cx: &mut Context<Self>) {
+        if event.keystroke.key == "escape" {
+            self.escape(window, cx);
+        }
+    }
+
+    fn escape(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        if self.marked_range.is_some() {
+            cx.stop_propagation();
+            return;
+        }
+        if let Some(on_escape) = self.on_escape.clone() {
+            on_escape(window, cx);
+            cx.stop_propagation();
         }
     }
 
@@ -442,7 +497,6 @@ impl InputRuntime {
             self.selected_range = 0..self.value.len();
             self.selection_reversed = false;
         }
-
         cx.notify();
     }
 
@@ -745,8 +799,10 @@ mod unit_tests {
     use gpui::{
         div, px, size, AppContext as _, Entity, IntoElement, Render, SharedString, TestAppContext,
     };
+    use std::{cell::RefCell, rc::Rc};
 
     use super::{normalize_single_line, EntityInputHandler, InputRuntime};
+    use crate::primitives::input::InputEnter;
 
     struct RuntimeHarness {
         input: Entity<InputRuntime>,
@@ -806,6 +862,50 @@ mod unit_tests {
                         EntityInputHandler::marked_text_range(input, window, cx),
                         Some(1..2)
                     );
+                });
+            })
+            .expect("runtime test window should be open");
+    }
+
+    #[gpui::test]
+    fn ime_composition_consumes_enter_and_escape_without_invoking_handlers(
+        cx: &mut TestAppContext,
+    ) {
+        let enter_count = Rc::new(RefCell::new(0));
+        let escape_count = Rc::new(RefCell::new(0));
+        let enter_sink = Rc::clone(&enter_count);
+        let escape_sink = Rc::clone(&escape_count);
+        let window = cx.open_window(size(px(120.0), px(40.0)), |window, cx| RuntimeHarness {
+            input: cx.new(|cx| InputRuntime::new(SharedString::from("a"), window, cx)),
+        });
+
+        window
+            .update(cx, |harness, window, cx| {
+                harness.input.update(cx, |input, cx| {
+                    input.on_enter = Some(Rc::new(move |_, _, _| {
+                        *enter_sink.borrow_mut() += 1;
+                    }));
+                    input.sync_escape_handler(Some(Rc::new(move |_, _| {
+                        *escape_sink.borrow_mut() += 1;
+                    })));
+                    EntityInputHandler::replace_and_mark_text_in_range(
+                        input,
+                        None,
+                        "é",
+                        Some(0..1),
+                        window,
+                        cx,
+                    );
+                    input.enter(&InputEnter, window, cx);
+                    input.escape(window, cx);
+                    assert_eq!(*enter_count.borrow(), 0);
+                    assert_eq!(*escape_count.borrow(), 0);
+
+                    EntityInputHandler::unmark_text(input, window, cx);
+                    input.enter(&InputEnter, window, cx);
+                    input.escape(window, cx);
+                    assert_eq!(*enter_count.borrow(), 1);
+                    assert_eq!(*escape_count.borrow(), 1);
                 });
             })
             .expect("runtime test window should be open");

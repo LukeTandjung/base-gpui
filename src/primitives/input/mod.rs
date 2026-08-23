@@ -14,7 +14,8 @@ pub use actions::{
 };
 pub use layers::{input, Input};
 pub use props::{
-    InputBoundaryHandler, InputEnterHandler, InputPasteHandler, InputValueChangeHandler,
+    InputBoundaryHandler, InputEnterHandler, InputEscapeHandler, InputFocusChangeHandler,
+    InputPasteHandler, InputValueChangeHandler,
 };
 pub use runtime::InputRuntime;
 pub use style_state::InputStyleState;
