@@ -12,6 +12,7 @@ pub mod dialog;
 pub mod drawer;
 pub mod field;
 pub mod fieldset;
+pub mod file_tree;
 pub mod form;
 pub mod input;
 pub mod menu;
@@ -48,6 +49,7 @@ pub fn init(cx: &mut gpui::App) {
     combobox::init(cx);
     dialog::init(cx);
     fieldset::init(cx);
+    file_tree::init(cx);
     form::init(cx);
     menu::init(cx);
     menubar::init(cx);
