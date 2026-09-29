@@ -1,0 +1,16 @@
+[workspace]
+
+[package]
+name = "file-tree-demo"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[[bin]]
+name = "file-tree-demo"
+path = "src/main.rs"
+
+[dependencies]
+base-gpui = { path = "../.." }
+gpui = { version = "0.2.2", git = "https://github.com/zed-industries/zed", rev = "59b2ebf10351b5c0b5cd4403f01ed0460eeec06d" }
+gpui_platform = { git = "https://github.com/zed-industries/zed", rev = "59b2ebf10351b5c0b5cd4403f01ed0460eeec06d", features = ["wayland", "x11"] }
